@@ -58,6 +58,9 @@
     <ClInclude Include="Headlines\Revit\Elements\DoorElement.h">
       <Filter>Headlines\Revit\Elements</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\FloorsElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -80,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="Executable\Revit\Elements\DoorElement.cpp">
       <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\FloorsElement.cpp">
+      <Filter>Headlines\Revit\Elements</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
