@@ -46,6 +46,9 @@
     <ClInclude Include="Headlines\Revit\Elements\BaseElement.h">
       <Filter>Headlines\Revit\Elements</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\WallElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -55,6 +58,9 @@
       <Filter>Executable</Filter>
     </ClCompile>
     <ClCompile Include="Executable\Revit\Elements\BaseElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\WallElement.cpp">
       <Filter>Executable\Revit\Elements</Filter>
     </ClCompile>
   </ItemGroup>

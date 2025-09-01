@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headlines\Revit\Elements\BaseElement.h" />
+    <ClInclude Include="Headlines\Revit\Elements\WallElement.h" />
     <ClInclude Include="Headlines\VPlug.h" />
     <ClInclude Include="Resources\Resource.h" />
   </ItemGroup>
@@ -149,6 +150,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Executable\Revit\Elements\BaseElement.cpp" />
+    <ClCompile Include="Executable\Revit\Elements\WallElement.cpp" />
     <ClCompile Include="Executable\VPlug.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
