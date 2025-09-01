@@ -52,6 +52,12 @@
     <ClInclude Include="Headlines\Revit\Elements\CeilingsElement.h">
       <Filter>Headlines\Revit\Elements</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\ColumnElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\DoorElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -67,6 +73,12 @@
       <Filter>Executable\Revit\Elements</Filter>
     </ClCompile>
     <ClCompile Include="Executable\Revit\Elements\CeilingsElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\ColumnElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\DoorElement.cpp">
       <Filter>Executable\Revit\Elements</Filter>
     </ClCompile>
   </ItemGroup>
