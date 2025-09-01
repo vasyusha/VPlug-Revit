@@ -13,6 +13,18 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{53aceb5e-745e-451a-b5d7-e56018eb8fdb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headlines\Revit">
+      <UniqueIdentifier>{667c298f-29e9-45e7-aac4-fc5a55f28fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headlines\Revit\Elements">
+      <UniqueIdentifier>{5105f131-c90d-45a2-9fc8-b3ed880e9b83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\Revit">
+      <UniqueIdentifier>{77a7611e-5014-45e8-85ae-05150b31deb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\Revit\Elements">
+      <UniqueIdentifier>{be36f743-6d9f-42b2-955c-cf06d4982bc0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\app.ico">
@@ -31,6 +43,9 @@
     <ClInclude Include="Resources\Resource.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\BaseElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -38,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="Executable\VPlug.cpp">
       <Filter>Executable</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\BaseElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
