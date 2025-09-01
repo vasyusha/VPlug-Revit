@@ -67,6 +67,12 @@
     <ClInclude Include="Headlines\Revit\Elements\RampElement.h">
       <Filter>Headlines\Revit\Elements</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\RoofElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\RoomElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -97,6 +103,12 @@
       <Filter>Executable\Revit\Elements</Filter>
     </ClCompile>
     <ClCompile Include="Executable\Revit\Elements\RampElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\RoofElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\RoomElement.cpp">
       <Filter>Executable\Revit\Elements</Filter>
     </ClCompile>
   </ItemGroup>
