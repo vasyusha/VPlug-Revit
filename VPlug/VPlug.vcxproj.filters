@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Configuration">
+      <UniqueIdentifier>{846fb26f-2bd3-4c0f-a064-acb364a52634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable">
+      <UniqueIdentifier>{90ae0ead-d3a1-43e2-b0d3-015f6892d3c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headlines">
+      <UniqueIdentifier>{6ecd9cb8-831a-40c5-a09a-e13282e22e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{53aceb5e-745e-451a-b5d7-e56018eb8fdb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\app.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\app.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headlines\VPlug.h">
+      <Filter>Headlines</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Executable\AssemblyInfo.cpp">
+      <Filter>Executable</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\VPlug.cpp">
+      <Filter>Executable</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
