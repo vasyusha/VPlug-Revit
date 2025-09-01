@@ -144,6 +144,8 @@
     <ClInclude Include="Headlines\Revit\Elements\ColumnElement.h" />
     <ClInclude Include="Headlines\Revit\Elements\DoorElement.h" />
     <ClInclude Include="Headlines\Revit\Elements\FloorsElement.h" />
+    <ClInclude Include="Headlines\Revit\Elements\GenericModelElement.h" />
+    <ClInclude Include="Headlines\Revit\Elements\RampElement.h" />
     <ClInclude Include="Headlines\Revit\Elements\WallElement.h" />
     <ClInclude Include="Headlines\VPlug.h" />
     <ClInclude Include="Resources\Resource.h" />
@@ -158,6 +160,8 @@
     <ClCompile Include="Executable\Revit\Elements\ColumnElement.cpp" />
     <ClCompile Include="Executable\Revit\Elements\DoorElement.cpp" />
     <ClCompile Include="Executable\Revit\Elements\FloorsElement.cpp" />
+    <ClCompile Include="Executable\Revit\Elements\GenericModelElement.cpp" />
+    <ClCompile Include="Executable\Revit\Elements\RampElement.cpp" />
     <ClCompile Include="Executable\Revit\Elements\WallElement.cpp" />
     <ClCompile Include="Executable\VPlug.cpp" />
   </ItemGroup>
