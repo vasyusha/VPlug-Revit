@@ -115,6 +115,9 @@
     <ClInclude Include="Headlines\UI\VPControls\VPBaseControl.h">
       <Filter>Headlines\UI\VPControls</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\UI\VPForms\VPFormAuditParameterCommand.h">
+      <Filter>Headlines\UI\VPForms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -176,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="Executable\UI\VPControls\VPButton.cpp">
       <Filter>Executable\UI\VPControls</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\UI\VPForms\VPFormAuditParameterCommand.cpp">
+      <Filter>Executable\UI\VPForms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -158,6 +158,7 @@
     <ClInclude Include="Headlines\UI\VPControls\VPBaseControl.h" />
     <ClInclude Include="Headlines\UI\VPControls\VPButton.h" />
     <ClInclude Include="Headlines\UI\VPForms\BaseVPForm.h" />
+    <ClInclude Include="Headlines\UI\VPForms\VPFormAuditParameterCommand.h" />
     <ClInclude Include="Headlines\VPlug.h" />
     <ClInclude Include="Resources\Resource.h" />
   </ItemGroup>
@@ -184,6 +185,7 @@
     <ClCompile Include="Executable\UI\VPControls\VPBaseControl.cpp" />
     <ClCompile Include="Executable\UI\VPControls\VPButton.cpp" />
     <ClCompile Include="Executable\UI\VPForms\BaseVPForm.cpp" />
+    <ClCompile Include="Executable\UI\VPForms\VPFormAuditParameterCommand.cpp" />
     <ClCompile Include="Executable\VPlug.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
