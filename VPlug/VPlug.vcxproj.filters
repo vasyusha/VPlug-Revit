@@ -25,6 +25,18 @@
     <Filter Include="Executable\Revit\Elements">
       <UniqueIdentifier>{be36f743-6d9f-42b2-955c-cf06d4982bc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headlines\UI">
+      <UniqueIdentifier>{4543d309-fd65-4185-a2e7-600e00f95f84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headlines\UI\VPForms">
+      <UniqueIdentifier>{279926c1-928d-45dd-8a72-f8410233b8c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\UI">
+      <UniqueIdentifier>{286ed6fe-f26b-4c3a-93d3-1d3c6881f42d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\UI\VPForms">
+      <UniqueIdentifier>{aa229539-a950-4fb7-90e5-09579d7bba4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\app.ico">
@@ -73,6 +85,24 @@
     <ClInclude Include="Headlines\Revit\Elements\RoomElement.h">
       <Filter>Headlines\Revit\Elements</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\StairsElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\StairsRailingElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\StructuralFramingElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\WindowElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\Revit\Elements\StructuralFoundationElement.h">
+      <Filter>Headlines\Revit\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\UI\VPForms\BaseVPForm.h">
+      <Filter>Headlines\UI\VPForms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -110,6 +140,24 @@
     </ClCompile>
     <ClCompile Include="Executable\Revit\Elements\RoomElement.cpp">
       <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\StairsElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\StairsRailingElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\StructuralFramingElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\WindowElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\StructuralFoundationElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\UI\VPForms\BaseVPForm.cpp">
+      <Filter>Executable\UI\VPForms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
