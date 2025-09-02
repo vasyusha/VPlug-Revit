@@ -37,6 +37,12 @@
     <Filter Include="Executable\UI\VPForms">
       <UniqueIdentifier>{aa229539-a950-4fb7-90e5-09579d7bba4d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headlines\UI\VPControls">
+      <UniqueIdentifier>{db52db82-1000-4a9e-b099-4725fc28dd39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\UI\VPControls">
+      <UniqueIdentifier>{63d6f538-a60e-4d57-b6c4-c63a73c7d00f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\app.ico">
@@ -103,6 +109,12 @@
     <ClInclude Include="Headlines\UI\VPForms\BaseVPForm.h">
       <Filter>Headlines\UI\VPForms</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\UI\VPControls\VPButton.h">
+      <Filter>Headlines\UI\VPControls</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\UI\VPControls\VPBaseControl.h">
+      <Filter>Headlines\UI\VPControls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -158,6 +170,12 @@
     </ClCompile>
     <ClCompile Include="Executable\UI\VPForms\BaseVPForm.cpp">
       <Filter>Executable\UI\VPForms</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\UI\VPControls\VPBaseControl.cpp">
+      <Filter>Executable\UI\VPControls</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\UI\VPControls\VPButton.cpp">
+      <Filter>Executable\UI\VPControls</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -128,6 +128,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -154,6 +155,8 @@
     <ClInclude Include="Headlines\Revit\Elements\StructuralFramingElement.h" />
     <ClInclude Include="Headlines\Revit\Elements\WallElement.h" />
     <ClInclude Include="Headlines\Revit\Elements\WindowElement.h" />
+    <ClInclude Include="Headlines\UI\VPControls\VPBaseControl.h" />
+    <ClInclude Include="Headlines\UI\VPControls\VPButton.h" />
     <ClInclude Include="Headlines\UI\VPForms\BaseVPForm.h" />
     <ClInclude Include="Headlines\VPlug.h" />
     <ClInclude Include="Resources\Resource.h" />
@@ -178,6 +181,8 @@
     <ClCompile Include="Executable\Revit\Elements\StructuralFramingElement.cpp" />
     <ClCompile Include="Executable\Revit\Elements\WallElement.cpp" />
     <ClCompile Include="Executable\Revit\Elements\WindowElement.cpp" />
+    <ClCompile Include="Executable\UI\VPControls\VPBaseControl.cpp" />
+    <ClCompile Include="Executable\UI\VPControls\VPButton.cpp" />
     <ClCompile Include="Executable\UI\VPForms\BaseVPForm.cpp" />
     <ClCompile Include="Executable\VPlug.cpp" />
   </ItemGroup>
