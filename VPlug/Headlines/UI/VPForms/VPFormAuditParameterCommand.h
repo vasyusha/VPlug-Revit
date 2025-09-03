@@ -5,7 +5,7 @@ using namespace System::Windows::Forms;
 
 namespace VPForms {
 
-public ref class VPFormAuditParameterCommand : Form {
+public ref class VPFormAuditParameterCommand : public System::Windows::Forms::Form {
 public:
 	VPFormAuditParameterCommand();
 	void CreateControls();

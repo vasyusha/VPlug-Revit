@@ -7,6 +7,8 @@ VPForms::VPFormAuditParameterCommand::VPFormAuditParameterCommand() {
 	this->Size = Drawing::Size(1000, 750);
 	this->FormBorderStyle = ::FormBorderStyle::FixedSingle;
 	this->MinimizeBox = false;
+
+	CreateControls();
 }
 
 void VPForms::VPFormAuditParameterCommand::CreateControls() {
