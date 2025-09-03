@@ -43,6 +43,12 @@
     <Filter Include="Executable\UI\VPControls">
       <UniqueIdentifier>{63d6f538-a60e-4d57-b6c4-c63a73c7d00f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headlines\Commands">
+      <UniqueIdentifier>{232065e7-3b14-49be-8ed6-c17ab64f5e02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\Commands">
+      <UniqueIdentifier>{a26e5c43-df61-4f04-b50c-614042c1b9ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\app.ico">
@@ -118,6 +124,9 @@
     <ClInclude Include="Headlines\UI\VPForms\VPFormAuditParameterCommand.h">
       <Filter>Headlines\UI\VPForms</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Commands\AuditParameterCommand.h">
+      <Filter>Headlines\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -182,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="Executable\UI\VPForms\VPFormAuditParameterCommand.cpp">
       <Filter>Executable\UI\VPForms</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Commands\AuditParameterCommand.cpp">
+      <Filter>Executable\Commands</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
