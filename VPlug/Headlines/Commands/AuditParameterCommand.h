@@ -21,7 +21,11 @@ private:
 public:
 	virtual Result Execute(ExternalCommandData^ command_data, 
 		String^% message, ElementSet^ elements);
-
+	
+	void Audit();
+	void SetParseConfigJSON(Object^ sender, EventArgs^ e);
+	void SetParseJSON(Object^ sender, EventArgs^ e);
+	void GetResultAudit(Object^ sender, EventArgs^ e);
 };
 
 }

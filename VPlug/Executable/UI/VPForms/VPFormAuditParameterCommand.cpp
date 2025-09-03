@@ -32,7 +32,7 @@ void VPForms::VPFormAuditParameterCommand::CreateButton() {
 	Button^ button_path_input = gcnew Button();
 	button_path_input->Name = "set_path_input";
 	button_path_input->Text = "Обзор";
-	button_path_input->Location = Drawing::Point(230, 630);
+	button_path_input->Location = Drawing::Point(230, 60);
 	button_path_input->Size = Drawing::Size(100, 20);
 	button_path_input->Anchor = AnchorStyles::Top | AnchorStyles::Left;
 	button_path_input->Click += gcnew EventHandler(this, &VPFormAuditParameterCommand::SetPathInput);
@@ -41,7 +41,7 @@ void VPForms::VPFormAuditParameterCommand::CreateButton() {
 	Button^ button_path_output = gcnew Button();
 	button_path_output->Name = "set_path_output";
 	button_path_output->Text = "Обзор";
-	button_path_output->Location = Drawing::Point(230, 60);
+	button_path_output->Location = Drawing::Point(230, 630);
 	button_path_output->Size = Drawing::Size(100, 20);
 	button_path_output->Anchor = AnchorStyles::Top | AnchorStyles::Left;
 	button_path_output->Click += gcnew EventHandler(this, &VPFormAuditParameterCommand::SetPathOutput);
@@ -131,13 +131,13 @@ void VPForms::VPFormAuditParameterCommand::OnClose(Object^ sender, EventArgs^ e)
 }
 
 void VPForms::VPFormAuditParameterCommand::SetPathInput(Object^ sender, EventArgs^ e) {
-
+	input_(this, EventArgs::Empty);
 }
 
 void VPForms::VPFormAuditParameterCommand::SetPathOutput(Object^ sender, EventArgs^ e) {
-
+	output_(this, EventArgs::Empty);
 }
 
 void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs^ e) {
-
+	category_(this, EventArgs::Empty);
 }
