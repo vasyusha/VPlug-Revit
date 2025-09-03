@@ -13,6 +13,8 @@ void VPForms::VPFormAuditParameterCommand::CreateControls() {
 	CreateButton();
 	CreateTextBox();
 	CreateLabel();
+	CreatePanel();
+	CreateComboBox();
 }
 
 void VPForms::VPFormAuditParameterCommand::CreateButton() {
@@ -90,6 +92,38 @@ void VPForms::VPFormAuditParameterCommand::CreateLabel() {
 	this->Controls->Add(label_select_categody);
 }
 
+void VPForms::VPFormAuditParameterCommand::CreatePanel() {
+	Panel^ panel_contains_com_box= gcnew Panel();
+	panel_contains_com_box->Name = "contains_com_box";
+	panel_contains_com_box->Location = Drawing::Point(10, 120);
+	panel_contains_com_box->Size = Drawing::Size(150, 500);
+	panel_contains_com_box->Anchor = AnchorStyles::Top | AnchorStyles::Left;
+	panel_contains_com_box->AutoScroll = true;
+	panel_contains_com_box->BorderStyle = BorderStyle::FixedSingle;
+	panel_contains_com_box->BackColor = Drawing::Color::FromArgb(208, 208, 208);
+	this->Controls->Add(panel_contains_com_box);
+}
+
+void VPForms::VPFormAuditParameterCommand::CreateComboBox() {
+	array<Object^>^ category = {
+		"Категория",
+		"IfcExportAs"
+	};
+
+	ComboBox^ combo_box_verific_method = gcnew ComboBox();
+	combo_box_verific_method->Name = "verific_method";
+	combo_box_verific_method->Location = Drawing::Point(10, 30);
+	combo_box_verific_method->Size = Drawing::Size(100, 20);
+	combo_box_verific_method->Anchor = AnchorStyles::Top | AnchorStyles::Left;
+	combo_box_verific_method->Items->AddRange(category);
+	combo_box_verific_method->DropDownWidth = category->Length * 20;
+	combo_box_verific_method->DropDownWidth = 150;
+	combo_box_verific_method->SelectedIndex = -1;
+	combo_box_verific_method->SelectedIndexChanged += gcnew EventHandler(this, &VPFormAuditParameterCommand::SetCategory);
+	combo_box_verific_method->DropDownStyle = ComboBoxStyle::DropDownList;	
+	this->Controls->Add(combo_box_verific_method);
+}
+
 void VPForms::VPFormAuditParameterCommand::OnClose(Object^ sender, EventArgs^ e) {
 	this->Close();
 }
@@ -99,5 +133,9 @@ void VPForms::VPFormAuditParameterCommand::SetPathInput(Object^ sender, EventArg
 }
 
 void VPForms::VPFormAuditParameterCommand::SetPathOutput(Object^ sender, EventArgs^ e) {
+
+}
+
+void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs^ e) {
 
 }

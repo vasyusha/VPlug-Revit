@@ -12,10 +12,13 @@ public:
 	void CreateButton();
 	void CreateTextBox();
 	void CreateLabel();
+	void CreatePanel();
+	void CreateComboBox();
 
 	void OnClose(Object^ sender, EventArgs^ e);
 	void SetPathInput(Object^ sender, EventArgs^ e);
 	void SetPathOutput(Object^ sender, EventArgs^ e);
+	void SetCategory(Object^ sender, EventArgs^e);
 };
 
 }
