@@ -18,12 +18,6 @@ private:
 	Document^ doc_;
 	VPForms::VPFormAuditParameterCommand^ form_;
 
-	enum VerificationMethod {
-		Category,
-		IfcExportAs	
-	};
-	VerificationMethod verification_method_;
-
 public:
 	virtual Result Execute(ExternalCommandData^ command_data, 
 		String^% message, ElementSet^ elements);
@@ -31,6 +25,14 @@ public:
 	void SetParseConfigJSON(Object^ sender, EventArgs^ e);
 	void SetParseJSON(Object^ sender, EventArgs^ e);
 	void GetResultAudit(Object^ sender, EventArgs^ e);
+
+	enum class VerificationMethod {
+		Category,
+		IfcExportAs	
+	};
+private:
+	VerificationMethod verification_method_;
+
 };
 
 }
