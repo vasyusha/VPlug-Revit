@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 using namespace System;
+using namespace System::IO;
 using namespace System::Windows::Forms;
 
 namespace VPForms {
@@ -8,6 +9,7 @@ namespace VPForms {
 public ref class VPFormAuditParameterCommand : public System::Windows::Forms::Form {
 private:
 	String^ verification_method_;
+	String^ file_path_input;
 
 public:
 	VPFormAuditParameterCommand();
@@ -24,6 +26,7 @@ public:
 	void SetCategory(Object^ sender, EventArgs^e);
 
 	String^ GetVerificationMethod();
+	String^ GetPathInput();
 
 	event EventHandler^ input_;
 	event EventHandler^ output_;

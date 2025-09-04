@@ -131,6 +131,27 @@ void VPForms::VPFormAuditParameterCommand::OnClose(Object^ sender, EventArgs^ e)
 }
 
 void VPForms::VPFormAuditParameterCommand::SetPathInput(Object^ sender, EventArgs^ e) {
+	if(!verification_method_) {
+		MessageBox::Show("Установите метод проверки!", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+		return;
+	}
+	
+	Stream^ my_stream;
+	OpenFileDialog^ open_file_dialog = gcnew OpenFileDialog();
+	open_file_dialog->Filter = "json files (*.json)|*.json";
+	open_file_dialog->FilterIndex = 1;
+	open_file_dialog->RestoreDirectory = true;
+
+	if(open_file_dialog->ShowDialog() == ::DialogResult::OK) {
+		if((my_stream = open_file_dialog->OpenFile()) != nullptr) {
+		MessageBox::Show(open_file_dialog->FileName, "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			file_path_input = open_file_dialog->FileName;		
+			my_stream->Close();
+		}
+	} else {
+		return;
+	}
+
 	input_(this, EventArgs::Empty);
 }
 
@@ -146,4 +167,8 @@ void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs
 
 String^ VPForms::VPFormAuditParameterCommand::GetVerificationMethod() {
 	return verification_method_;
+}
+
+String^ VPForms::VPFormAuditParameterCommand::GetPathInput() {
+	return file_path_input;
 }
