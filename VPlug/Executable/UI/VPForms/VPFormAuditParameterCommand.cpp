@@ -156,6 +156,25 @@ void VPForms::VPFormAuditParameterCommand::SetPathInput(Object^ sender, EventArg
 }
 
 void VPForms::VPFormAuditParameterCommand::SetPathOutput(Object^ sender, EventArgs^ e) {
+	if(!file_path_input) {
+		MessageBox::Show("Установите файл конфигурации!", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+		return;
+	}
+	Stream^ my_stream;
+	SaveFileDialog^ save_file_dialog = gcnew SaveFileDialog();
+	save_file_dialog->Filter = "html files (*.html)| *.html";
+	save_file_dialog->FilterIndex = 1;
+	save_file_dialog->RestoreDirectory = true;
+
+	if(save_file_dialog->ShowDialog() == ::DialogResult::OK) {
+		if((my_stream = save_file_dialog->OpenFile()) != nullptr) {
+			MessageBox::Show(save_file_dialog->FileName, "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			file_path_output_ = save_file_dialog->FileName;
+			my_stream->Close();
+		}
+	} else {
+		return;
+	}
 	output_(this, EventArgs::Empty);
 }
 
@@ -171,4 +190,8 @@ String^ VPForms::VPFormAuditParameterCommand::GetVerificationMethod() {
 
 String^ VPForms::VPFormAuditParameterCommand::GetPathInput() {
 	return file_path_input;
+}
+
+String^ VPForms::VPFormAuditParameterCommand::GetPathOutput() {
+	return file_path_output_;
 }

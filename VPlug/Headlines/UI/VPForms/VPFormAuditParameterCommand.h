@@ -10,6 +10,7 @@ public ref class VPFormAuditParameterCommand : public System::Windows::Forms::Fo
 private:
 	String^ verification_method_;
 	String^ file_path_input;
+	String^ file_path_output_;
 
 public:
 	VPFormAuditParameterCommand();
@@ -27,6 +28,7 @@ public:
 
 	String^ GetVerificationMethod();
 	String^ GetPathInput();
+	String^ GetPathOutput();
 
 	event EventHandler^ input_;
 	event EventHandler^ output_;

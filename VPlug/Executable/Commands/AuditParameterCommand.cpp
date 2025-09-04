@@ -27,5 +27,5 @@ void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e)
 }
 
 void Commands::AuditParameterCommand::GetResultAudit(Object^ sender, EventArgs^ e) {
-	TaskDialog::Show("Test3", "Result");
+	TaskDialog::Show("Test3", form_->GetPathOutput());
 }
