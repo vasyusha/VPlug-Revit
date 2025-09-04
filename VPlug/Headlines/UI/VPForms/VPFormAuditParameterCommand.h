@@ -6,6 +6,9 @@ using namespace System::Windows::Forms;
 namespace VPForms {
 
 public ref class VPFormAuditParameterCommand : public System::Windows::Forms::Form {
+private:
+	String^ verification_method_;
+
 public:
 	VPFormAuditParameterCommand();
 	void CreateControls();
@@ -19,6 +22,8 @@ public:
 	void SetPathInput(Object^ sender, EventArgs^ e);
 	void SetPathOutput(Object^ sender, EventArgs^ e);
 	void SetCategory(Object^ sender, EventArgs^e);
+
+	String^ GetVerificationMethod();
 
 	event EventHandler^ input_;
 	event EventHandler^ output_;

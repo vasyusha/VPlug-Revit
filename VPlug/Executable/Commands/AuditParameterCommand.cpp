@@ -19,7 +19,7 @@ Result Commands::AuditParameterCommand::Execute(ExternalCommandData^ command_dat
 }
 
 void Commands::AuditParameterCommand::SetParseConfigJSON(Object^ sender, EventArgs^ e) {
-	TaskDialog::Show("Test", "category");
+	TaskDialog::Show("Test", form_->GetVerificationMethod());
 }
 
 void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e) {

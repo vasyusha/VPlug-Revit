@@ -139,5 +139,11 @@ void VPForms::VPFormAuditParameterCommand::SetPathOutput(Object^ sender, EventAr
 }
 
 void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs^ e) {
+	ComboBox^ combo_box = dynamic_cast<ComboBox^>(this->Controls["verific_method"]);
+	verification_method_ = combo_box->Text;
 	category_(this, EventArgs::Empty);
+}
+
+String^ VPForms::VPFormAuditParameterCommand::GetVerificationMethod() {
+	return verification_method_;
 }

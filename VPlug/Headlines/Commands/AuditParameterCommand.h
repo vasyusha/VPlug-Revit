@@ -16,7 +16,7 @@ namespace Commands {
 public ref class AuditParameterCommand : public IExternalCommand {
 private:
 	Document^ doc_;
-	VPForms::VPFormAuditParameterCommand^ form_;	
+	VPForms::VPFormAuditParameterCommand^ form_;
 
 public:
 	virtual Result Execute(ExternalCommandData^ command_data, 
