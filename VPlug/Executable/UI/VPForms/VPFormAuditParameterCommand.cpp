@@ -145,7 +145,7 @@ void VPForms::VPFormAuditParameterCommand::SetPathInput(Object^ sender, EventArg
 	if(open_file_dialog->ShowDialog() == ::DialogResult::OK) {
 		if((my_stream = open_file_dialog->OpenFile()) != nullptr) {
 		MessageBox::Show(open_file_dialog->FileName, "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
-			file_path_input = open_file_dialog->FileName;		
+			file_path_input_ = open_file_dialog->FileName;		
 			my_stream->Close();
 		}
 	} else {
@@ -156,7 +156,7 @@ void VPForms::VPFormAuditParameterCommand::SetPathInput(Object^ sender, EventArg
 }
 
 void VPForms::VPFormAuditParameterCommand::SetPathOutput(Object^ sender, EventArgs^ e) {
-	if(!file_path_input) {
+	if(!file_path_input_) {
 		MessageBox::Show("Установите файл конфигурации!", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 		return;
 	}
@@ -189,7 +189,7 @@ String^ VPForms::VPFormAuditParameterCommand::GetVerificationMethod() {
 }
 
 String^ VPForms::VPFormAuditParameterCommand::GetPathInput() {
-	return file_path_input;
+	return file_path_input_;
 }
 
 String^ VPForms::VPFormAuditParameterCommand::GetPathOutput() {
