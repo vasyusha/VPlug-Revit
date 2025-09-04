@@ -18,6 +18,12 @@ private:
 	Document^ doc_;
 	VPForms::VPFormAuditParameterCommand^ form_;
 
+	enum VerificationMethod {
+		Category,
+		IfcExportAs	
+	};
+	VerificationMethod verification_method_;
+
 public:
 	virtual Result Execute(ExternalCommandData^ command_data, 
 		String^% message, ElementSet^ elements);

@@ -20,6 +20,11 @@ Result Commands::AuditParameterCommand::Execute(ExternalCommandData^ command_dat
 
 void Commands::AuditParameterCommand::SetParseConfigJSON(Object^ sender, EventArgs^ e) {
 	TaskDialog::Show("Test", form_->GetVerificationMethod());
+	if(form_->GetVerificationMethod() == "IfcExportAs") {
+		verification_method_ = VerificationMethod::IfcExportAs;
+	} else {
+		verification_method_ = VerificationMethod::Category;
+	}
 }
 
 void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e) {
