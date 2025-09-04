@@ -142,6 +142,9 @@
     <ClInclude Include="Headlines\Config\json\json.h">
       <Filter>Headlines\Config\json</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Config\json\json_reader_base.h">
+      <Filter>Headlines\Config\json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -211,6 +214,9 @@
       <Filter>Executable\Commands</Filter>
     </ClCompile>
     <ClCompile Include="Executable\Config\json\json.cpp">
+      <Filter>Executable\Config\json</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Config\json\json_reader_base.cpp">
       <Filter>Executable\Config\json</Filter>
     </ClCompile>
   </ItemGroup>
