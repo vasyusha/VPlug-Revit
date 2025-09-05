@@ -20,6 +20,8 @@ public:
 	void CreateLabel();
 	void CreatePanel();
 	void CreateComboBox();
+	void CreateCheckBox(String^ name, String^ text, int num_box);
+	void ClearCheckBox();
 
 	void OnClose(Object^ sender, EventArgs^ e);
 	void SetPathInput(Object^ sender, EventArgs^ e);

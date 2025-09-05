@@ -126,6 +126,23 @@ void VPForms::VPFormAuditParameterCommand::CreateComboBox() {
 	this->Controls->Add(combo_box_verific_method);
 }
 
+void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ text, int num_box) {
+	Panel^ panel = dynamic_cast<Panel^>(this->Controls["contains_com_box"]);
+
+	CheckBox^ check_box = gcnew CheckBox();
+	check_box->Name = name;
+	check_box->Text = text;
+	check_box->Location = Drawing::Point(10, num_box * 20);
+	check_box->AutoSize = true;
+	check_box->Appearance = Appearance::Normal;
+	check_box->AutoCheck = true;
+	panel->Controls->Add(check_box);
+}
+
+void VPForms::VPFormAuditParameterCommand::ClearCheckBox() {
+	this->Controls["contains_com_box"]->Controls->Clear();
+}
+
 void VPForms::VPFormAuditParameterCommand::OnClose(Object^ sender, EventArgs^ e) {
 	this->Close();
 }
