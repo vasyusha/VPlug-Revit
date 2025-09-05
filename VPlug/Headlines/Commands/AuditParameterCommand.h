@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <msclr/marshal_cppstd.h>
+#include "..\..\Headlines\Config\json\json_reader_base.h"
 #include "..\UI\VPForms\VPFormAuditParameterCommand.h"
 
 using namespace System;

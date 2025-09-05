@@ -28,6 +28,32 @@ void Commands::AuditParameterCommand::SetParseConfigJSON(Object^ sender, EventAr
 }
 
 void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e) {
+	//!!!TEST!!!
+	System::Windows::Forms::TextBox^ text_box = dynamic_cast<System::Windows::Forms::TextBox^>(form_->Controls["main_text"]);
+	form_->ClearCheckBox();
+
+	std::ifstream in(msclr::interop::marshal_as<std::string>(form_->GetPathInput()));
+	json_reader::JsonReaderBase js_reader(in);
+		text_box->Text += gcnew String("TESTs") + "\r\n";
+	int num_box = 1;
+	for(const auto& vec : js_reader.ParseVectorMapStringString()) {
+		text_box->Text += gcnew String("{") + "\r\n";
+		String^ id;
+		String^ name;
+		String^ text;
+		try {
+			name = gcnew String(vec.at("BuiltInCategory").c_str());
+			text = gcnew String(vec.at("Name").c_str());
+			id = gcnew String(vec.at("Id").c_str());
+		} catch (...) {
+			continue;
+		}
+		text_box->Text += id + " = [" + name + " : " + text + "]" +"\r\n";
+		text_box->Text += gcnew String("}") + "\r\n";
+		form_->CreateCheckBox(name, text, num_box);
+		++num_box;
+	}
+	//!!!TEST!!!
 	TaskDialog::Show("Test2", form_->GetPathInput());
 }
 
