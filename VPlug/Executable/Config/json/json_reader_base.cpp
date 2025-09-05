@@ -78,3 +78,30 @@ std::map<std::pair<std::string, std::string>, std::vector<std::string>> json_rea
 	}
 	return result;
 }
+
+std::vector<std::map<std::string, std::string>> json_reader::JsonReaderBase::ParseVectorMapStringString() {
+	std::vector<std::map<std::string, std::string>> result;
+
+	if(document_.GetRoot().IsArray()) {
+		for(const auto& cont : document_.GetRoot().AsArray()) {
+			if(cont.IsDict() && cont.AsDict().size() == 3) {
+				json::Node it_Id;
+				json::Node it_BuiltInCategory;
+				json::Node it_Name;
+				try {
+					it_Id= cont.AsDict().at("Id");
+					it_BuiltInCategory= cont.AsDict().at("BuiltInCategory");
+					it_Name = cont.AsDict().at("Name");
+				} catch (std::out_of_range) {
+					return result;
+				}
+				std::map<std::string, std::string> data;
+				for(const auto& [key, value] : cont.AsDict()) {
+					data.emplace(std::make_pair(key, value.AsString()));	
+				}
+				result.push_back(data);
+			}
+		}
+	}
+	return result;
+}

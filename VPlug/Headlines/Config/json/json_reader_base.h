@@ -17,6 +17,8 @@ public:
 	std::map<std::string, std::vector<std::string>> ParseMapStringVectorString();
 	std::map<std::string, std::map<std::string, std::string>> ParseMapStringMapStringString();
 	std::map<std::pair<std::string, std::string>, std::vector<std::string>> ParseMapPairStringStringVectorString();
+
+	std::vector<std::map<std::string, std::string>> ParseVectorMapStringString();
 };
 
 }
