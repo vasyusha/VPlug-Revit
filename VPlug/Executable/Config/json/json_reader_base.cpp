@@ -105,3 +105,36 @@ std::vector<std::map<std::string, std::string>> json_reader::JsonReaderBase::Par
 	}
 	return result;
 }
+
+std::vector<json_reader::JsonReaderBase::DataElement> json_reader::JsonReaderBase::ParseDataElement() {
+	std::vector<DataElement> result;
+
+	if(document_.GetRoot().IsArray()) {
+		for(const auto& cont : document_.GetRoot().AsArray()) {
+			DataElement data_element;
+			if(cont.IsDict() && cont.AsDict().size() == 4) {
+				json::Node it_Id;
+				json::Node it_BuiltInCategory;
+				json::Node it_Name;
+				json::Node it_Parameters;
+				try {
+					it_Id= cont.AsDict().at("Id");
+					it_BuiltInCategory= cont.AsDict().at("BuiltInCategory");
+					it_Name = cont.AsDict().at("Name");
+					it_Parameters = cont.AsDict().at("Parameters");
+				} catch (std::out_of_range) {
+					return result;
+				}
+				data_element.id = it_Id.AsString();
+				data_element.built_in_category = it_BuiltInCategory.AsString();
+				data_element.name = it_Name.AsString();
+
+				for(const auto& value : it_Parameters.AsArray()) {
+					data_element.parameters.push_back(value.AsString());
+				}
+				result.push_back(data_element);
+			}
+		}
+	}
+	return result;
+}

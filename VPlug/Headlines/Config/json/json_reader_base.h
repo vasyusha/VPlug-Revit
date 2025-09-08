@@ -9,6 +9,14 @@ namespace json_reader {
 class JsonReaderBase {
 private:
 	json::Document document_;
+	//!!!Test!!!
+	struct DataElement {
+		std::string id;
+		std::string built_in_category;
+		std::string name;
+		std::vector<std::string> parameters;
+	};
+	//!!!Test!!!
 
 public:
 	JsonReaderBase(std::istream& input);
@@ -19,6 +27,8 @@ public:
 	std::map<std::pair<std::string, std::string>, std::vector<std::string>> ParseMapPairStringStringVectorString();
 
 	std::vector<std::map<std::string, std::string>> ParseVectorMapStringString();
+	//!!!Test!!!
+	std::vector<DataElement> ParseDataElement();
 };
 
 }
