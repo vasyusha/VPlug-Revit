@@ -224,7 +224,7 @@ void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs
 }
 
 void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e) {
-	
+	audit_(this, EventArgs::Empty);	
 }
 
 

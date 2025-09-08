@@ -37,6 +37,7 @@ public:
 	event EventHandler^ input_;
 	event EventHandler^ output_;
 	event EventHandler^ category_;
+	event EventHandler^ audit_;
 
 };
 
