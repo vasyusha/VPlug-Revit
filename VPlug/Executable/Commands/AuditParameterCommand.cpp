@@ -36,19 +36,17 @@ void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e)
 	json_reader::JsonReaderBase js_reader(in);
 		text_box->Text += gcnew String("TESTs") + "\r\n";
 	int num_box = 1;
-	for(const auto& vec : js_reader.ParseVectorMapStringString()) {
+
+	for(const auto& data : js_reader.ParseDataElement()) {
 		text_box->Text += gcnew String("{") + "\r\n";
-		String^ id;
-		String^ name;
-		String^ text;
-		try {
-			name = gcnew String(vec.at("BuiltInCategory").c_str());
-			text = gcnew String(vec.at("Name").c_str());
-			id = gcnew String(vec.at("Id").c_str());
-		} catch (...) {
-			continue;
-		}
+		String^ id = gcnew String(data.id.c_str());
+		String^ name = gcnew String(data.built_in_category.c_str());
+		String^ text = gcnew String(data.name.c_str());
+		
 		text_box->Text += id + " = [" + name + " : " + text + "]" +"\r\n";
+		for(const auto& param : data.parameters) {
+			text_box->Text += gcnew String(param.c_str());
+		}
 		text_box->Text += gcnew String("}") + "\r\n";
 		form_->CreateCheckBox(name, text, num_box);
 		++num_box;
