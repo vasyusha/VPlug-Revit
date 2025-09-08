@@ -3,6 +3,7 @@
 using namespace System;
 using namespace System::IO;
 using namespace System::Windows::Forms;
+using namespace System::Collections::Generic;
 
 namespace VPForms {
 
@@ -11,6 +12,7 @@ private:
 	String^ verification_method_;
 	String^ file_path_input_;
 	String^ file_path_output_;
+	List<int>^ id_category_;
 
 public:
 	VPFormAuditParameterCommand();
@@ -20,7 +22,8 @@ public:
 	void CreateLabel();
 	void CreatePanel();
 	void CreateComboBox();
-	void CreateCheckBox(String^ name, String^ text, int num_box);
+	void CreateCheckBox(String^ name, String^ text, int tag, int num_box);
+
 	void ClearCheckBox();
 	void CreateTable();
 
@@ -33,6 +36,7 @@ public:
 	String^ GetVerificationMethod();
 	String^ GetPathInput();
 	String^ GetPathOutput();
+	List<int>^ GetIdCategory();
 
 	event EventHandler^ input_;
 	event EventHandler^ output_;

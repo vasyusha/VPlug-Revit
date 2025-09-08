@@ -137,7 +137,7 @@ void VPForms::VPFormAuditParameterCommand::CreateComboBox() {
 	this->Controls->Add(combo_box_verific_method);
 }
 
-void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ text, int num_box) {
+void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ text, int tag, int num_box) {
 	Panel^ panel = dynamic_cast<Panel^>(this->Controls["contains_com_box"]);
 
 	CheckBox^ check_box = gcnew CheckBox();
@@ -147,6 +147,7 @@ void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ 
 	check_box->AutoSize = true;
 	check_box->Appearance = Appearance::Normal;
 	check_box->AutoCheck = true;
+	check_box->Tag = tag;
 	panel->Controls->Add(check_box);
 }
 
@@ -224,6 +225,14 @@ void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs
 }
 
 void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e) {
+	id_category_ = gcnew List<int>();
+
+	for each(Control^ control in this->Controls["contains_com_box"]->Controls) {
+		CheckBox^ check_box = dynamic_cast<CheckBox^>(control);
+		if(check_box != nullptr && check_box->Checked) {
+			id_category_->Add(Convert::ToInt32(check_box->Tag));
+		}
+	}
 	audit_(this, EventArgs::Empty);	
 }
 
@@ -238,4 +247,8 @@ String^ VPForms::VPFormAuditParameterCommand::GetPathInput() {
 
 String^ VPForms::VPFormAuditParameterCommand::GetPathOutput() {
 	return file_path_output_;
+}
+
+List<int>^ VPForms::VPFormAuditParameterCommand::GetIdCategory() {
+	return id_category_;
 }
