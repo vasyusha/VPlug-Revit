@@ -26,6 +26,7 @@ public:
 	
 	void SetParseConfigJSON(Object^ sender, EventArgs^ e);
 	void SetParseJSON(Object^ sender, EventArgs^ e);
+	void Audit(Object^ sender, EventArgs^ e);
 	void GetResultAudit(Object^ sender, EventArgs^ e);
 
 	enum class VerificationMethod {

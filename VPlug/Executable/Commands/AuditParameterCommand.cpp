@@ -11,7 +11,7 @@ Result Commands::AuditParameterCommand::Execute(ExternalCommandData^ command_dat
 	form_->category_ += gcnew EventHandler(this, &AuditParameterCommand::SetParseConfigJSON);
 	form_->input_ += gcnew EventHandler(this, &AuditParameterCommand::SetParseJSON);
 	form_->output_ += gcnew EventHandler(this, &AuditParameterCommand::GetResultAudit);
-	
+	form_->audit_ += gcnew EventHandler(this, &AuditParameterCommand::Audit);	
 
 	form_->ShowDialog();
 
@@ -48,11 +48,24 @@ void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e)
 			text_box->Text += gcnew String(param.c_str());
 		}
 		text_box->Text += gcnew String("}") + "\r\n";
-		form_->CreateCheckBox(name, text, num_box);
+		form_->CreateCheckBox(name, text, Convert::ToInt32(id), num_box);
 		++num_box;
 	}
 	//!!!TEST!!!
 	TaskDialog::Show("Test2", form_->GetPathInput());
+}
+
+void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
+	//!!!TESTs!!!
+	Windows::Forms::Panel^ panel = dynamic_cast<Windows::Forms::Panel^>(form_->Controls["contains_com_box"]);
+	System::Windows::Forms::TextBox^ text_box = dynamic_cast<System::Windows::Forms::TextBox^>(form_->Controls["main_text"]);
+	text_box->Clear();
+	for each(int i in form_->GetIdCategory()) {
+		
+		text_box->Text += "\r\n" + i + "\r\n";
+	}
+	//!!!TESTs!!!
+	TaskDialog::Show("Test4", "AUDIT");
 }
 
 void Commands::AuditParameterCommand::GetResultAudit(Object^ sender, EventArgs^ e) {
