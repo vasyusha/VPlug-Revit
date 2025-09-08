@@ -160,6 +160,9 @@
     <ClInclude Include="Headlines\Revit\Elements\StructuralFramingElement.h" />
     <ClInclude Include="Headlines\Revit\Elements\WallElement.h" />
     <ClInclude Include="Headlines\Revit\Elements\WindowElement.h" />
+    <ClInclude Include="Headlines\Revit\Filters\ElementCollectorFilter.h" />
+    <ClInclude Include="Headlines\Revit\Filters\ParameterFilledFilter.h" />
+    <ClInclude Include="Headlines\Revit\Services\BaseService.h" />
     <ClInclude Include="Headlines\UI\VPControls\VPBaseControl.h" />
     <ClInclude Include="Headlines\UI\VPControls\VPButton.h" />
     <ClInclude Include="Headlines\UI\VPForms\BaseVPForm.h" />
@@ -190,6 +193,9 @@
     <ClCompile Include="Executable\Revit\Elements\StructuralFramingElement.cpp" />
     <ClCompile Include="Executable\Revit\Elements\WallElement.cpp" />
     <ClCompile Include="Executable\Revit\Elements\WindowElement.cpp" />
+    <ClCompile Include="Executable\Revit\Filters\ElementCollectorFilter.cpp" />
+    <ClCompile Include="Executable\Revit\Filters\ParameterFilledFilter.cpp" />
+    <ClCompile Include="Executable\Revit\Services\BaseService.cpp" />
     <ClCompile Include="Executable\UI\VPControls\VPBaseControl.cpp" />
     <ClCompile Include="Executable\UI\VPControls\VPButton.cpp" />
     <ClCompile Include="Executable\UI\VPForms\BaseVPForm.cpp" />

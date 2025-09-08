@@ -61,6 +61,18 @@
     <Filter Include="Headlines\Config\json">
       <UniqueIdentifier>{75ec8457-f843-4993-9da2-01e63bf26fed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headlines\Revit\Services">
+      <UniqueIdentifier>{16c9c862-f7ab-4595-be17-33b61904344a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\Revit\Services">
+      <UniqueIdentifier>{c6835f07-8bd2-4f0f-beec-f56925e0afbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headlines\Revit\Filters">
+      <UniqueIdentifier>{83080d26-f7da-4482-afa2-74506fe425e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\Revit\Filters">
+      <UniqueIdentifier>{ce4cf66a-2a2d-43eb-bd4f-742fbb8f10c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\app.ico">
@@ -145,6 +157,15 @@
     <ClInclude Include="Headlines\Config\json\json_reader_base.h">
       <Filter>Headlines\Config\json</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Revit\Services\BaseService.h">
+      <Filter>Headlines\Revit\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\Revit\Filters\ElementCollectorFilter.h">
+      <Filter>Headlines\Revit\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Headlines\Revit\Filters\ParameterFilledFilter.h">
+      <Filter>Headlines\Revit\Filters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -218,6 +239,15 @@
     </ClCompile>
     <ClCompile Include="Executable\Config\json\json_reader_base.cpp">
       <Filter>Executable\Config\json</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Services\BaseService.cpp">
+      <Filter>Executable\Revit\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Filters\ElementCollectorFilter.cpp">
+      <Filter>Executable\Revit\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Filters\ParameterFilledFilter.cpp">
+      <Filter>Executable\Revit\Filters</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
