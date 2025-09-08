@@ -17,6 +17,7 @@ void VPForms::VPFormAuditParameterCommand::CreateControls() {
 	CreateLabel();
 	CreatePanel();
 	CreateComboBox();
+	CreateTable();
 }
 
 void VPForms::VPFormAuditParameterCommand::CreateButton() {
@@ -46,13 +47,23 @@ void VPForms::VPFormAuditParameterCommand::CreateButton() {
 	button_path_output->Anchor = AnchorStyles::Top | AnchorStyles::Left;
 	button_path_output->Click += gcnew EventHandler(this, &VPFormAuditParameterCommand::SetPathOutput);
 	this->Controls->Add(button_path_output);
+
+	Button^ button_start_audit = gcnew Button();
+	button_start_audit->Name = "start_audit";
+	button_start_audit->Text = "Проверить";
+	button_start_audit->Location = Drawing::Point(700, 60);
+	button_start_audit->Size = Drawing::Size(100, 20);
+	button_start_audit->Anchor = AnchorStyles::Top | AnchorStyles::Left;
+	button_start_audit->Click += gcnew EventHandler(this, &VPFormAuditParameterCommand::SetAudit);
+	button_start_audit->BackColor = Drawing::Color::Red;
+	this->Controls->Add(button_start_audit);
 }
 
 void VPForms::VPFormAuditParameterCommand::CreateTextBox() {
 	TextBox^ text_boxe_main = gcnew TextBox();
 	text_boxe_main->Name = "main_text";
 	text_boxe_main->Location = Drawing::Point(170, 120);
-	text_boxe_main->Size = Drawing::Size(800, 500);
+	text_boxe_main->Size = Drawing::Size(800, 200);
 	text_boxe_main->Anchor = AnchorStyles::Top | AnchorStyles::Left;
 	text_boxe_main->Multiline = true;
 	this->Controls->Add(text_boxe_main);
@@ -143,6 +154,17 @@ void VPForms::VPFormAuditParameterCommand::ClearCheckBox() {
 	this->Controls["contains_com_box"]->Controls->Clear();
 }
 
+void VPForms::VPFormAuditParameterCommand::CreateTable() {
+	DataGridView^ table = gcnew DataGridView();
+	table->Name = "table_category";
+	table->Location = Drawing::Point(170, 340);
+	table->Size = Drawing::Size(800, 280);
+	table->Columns->Add("category", "Категория");
+	table->Columns->Add("not_filled", "Не заполнено");
+	table->Columns->Add("no_parameter", "Нет параметра");
+	this->Controls->Add(table);
+}
+
 void VPForms::VPFormAuditParameterCommand::OnClose(Object^ sender, EventArgs^ e) {
 	this->Close();
 }
@@ -200,6 +222,11 @@ void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs
 	verification_method_ = combo_box->Text;
 	category_(this, EventArgs::Empty);
 }
+
+void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e) {
+	
+}
+
 
 String^ VPForms::VPFormAuditParameterCommand::GetVerificationMethod() {
 	return verification_method_;

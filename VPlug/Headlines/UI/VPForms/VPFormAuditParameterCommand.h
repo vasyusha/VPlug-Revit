@@ -22,11 +22,13 @@ public:
 	void CreateComboBox();
 	void CreateCheckBox(String^ name, String^ text, int num_box);
 	void ClearCheckBox();
+	void CreateTable();
 
 	void OnClose(Object^ sender, EventArgs^ e);
 	void SetPathInput(Object^ sender, EventArgs^ e);
 	void SetPathOutput(Object^ sender, EventArgs^ e);
 	void SetCategory(Object^ sender, EventArgs^e);
+	void SetAudit(Object^ sender, EventArgs^ e);
 
 	String^ GetVerificationMethod();
 	String^ GetPathInput();
