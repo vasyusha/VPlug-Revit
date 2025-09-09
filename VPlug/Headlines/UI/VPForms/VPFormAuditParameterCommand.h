@@ -22,7 +22,7 @@ public:
 	void CreateLabel();
 	void CreatePanel();
 	void CreateComboBox();
-	void CreateCheckBox(String^ name, String^ text, int tag, int num_box);
+	void CreateCheckBox(String^ name, String^ text, Tuple<int, List<String^>^>^ id_pram, int num_box);
 
 	void ClearCheckBox();
 	void CreateTable();

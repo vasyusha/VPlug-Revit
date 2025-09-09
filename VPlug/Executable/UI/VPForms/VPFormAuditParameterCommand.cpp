@@ -137,7 +137,7 @@ void VPForms::VPFormAuditParameterCommand::CreateComboBox() {
 	this->Controls->Add(combo_box_verific_method);
 }
 
-void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ text, int tag, int num_box) {
+void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ text, Tuple<int, List<String^>^>^ id_param, int num_box) {
 	Panel^ panel = dynamic_cast<Panel^>(this->Controls["contains_com_box"]);
 
 	CheckBox^ check_box = gcnew CheckBox();
@@ -147,7 +147,7 @@ void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ 
 	check_box->AutoSize = true;
 	check_box->Appearance = Appearance::Normal;
 	check_box->AutoCheck = true;
-	check_box->Tag = tag;
+	check_box->Tag = id_param;
 	panel->Controls->Add(check_box);
 }
 
@@ -230,7 +230,8 @@ void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e
 	for each(Control^ control in this->Controls["contains_com_box"]->Controls) {
 		CheckBox^ check_box = dynamic_cast<CheckBox^>(control);
 		if(check_box != nullptr && check_box->Checked) {
-			id_category_->Add(Convert::ToInt32(check_box->Tag));
+			Tuple<int, List<String^>^>^ tag = dynamic_cast<Tuple<int, List<String^>^>^>(check_box->Tag);
+			id_category_->Add(Convert::ToInt32(tag->Item1));
 		}
 	}
 	audit_(this, EventArgs::Empty);	
