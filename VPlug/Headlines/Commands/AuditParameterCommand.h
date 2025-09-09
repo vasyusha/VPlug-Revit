@@ -2,6 +2,7 @@
 #include <msclr/marshal_cppstd.h>
 #include "..\..\Headlines\Config\json\json_reader_base.h"
 #include "..\UI\VPForms\VPFormAuditParameterCommand.h"
+#include "..\..\Headlines\Revit\Services\BaseService.h"
 
 using namespace System;
 using namespace System::Drawing;

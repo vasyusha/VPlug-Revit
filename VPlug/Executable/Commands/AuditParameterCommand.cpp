@@ -44,11 +44,14 @@ void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e)
 		String^ text = gcnew String(data.name.c_str());
 		
 		text_box->Text += id + " = [" + name + " : " + text + "]" +"\r\n";
+		List<String^>^ parameters = gcnew List<String^>();
 		for(const auto& param : data.parameters) {
 			text_box->Text += gcnew String(param.c_str());
+			parameters->Add(gcnew String(param.c_str()));
 		}
 		text_box->Text += gcnew String("}") + "\r\n";
-		form_->CreateCheckBox(name, text, Convert::ToInt32(id), num_box);
+		form_->CreateCheckBox(name, text, 
+				gcnew Tuple<int, List<String^>^>(Convert::ToInt32(id), parameters), num_box);
 		++num_box;
 	}
 	//!!!TEST!!!
@@ -60,11 +63,25 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 	Windows::Forms::Panel^ panel = dynamic_cast<Windows::Forms::Panel^>(form_->Controls["contains_com_box"]);
 	System::Windows::Forms::TextBox^ text_box = dynamic_cast<System::Windows::Forms::TextBox^>(form_->Controls["main_text"]);
 	text_box->Clear();
-	for each(int i in form_->GetIdCategory()) {
+	for each(Tuple<int, List<String^>^>^ i in form_->GetIdCategory()) {
 		
-		text_box->Text += "\r\n" + i + "\r\n";
+		text_box->Text += "\r\n" + i->Item1 + "\r\n";
 	}
 	//!!!TESTs!!!
+		text_box->Text += "\r\n\n";
+
+	for each(Tuple<int, List<String^>^>^ data in form_->GetIdCategory()) {
+		Services::BaseService^ base_service = gcnew Services::BaseService(doc_, data->Item1, data->Item2);
+
+		for each(Elements::BaseElement^ element in base_service->GetElemenst()) {
+			text_box->Text += element->GetId() + "\r\n";
+			text_box->Text += element->GetName() + "\r\n";
+			text_box->Text +=  "\r\n";
+			for each(KeyValuePair<String^, String^>^ param_value in element->GetParameters()) {
+				text_box->Text += param_value->Key + " ---> " + param_value->Value + "\r\n";
+			}
+		}
+	}
 	TaskDialog::Show("Test4", "AUDIT");
 }
 
