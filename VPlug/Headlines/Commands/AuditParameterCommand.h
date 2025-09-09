@@ -20,6 +20,7 @@ public ref class AuditParameterCommand : public IExternalCommand {
 private:
 	Document^ doc_;
 	VPForms::VPFormAuditParameterCommand^ form_;
+	List<Elements::BaseElement^>^ base_elements_;
 
 public:
 	virtual Result Execute(ExternalCommandData^ command_data, 

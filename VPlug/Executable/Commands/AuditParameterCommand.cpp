@@ -69,18 +69,43 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 	}
 	//!!!TESTs!!!
 		text_box->Text += "\r\n\n";
-
+	//Навести порядок (мб вывести в отдельную функцию создание строк таблицы
+	base_elements_ = gcnew List<Elements::BaseElement^>();
+	List<Tuple<String^, int, int>^>^ category_not_filled_no_parameter = gcnew List<Tuple<String^, int, int>^>();
+	Windows::Forms::DataGridView^ table = dynamic_cast<Windows::Forms::DataGridView^>(form_->Controls["table_category"]);
+	table->Rows->Clear();
 	for each(Tuple<int, List<String^>^>^ data in form_->GetIdCategory()) {
 		Services::BaseService^ base_service = gcnew Services::BaseService(doc_, data->Item1, data->Item2);
+		
+		String^ category;
+		int no_filled = 0;
+		int no_parameter = 0;
 
 		for each(Elements::BaseElement^ element in base_service->GetElemenst()) {
+			if(element->GetParameters() == nullptr) continue;
+
+			base_elements_->Add(element);
+			
+			if(category->Empty) {
+				category = element->GetCategory();
+			}
+
 			text_box->Text += element->GetId() + "\r\n";
 			text_box->Text += element->GetName() + "\r\n";
+			text_box->Text += element->GetCategory() + "\r\n";
 			text_box->Text +=  "\r\n";
+
 			for each(KeyValuePair<String^, String^>^ param_value in element->GetParameters()) {
 				text_box->Text += param_value->Key + " ---> " + param_value->Value + "\r\n";
+				if(param_value->Value == "Ошибка - параметер не заполнен!") {
+					++no_filled;
+				}
+				if(param_value->Value == "Ошибка - Параметр отсутствует у семейства типа/экземаляра") {
+					++no_parameter;
+				}
 			}
 		}
+		table->Rows->Add(category, no_filled, no_parameter);
 	}
 	TaskDialog::Show("Test4", "AUDIT");
 }
