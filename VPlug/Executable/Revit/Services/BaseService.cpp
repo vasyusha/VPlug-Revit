@@ -13,7 +13,7 @@ void Services::BaseService::SetElements(List<Element^>^ elements, List<String^>^
 	elements_ = gcnew List<Elements::BaseElement^>();
 
 	for each(Element^ e in elements) {
-		Elements::BaseElement^ element;
+		Elements::BaseElement^ element = gcnew Elements::BaseElement();
 
 		element->SetId(e->Id->IntegerValue.ToString());
 		element->SetName(e->Name);
