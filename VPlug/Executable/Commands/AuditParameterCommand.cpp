@@ -76,7 +76,7 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 	table->Rows->Clear();
 	for each(Tuple<int, List<String^>^>^ data in form_->GetIdCategory()) {
 		Services::BaseService^ base_service = gcnew Services::BaseService(doc_, data->Item1, data->Item2);
-		
+
 		String^ category;
 		int no_filled = 0;
 		int no_parameter = 0;
@@ -105,7 +105,9 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 				}
 			}
 		}
-		table->Rows->Add(category, no_filled, no_parameter);
+		if(category != nullptr) {
+			table->Rows->Add(category, no_filled, no_parameter);
+		}
 	}
 	TaskDialog::Show("Test4", "AUDIT");
 }
