@@ -1,6 +1,6 @@
 ﻿#include "..\..\..\Headlines\Revit\Filters\ParameterFilledFilter.h"
 
-String^ Filters::ParameterFilledFilter::CheckParam(Document^ doc, Element^ element, String^ parameter) {
+String^ Filters::ParameterFilledFilter::CheckParam(Document^ doc, Element^ element, String^ parameter, bool only_missing) {
 	if(element == nullptr) return nullptr;
 
 	Parameter^ find_parameter = element->LookupParameter(parameter);
@@ -20,7 +20,7 @@ String^ Filters::ParameterFilledFilter::CheckParam(Document^ doc, Element^ eleme
 
 	String^ value = nullptr;
 
-	if(find_parameter != nullptr) {
+	if(find_parameter != nullptr && !only_missing) {
 		switch (find_parameter->StorageType) {
 			case StorageType::Double :
 				value = find_parameter->AsValueString();
