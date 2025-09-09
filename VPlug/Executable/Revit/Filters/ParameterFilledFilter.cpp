@@ -8,13 +8,13 @@ String^ Filters::ParameterFilledFilter::CheckParam(Document^ doc, Element^ eleme
 	if(find_parameter == nullptr) {
 		//!!!TESTs!!! тест конструкции
 		try {
-			
+			Element^ element_type = doc->GetElement(element->GetTypeId());
+			find_parameter = element_type->LookupParameter(parameter);
+
 		} catch(...) { 
 			//NullReferenceException - если элемент не имеет типа
 			//InvalidOperationException - если тип недоступен или элемент не поддерживает типизацию
 			//ArgumentException - если попытка получить тип у неверного объекта
-			Element^ element_type = doc->GetElement(element->GetTypeId());
-			find_parameter = element_type->LookupParameter(parameter);
 		}
 	}
 
