@@ -161,8 +161,11 @@ void VPForms::VPFormAuditParameterCommand::CreateTable() {
 	table->Location = Drawing::Point(170, 340);
 	table->Size = Drawing::Size(800, 280);
 	table->Columns->Add("category", "Категория");
+	table->Columns["category"]->Width = 250;
 	table->Columns->Add("not_filled", "Не заполнено");
+	table->Columns["not_filled"]->Width = 250;
 	table->Columns->Add("no_parameter", "Нет параметра");
+	table->Columns["no_parameter"]->Width = 250;
 	this->Controls->Add(table);
 }
 
