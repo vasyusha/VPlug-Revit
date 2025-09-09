@@ -21,6 +21,14 @@ String^ Elements::BaseElement::GetGuid() {
 	return guid_;
 }
 
+void Elements::BaseElement::SetCategory(String^ category) {
+	category_ = category;
+}
+
+String^ Elements::BaseElement::GetCategory() {
+	return category_;
+}
+
 void Elements::BaseElement::SetParameters(String^ key, String^ value) {
 	if(parameters_ == nullptr) {
 		parameters_ = gcnew Dictionary<String^, String^>();

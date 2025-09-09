@@ -10,6 +10,7 @@ private:
 	String^ id_;
 	String^ name_;
 	String^ guid_;
+	String^ category_;
 
 	Dictionary<String^, String^>^ parameters_;
 public:
@@ -21,6 +22,9 @@ public:
 
 	virtual void SetGuid(String^ guid);
 	virtual String^ GetGuid();
+
+	virtual void SetCategory(String^ category);
+	virtual String^ GetCategory();
 
 	virtual void SetParameters(String^ key, String^ value);
 	virtual Dictionary<String^, String^>^ GetParameters();
