@@ -21,7 +21,8 @@ void Services::BaseService::SetElements(List<Element^>^ elements, List<String^>^
 
 		for each(String^ param in parameters) {
 			Filters::ParameterFilledFilter^ filter = gcnew Filters::ParameterFilledFilter();
-			String^ filter_out = filter->CheckParam(doc_, e, param);
+			//А когда нужны все параметры?
+			String^ filter_out = filter->CheckParam(doc_, e, param, true);
 
 			if(filter_out != nullptr) {
 				element->SetParameters(param, filter_out);
