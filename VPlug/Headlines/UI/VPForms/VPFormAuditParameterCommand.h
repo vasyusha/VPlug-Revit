@@ -12,7 +12,7 @@ private:
 	String^ verification_method_;
 	String^ file_path_input_;
 	String^ file_path_output_;
-	List<int>^ id_category_;
+	List<Tuple<int, List<String^>^>^>^ id_category_parameters_;
 
 public:
 	VPFormAuditParameterCommand();
@@ -36,7 +36,7 @@ public:
 	String^ GetVerificationMethod();
 	String^ GetPathInput();
 	String^ GetPathOutput();
-	List<int>^ GetIdCategory();
+	List<Tuple<int, List<String^>^>^>^ GetIdCategory();
 
 	event EventHandler^ input_;
 	event EventHandler^ output_;

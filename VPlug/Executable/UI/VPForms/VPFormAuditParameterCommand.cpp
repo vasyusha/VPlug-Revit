@@ -225,13 +225,15 @@ void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs
 }
 
 void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e) {
-	id_category_ = gcnew List<int>();
+	id_category_parameters_ = gcnew List<Tuple<int, List<String^>^>^>();
 
 	for each(Control^ control in this->Controls["contains_com_box"]->Controls) {
 		CheckBox^ check_box = dynamic_cast<CheckBox^>(control);
 		if(check_box != nullptr && check_box->Checked) {
 			Tuple<int, List<String^>^>^ tag = dynamic_cast<Tuple<int, List<String^>^>^>(check_box->Tag);
-			id_category_->Add(Convert::ToInt32(tag->Item1));
+			id_category_parameters_->Add(
+				gcnew Tuple<int, List<String^>^>(Convert::ToInt32(tag->Item1)
+					, tag->Item2));
 		}
 	}
 	audit_(this, EventArgs::Empty);	
@@ -250,6 +252,6 @@ String^ VPForms::VPFormAuditParameterCommand::GetPathOutput() {
 	return file_path_output_;
 }
 
-List<int>^ VPForms::VPFormAuditParameterCommand::GetIdCategory() {
-	return id_category_;
+List<Tuple<int, List<String^>^>^>^ VPForms::VPFormAuditParameterCommand::GetIdCategory() {
+	return id_category_parameters_;
 }
