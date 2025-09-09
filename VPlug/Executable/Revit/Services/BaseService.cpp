@@ -17,6 +17,7 @@ void Services::BaseService::SetElements(List<Element^>^ elements, List<String^>^
 
 		element->SetId(e->Id->IntegerValue.ToString());
 		element->SetName(e->Name);
+		element->SetCategory(e->Category->Name);
 
 		for each(String^ param in parameters) {
 			Filters::ParameterFilledFilter^ filter = gcnew Filters::ParameterFilledFilter();
