@@ -21,11 +21,31 @@
 <h4>The project is being developed in Visual Studio 2022</h4>
 <hr></hr>
 
+## Register Plugin
+
+Create file .addin in the directory X:\Users\\%USER%\AppData\Roaming\Autodesk\Revit\Addins\20XX\
+
+```xml
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>VPlug</Name>
+    <Assembly>"%your_path%\VPlug.dll"</Assembly>
+    <AddInId>{75B71A2F-2ACD-48CE-8518-FF869D3A8440}</AddInId>
+    <FullClassName>VPlug.Main</FullClassName>
+    <VendorId>vasyusha</VendorId>
+    <VendorDescription>https://github.com/vasyusha/VPlug-Revit</VendorDescription>
+  </AddIn>
+</RevitAddIns>
+```
+
+
+
 ## Project tree
 ```
 VPlug/
-├───Configuration/
-│   └───Parameter_Checks/
+├───Configuration/                  # configuration file examples
+│   └───Parameter_Checks/           # checking parameters are filled
 ├───Executable/						# executable files
 │   ├───Commands/					# plugin function initialization files
 │   ├───Config/						# configuration processing
