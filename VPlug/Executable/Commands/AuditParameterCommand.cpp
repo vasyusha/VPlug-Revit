@@ -70,22 +70,26 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 	//!!!TESTs!!!
 		text_box->Text += "\r\n\n";
 	//Навести порядок (мб вывести в отдельную функцию создание строк таблицы
-	base_elements_ = gcnew List<Elements::BaseElement^>();
+	//base_elements_ = gcnew List<Elements::BaseElement^>();
+	category_base_element_ = gcnew Dictionary<String^, List<Elements::BaseElement^>^>();
 	List<Tuple<String^, int, int>^>^ category_not_filled_no_parameter = gcnew List<Tuple<String^, int, int>^>();
 	Windows::Forms::DataGridView^ table = dynamic_cast<Windows::Forms::DataGridView^>(form_->Controls["table_category"]);
 	table->Rows->Clear();
 	for each(Tuple<int, List<String^>^>^ data in form_->GetIdCategory()) {
 		Services::BaseService^ base_service = gcnew Services::BaseService(doc_, data->Item1, data->Item2);
-
-		String^ category;
+		List<Elements::BaseElement^>^ base_elements = nullptr;
+		String^ category = nullptr;
 		int no_filled = 0;
 		int no_parameter = 0;
 
 		for each(Elements::BaseElement^ element in base_service->GetElemenst()) {
 			if(element->GetParameters() == nullptr) continue;
-
-			base_elements_->Add(element);
 			
+			//base_elements_->Add(element);
+			if(base_elements == nullptr) {
+				base_elements = gcnew List<Elements::BaseElement^>();
+			}
+			base_elements->Add(element);
 			if(category->Empty) {
 				category = element->GetCategory();
 			}
@@ -105,13 +109,16 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 				}
 			}
 		}
-		if(category != nullptr) {
+		if(category != nullptr && base_elements != nullptr) {
 			table->Rows->Add(category, no_filled, no_parameter);
+			category_base_element_->Add(category, base_elements);
 		}
 	}
 	TaskDialog::Show("Test4", "AUDIT");
 }
 
 void Commands::AuditParameterCommand::GetResultAudit(Object^ sender, EventArgs^ e) {
+	Export::AuditParameterHtmlExport^ exp = gcnew Export::AuditParameterHtmlExport(form_->GetPathOutput());
+	exp->CompileFile(category_base_element_);
 	TaskDialog::Show("Test3", form_->GetPathOutput());
 }
