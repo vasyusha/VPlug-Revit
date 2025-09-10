@@ -21,7 +21,6 @@ public ref class AuditParameterCommand : public IExternalCommand {
 private:
 	Document^ doc_;
 	VPForms::VPFormAuditParameterCommand^ form_;
-	//List<Elements::BaseElement^>^ base_elements_;
 	Dictionary<String^, List<Elements::BaseElement^>^>^ category_base_element_;
 
 public:

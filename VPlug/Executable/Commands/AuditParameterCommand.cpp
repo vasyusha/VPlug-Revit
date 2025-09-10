@@ -19,7 +19,6 @@ Result Commands::AuditParameterCommand::Execute(ExternalCommandData^ command_dat
 }
 
 void Commands::AuditParameterCommand::SetParseConfigJSON(Object^ sender, EventArgs^ e) {
-	TaskDialog::Show("Test", form_->GetVerificationMethod());
 	if(form_->GetVerificationMethod() == "IfcExportAs") {
 		verification_method_ = VerificationMethod::IfcExportAs;
 	} else {
@@ -28,56 +27,44 @@ void Commands::AuditParameterCommand::SetParseConfigJSON(Object^ sender, EventAr
 }
 
 void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e) {
-	//!!!TEST!!!
-	System::Windows::Forms::TextBox^ text_box = dynamic_cast<System::Windows::Forms::TextBox^>(form_->Controls["main_text"]);
 	form_->ClearCheckBox();
 
 	std::ifstream in(msclr::interop::marshal_as<std::string>(form_->GetPathInput()));
 	json_reader::JsonReaderBase js_reader(in);
-		text_box->Text += gcnew String("TESTs") + "\r\n";
 	int num_box = 1;
 
 	for(const auto& data : js_reader.ParseDataElement()) {
-		text_box->Text += gcnew String("{") + "\r\n";
 		String^ id = gcnew String(data.id.c_str());
 		String^ name = gcnew String(data.built_in_category.c_str());
 		String^ text = gcnew String(data.name.c_str());
 		
-		text_box->Text += id + " = [" + name + " : " + text + "]" +"\r\n";
 		List<String^>^ parameters = gcnew List<String^>();
+
 		for(const auto& param : data.parameters) {
-			text_box->Text += gcnew String(param.c_str());
 			parameters->Add(gcnew String(param.c_str()));
 		}
-		text_box->Text += gcnew String("}") + "\r\n";
 		form_->CreateCheckBox(name, text, 
 				gcnew Tuple<int, List<String^>^>(Convert::ToInt32(id), parameters), num_box);
 		++num_box;
 	}
-	//!!!TEST!!!
-	TaskDialog::Show("Test2", form_->GetPathInput());
 }
 
 void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
-	//!!!TESTs!!!
+
 	Windows::Forms::Panel^ panel = dynamic_cast<Windows::Forms::Panel^>(form_->Controls["contains_com_box"]);
-	System::Windows::Forms::TextBox^ text_box = dynamic_cast<System::Windows::Forms::TextBox^>(form_->Controls["main_text"]);
-	text_box->Clear();
-	for each(Tuple<int, List<String^>^>^ i in form_->GetIdCategory()) {
-		
-		text_box->Text += "\r\n" + i->Item1 + "\r\n";
-	}
-	//!!!TESTs!!!
-		text_box->Text += "\r\n\n";
-	//Навести порядок (мб вывести в отдельную функцию создание строк таблицы
-	//base_elements_ = gcnew List<Elements::BaseElement^>();
+
 	category_base_element_ = gcnew Dictionary<String^, List<Elements::BaseElement^>^>();
+
 	List<Tuple<String^, int, int>^>^ category_not_filled_no_parameter = gcnew List<Tuple<String^, int, int>^>();
+
 	Windows::Forms::DataGridView^ table = dynamic_cast<Windows::Forms::DataGridView^>(form_->Controls["table_category"]);
 	table->Rows->Clear();
+
 	for each(Tuple<int, List<String^>^>^ data in form_->GetIdCategory()) {
+
 		Services::BaseService^ base_service = gcnew Services::BaseService(doc_, data->Item1, data->Item2);
 		List<Elements::BaseElement^>^ base_elements = nullptr;
+
 		String^ category = nullptr;
 		int no_filled = 0;
 		int no_parameter = 0;
@@ -85,7 +72,6 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 		for each(Elements::BaseElement^ element in base_service->GetElemenst()) {
 			if(element->GetParameters() == nullptr) continue;
 			
-			//base_elements_->Add(element);
 			if(base_elements == nullptr) {
 				base_elements = gcnew List<Elements::BaseElement^>();
 			}
@@ -94,13 +80,7 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 				category = element->GetCategory();
 			}
 
-			text_box->Text += element->GetId() + "\r\n";
-			text_box->Text += element->GetName() + "\r\n";
-			text_box->Text += element->GetCategory() + "\r\n";
-			text_box->Text +=  "\r\n";
-
 			for each(KeyValuePair<String^, String^>^ param_value in element->GetParameters()) {
-				text_box->Text += param_value->Key + " ---> " + param_value->Value + "\r\n";
 				if(param_value->Value == "Ошибка - параметер не заполнен!") {
 					++no_filled;
 				}
@@ -114,11 +94,9 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 			category_base_element_->Add(category, base_elements);
 		}
 	}
-	TaskDialog::Show("Test4", "AUDIT");
 }
 
 void Commands::AuditParameterCommand::GetResultAudit(Object^ sender, EventArgs^ e) {
 	Export::AuditParameterHtmlExport^ exp = gcnew Export::AuditParameterHtmlExport(form_->GetPathOutput());
 	exp->CompileFile(category_base_element_);
-	TaskDialog::Show("Test3", form_->GetPathOutput());
 }
