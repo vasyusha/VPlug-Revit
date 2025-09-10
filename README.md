@@ -17,5 +17,39 @@
 <h4> - :pushpin: Learn to work with C++/CLI</h4>
 <h4> - :pushpin: Learn RevitAPI</h4>
 <h4> - :pushpin: Create functionality that simplifies the work of BIM specialists and designers</h4>
-<hr></hr>
+
 <h4>The project is being developed in Visual Studio 2022</h4>
+<hr></hr>
+
+## Project tree
+```
+VPlug/
+├───Configuration/
+│   └───Parameter_Checks/
+├───Executable/						# executable files
+│   ├───Commands/					# plugin function initialization files
+│   ├───Config/						# configuration processing
+│   │   └───json/					# processing json
+│   ├───Export/						# export processing
+│   │   └───html/					# export html
+│   ├───Revit/						# wrappers, helper classes, functions for RevitAPI
+│   │   ├───Elements/				# Revit element wrappers
+│   │   ├───Filters/				# filtering, searching, customization
+│   │   └───Services/				# logic of elements and work
+│   └───UI/							# visual representation
+│       ├───VPControls/				# Controls
+│       └───VPForms/				# Forms
+└───Headlines/                		# header files
+    ├───Commands/					# plugin function initialization files
+    ├───Config/						# configuration processing
+    │   └───json/					# processing json
+    ├───Export/						# export processing
+    │   └───html/					# export html
+    ├───Revit/						# wrappers, helper classes, functions for RevitAPI
+    │   ├───Elements/				# Revit element wrappers
+    │   ├───Filters/				# filtering, searching, customization
+    │   └───Services/				# logic of elements and work
+    └───UI/							# visual representation
+        ├───VPControls/				# Controls
+        └───VPForms/				# Forms
+```
