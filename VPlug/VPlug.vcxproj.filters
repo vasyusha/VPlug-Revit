@@ -73,6 +73,18 @@
     <Filter Include="Executable\Revit\Filters">
       <UniqueIdentifier>{ce4cf66a-2a2d-43eb-bd4f-742fbb8f10c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headlines\Export">
+      <UniqueIdentifier>{baa3bd2d-e44e-4819-b111-eae8b1361cb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headlines\Export\html">
+      <UniqueIdentifier>{82081d99-b710-403b-b914-e4147a760bfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\Export">
+      <UniqueIdentifier>{765070e7-407a-457f-bb64-9e0473043c75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\Export\html">
+      <UniqueIdentifier>{9d31b860-21bb-4ef7-9cba-f4ba476df77b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\app.ico">
@@ -166,6 +178,9 @@
     <ClInclude Include="Headlines\Revit\Filters\ParameterFilledFilter.h">
       <Filter>Headlines\Revit\Filters</Filter>
     </ClInclude>
+    <ClInclude Include="Headlines\Export\html\AuditParameter_htmlExport.h">
+      <Filter>Headlines\Export\html</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -248,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="Executable\Revit\Filters\ParameterFilledFilter.cpp">
       <Filter>Executable\Revit\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Export\html\AuditParameter_htmlExport.cpp">
+      <Filter>Executable\Export\html</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
