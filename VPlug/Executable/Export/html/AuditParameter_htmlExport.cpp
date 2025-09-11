@@ -72,6 +72,23 @@ void Export::AuditParameterHtmlExport::CompileFile(Dictionary<String^, List<Elem
 		"\r\n\t\ttfoot td {"
 		"\r\n\t\t\tfont-weight: bold;"
 		"\r\n\t\t}"
+		"\r\n\t\t.hidden {"
+		"\r\n\t\t\tdisplay: none;"
+		"\r\n\t\t}"
+		"\r\n\t\t.arrow {"
+		"\r\n\t\t\tdisplay: inline-block;"
+		"\r\n\t\t\tmargin-right: 8px;"
+		"\r\n\t\t\ttransition: transform 0.3s ease;"
+		"\r\n\t\t}"
+		"\r\n\t\t.arrow.expanded {"
+		"\r\n\t\t\ttransform: rotate(90deg);"
+		"\r\n\t\t}"
+		"\r\n\t\t.section-header {"
+		"\r\n\t\t\tcursor: pointer;"
+		"\r\n\t\t\ttop: 10px;"
+		"\r\n\t\t\tposition: sticky;"
+		"\r\n\t\t}"
+		
 		"\r\n\t</style>"
 
 		"\r\n</head>"
@@ -91,13 +108,14 @@ void Export::AuditParameterHtmlExport::CompileFile(Dictionary<String^, List<Elem
 		"\r\n\t\t</thead>"//?
 	);
 
-
+	//Не обработать hidden категорию из 2-х слов
 	for each(KeyValuePair<String^, List<Elements::BaseElement^>^>^ kvp in data) {
-		output->Write("\r\n\t\t\t<td colspan=3><p class=\"category\">" + kvp->Key + "</p></td>");
+		output->Write("\r\n\t\t\t<tr class=\"section-header\" onclick=\"toggleSection('" + kvp->Key + "')\">");
+		output->Write("\r\n\t\t\t<td colspan=3><span class=\"arrow\">></span><span class=\"category\">" + kvp->Key + "</span></td></tr>");
 
 		for each(Elements::BaseElement^ element in kvp->Value) {
 			output->Write(
-				"\r\n\t\t\t<tr>" +
+				"\r\n\t\t\t<tr class=\"hidden " + kvp->Key + "-content\">" +
 				"\r\n\t\t\t\t<th scope=\"row\">" + element->GetId() + "</th>"
 				"\r\n\t\t\t\t<td>" + element->GetName() + "</td>"
 				"\r\n\t\t\t\t<td><p class=\"info\">Не заполнен или отсутствует у элемента:</p>"
@@ -116,6 +134,17 @@ void Export::AuditParameterHtmlExport::CompileFile(Dictionary<String^, List<Elem
 	output->Write(
 		"\r\n\t\t</tbody>"
 		"\r\n\t</table>"
+		"\r\n\t<script>"
+		"\r\n\t\tfunction toggleSection(sectionName) {"
+		"\r\n\t\t\tconst rows = document.querySelectorAll('.' + sectionName + '-content');"
+		"\r\n\t\t\tconst header = event.currentTarget;"
+		"\r\n\t\t\tconst arrow = header.querySelector('.arrow');"
+		"\r\n\t\t\trows.forEach(row => {"
+		"\r\n\t\t\t\trow.classList.toggle('hidden');"
+		"\r\n\t\t\t});"
+		"\r\n\t\t\tarrow.classList.toggle('expanded');"
+		"\r\n\t\t\}"
+		"\r\n\t</script>"
 		"\r</body>"
 		"\r</html>"
 	);
