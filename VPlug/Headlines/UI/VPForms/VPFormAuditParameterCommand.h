@@ -14,6 +14,7 @@ private:
 	String^ file_path_output_;
 	List<Tuple<int, List<String^>^>^>^ id_category_parameters_;
 	bool start_audit_ = false;
+	bool compile_audit_ = false;
 
 public:
 	VPFormAuditParameterCommand();

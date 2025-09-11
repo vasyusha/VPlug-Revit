@@ -191,6 +191,7 @@ void VPForms::VPFormAuditParameterCommand::SetPathInput(Object^ sender, EventArg
 		//MessageBox::Show(open_file_dialog->FileName, "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 			file_path_input_ = open_file_dialog->FileName;		
 			my_stream->Close();
+			this->Controls["get_path_config"]->Text = file_path_input_;
 		}
 	} else {
 		return;
@@ -204,6 +205,15 @@ void VPForms::VPFormAuditParameterCommand::SetPathOutput(Object^ sender, EventAr
 		MessageBox::Show("Установите файл конфигурации!", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 		return;
 	}
+	if(start_audit_ == false) {
+		MessageBox::Show("Установите элементы проверки!", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+		return;
+	}
+	if(compile_audit_ == false) {
+		MessageBox::Show("Выполните проверку!", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+		return;
+	}
+
 	Stream^ my_stream;
 	SaveFileDialog^ save_file_dialog = gcnew SaveFileDialog();
 	save_file_dialog->Filter = "html files (*.html)| *.html";
@@ -215,6 +225,7 @@ void VPForms::VPFormAuditParameterCommand::SetPathOutput(Object^ sender, EventAr
 			//MessageBox::Show(save_file_dialog->FileName, "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 			file_path_output_ = save_file_dialog->FileName;
 			my_stream->Close();
+			this->Controls["get_path_output"]->Text = file_path_input_;
 		}
 	} else {
 		return;
@@ -230,7 +241,7 @@ void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs
 
 void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e) {
 	if(start_audit_ == false) {
-		MessageBox::Show("Установите элементы проверки", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+		MessageBox::Show("Установите элементы проверки!", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 	}
 	id_category_parameters_ = gcnew List<Tuple<int, List<String^>^>^>();
 
@@ -243,7 +254,8 @@ void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e
 					, tag->Item2));
 		}
 	}
-	audit_(this, EventArgs::Empty);	
+	audit_(this, EventArgs::Empty);
+	compile_audit_ = true;
 }
 
 void VPForms::VPFormAuditParameterCommand::CheckCheckBox(Object^ sender, EventArgs^ e) {
