@@ -51,7 +51,7 @@ void VPForms::VPFormAuditParameterCommand::CreateButton() {
 	Button^ button_start_audit = gcnew Button();
 	button_start_audit->Name = "start_audit";
 	button_start_audit->Text = "Проверить";
-	button_start_audit->Location = Drawing::Point(700, 60);
+	button_start_audit->Location = Drawing::Point(870, 60);
 	button_start_audit->Size = Drawing::Size(100, 20);
 	button_start_audit->Anchor = AnchorStyles::Top | AnchorStyles::Left;
 	button_start_audit->Click += gcnew EventHandler(this, &VPFormAuditParameterCommand::SetAudit);
@@ -147,6 +147,7 @@ void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ 
 	check_box->AutoSize = true;
 	check_box->Appearance = Appearance::Normal;
 	check_box->AutoCheck = true;
+	check_box->CheckedChanged += gcnew EventHandler(this, &VPFormAuditParameterCommand::CheckCheckBox);
 	check_box->Tag = id_param;
 	panel->Controls->Add(check_box);
 }
@@ -187,7 +188,7 @@ void VPForms::VPFormAuditParameterCommand::SetPathInput(Object^ sender, EventArg
 
 	if(open_file_dialog->ShowDialog() == ::DialogResult::OK) {
 		if((my_stream = open_file_dialog->OpenFile()) != nullptr) {
-		MessageBox::Show(open_file_dialog->FileName, "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+		//MessageBox::Show(open_file_dialog->FileName, "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 			file_path_input_ = open_file_dialog->FileName;		
 			my_stream->Close();
 		}
@@ -211,7 +212,7 @@ void VPForms::VPFormAuditParameterCommand::SetPathOutput(Object^ sender, EventAr
 
 	if(save_file_dialog->ShowDialog() == ::DialogResult::OK) {
 		if((my_stream = save_file_dialog->OpenFile()) != nullptr) {
-			MessageBox::Show(save_file_dialog->FileName, "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			//MessageBox::Show(save_file_dialog->FileName, "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 			file_path_output_ = save_file_dialog->FileName;
 			my_stream->Close();
 		}
@@ -228,6 +229,9 @@ void VPForms::VPFormAuditParameterCommand::SetCategory(Object^ sender, EventArgs
 }
 
 void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e) {
+	if(start_audit_ == false) {
+		MessageBox::Show("Установите элементы проверки", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+	}
 	id_category_parameters_ = gcnew List<Tuple<int, List<String^>^>^>();
 
 	for each(Control^ control in this->Controls["contains_com_box"]->Controls) {
@@ -240,6 +244,25 @@ void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e
 		}
 	}
 	audit_(this, EventArgs::Empty);	
+}
+
+void VPForms::VPFormAuditParameterCommand::CheckCheckBox(Object^ sender, EventArgs^ e) {
+	CheckBox^ check_box = safe_cast<CheckBox^>(sender);
+	static int flag = 0;
+	
+	if(check_box->Checked) {
+		++flag;
+	} else {
+		--flag;
+	}
+	if(flag > 0) {
+		this->Controls["start_audit"]->BackColor = Drawing::Color::Green;
+		start_audit_ = true;
+	} else {
+		this->Controls["start_audit"]->BackColor = Drawing::Color::Red;
+		start_audit_ = false;
+	}
+	
 }
 
 

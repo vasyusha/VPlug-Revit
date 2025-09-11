@@ -13,6 +13,7 @@ private:
 	String^ file_path_input_;
 	String^ file_path_output_;
 	List<Tuple<int, List<String^>^>^>^ id_category_parameters_;
+	bool start_audit_ = false;
 
 public:
 	VPFormAuditParameterCommand();
@@ -32,6 +33,7 @@ public:
 	void SetPathOutput(Object^ sender, EventArgs^ e);
 	void SetCategory(Object^ sender, EventArgs^e);
 	void SetAudit(Object^ sender, EventArgs^ e);
+	void CheckCheckBox(Object^ sender, EventArgs^ e);
 
 	String^ GetVerificationMethod();
 	String^ GetPathInput();
