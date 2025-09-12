@@ -53,7 +53,7 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 
 	Windows::Forms::Panel^ panel = dynamic_cast<Windows::Forms::Panel^>(form_->Controls["contains_com_box"]);
 
-	category_base_element_ = gcnew Dictionary<String^, List<Elements::BaseElement^>^>();
+	category_base_element_ = gcnew Dictionary<Tuple<String^, String^>^, List<Elements::BaseElement^>^>();
 
 	List<Tuple<String^, int, int>^>^ category_not_filled_no_parameter = gcnew List<Tuple<String^, int, int>^>();
 
@@ -65,6 +65,7 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 		Services::BaseService^ base_service = gcnew Services::BaseService(doc_, data->Item1, data->Item2);
 		List<Elements::BaseElement^>^ base_elements = nullptr;
 
+		String^ built_in_category = nullptr;
 		String^ category_name = nullptr;
 		int no_filled = 0;
 		int no_parameter = 0;
@@ -76,9 +77,11 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 				base_elements = gcnew List<Elements::BaseElement^>();
 			}
 			base_elements->Add(element);
-			if(category_name->Empty) {
+			if(category_name == nullptr && built_in_category == nullptr) {
 				category_name = element->GetCategoryName();
+				built_in_category = element->GetBuiltInCategory();
 			}
+			
 
 			for each(KeyValuePair<String^, String^>^ param_value in element->GetParameters()) {
 				if(param_value->Value == "Ошибка - параметер не заполнен!") {
@@ -91,7 +94,8 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 		}
 		if(category_name != nullptr && base_elements != nullptr) {
 			table->Rows->Add(category_name, no_filled, no_parameter);
-			category_base_element_->Add(category_name, base_elements);
+			category_base_element_->Add(gcnew Tuple<String^, String^>(category_name,
+				built_in_category), base_elements);
 		}
 	}
 }
