@@ -11,6 +11,7 @@ private:
 	String^ name_;
 	String^ guid_;
 	String^ category_;
+	String^ built_in_category_;
 
 	Dictionary<String^, String^>^ parameters_;
 public:
@@ -25,6 +26,9 @@ public:
 
 	virtual void SetCategoryName(String^ category);
 	virtual String^ GetCategoryName();
+
+	virtual void SetBuiltInCategory(String^ built_in_category);
+	virtual String^ GetBuiltInCategory();
 
 	virtual void SetParameters(String^ key, String^ value);
 	virtual Dictionary<String^, String^>^ GetParameters();

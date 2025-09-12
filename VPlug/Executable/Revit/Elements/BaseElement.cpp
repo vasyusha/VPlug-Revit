@@ -29,6 +29,14 @@ String^ Elements::BaseElement::GetCategoryName() {
 	return category_;
 }
 
+void Elements::BaseElement::SetBuiltInCategory(String^ built_in_category) {
+	built_in_category_ = built_in_category;	
+}
+
+String^ Elements::BaseElement::GetBuiltInCategory() {
+	return built_in_category_;
+}
+
 void Elements::BaseElement::SetParameters(String^ key, String^ value) {
 	if(parameters_ == nullptr) {
 		parameters_ = gcnew Dictionary<String^, String^>();
