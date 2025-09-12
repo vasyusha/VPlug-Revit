@@ -21,11 +21,11 @@ String^ Elements::BaseElement::GetGuid() {
 	return guid_;
 }
 
-void Elements::BaseElement::SetCategory(String^ category) {
+void Elements::BaseElement::SetCategoryName(String^ category) {
 	category_ = category;
 }
 
-String^ Elements::BaseElement::GetCategory() {
+String^ Elements::BaseElement::GetCategoryName() {
 	return category_;
 }
 

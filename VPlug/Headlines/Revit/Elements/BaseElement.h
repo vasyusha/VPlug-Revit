@@ -23,8 +23,8 @@ public:
 	virtual void SetGuid(String^ guid);
 	virtual String^ GetGuid();
 
-	virtual void SetCategory(String^ category);
-	virtual String^ GetCategory();
+	virtual void SetCategoryName(String^ category);
+	virtual String^ GetCategoryName();
 
 	virtual void SetParameters(String^ key, String^ value);
 	virtual Dictionary<String^, String^>^ GetParameters();
