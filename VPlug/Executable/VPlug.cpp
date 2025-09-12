@@ -15,15 +15,23 @@ Result VPlug::Main::OnStartup(UIControlledApplication^ app) {
 	
 	String^ path = Assembly::GetExecutingAssembly()->Location;
 
-	RibbonPanel^ panel_bim_helper = app->CreateRibbonPanel(tab_name, "Бим помошник");
-	
-	PushButtonData^ button_bim_helper_check_param = gcnew PushButtonData(
-		"_bim_helper_check_param_",
-		"Пров. заполн. парам.",
+	RibbonPanel^ panel_check_something = app->CreateRibbonPanel(tab_name, "Проверка");
+
+	PulldownButtonData^ pull_button_data_check_something = gcnew PulldownButtonData(
+		"check_something",
+		"Проверить"
+	);
+
+	PulldownButton^ pull_button_check_something = safe_cast<PulldownButton^>(panel_check_something->AddItem(pull_button_data_check_something));
+
+	PushButtonData^ push_button_data_check_filling_param = gcnew PushButtonData(
+		"check_filling_param",
+		"Заполнение параметров",
 		path,
 		"Commands.AuditParameterCommand"
 	);
-	PushButton^ push_bim_helper_check_param = dynamic_cast<PushButton^>(panel_bim_helper->AddItem(button_bim_helper_check_param));
+
+	pull_button_check_something->AddPushButton(push_button_data_check_filling_param);
 
 	return Result::Succeeded;
 }
