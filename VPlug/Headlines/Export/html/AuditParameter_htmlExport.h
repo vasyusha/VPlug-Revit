@@ -15,7 +15,7 @@ private:
 public:
 	AuditParameterHtmlExport(String^ path);
 
-	void CompileFile(Dictionary<String^, List<Elements::BaseElement^>^>^ data);
+	void CompileFile(Dictionary<Tuple<String^, String^>^, List<Elements::BaseElement^>^>^ data);
 
 };
 

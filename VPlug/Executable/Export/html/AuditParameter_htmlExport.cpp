@@ -4,7 +4,7 @@ Export::AuditParameterHtmlExport::AuditParameterHtmlExport(String^ path) : path_
 
 };
 
-void Export::AuditParameterHtmlExport::CompileFile(Dictionary<String^, List<Elements::BaseElement^>^>^ data) {
+void Export::AuditParameterHtmlExport::CompileFile(Dictionary<Tuple<String^, String^>^, List<Elements::BaseElement^>^>^ data) {
 
 	StreamWriter^ output = gcnew StreamWriter(path_);
 
@@ -99,23 +99,23 @@ void Export::AuditParameterHtmlExport::CompileFile(Dictionary<String^, List<Elem
 		"\r\n\t</header>"
 		"\r\n\t<table>"
 		"\r\n\t\t<thead>"
-		"\r\n\t\t<tbody>"
 		"\r\n\t\t\t<tr>"
 		"\r\n\t\t\t\t<th scope=\"col\">ID</th>"
 		"\r\n\t\t\t\t<th scope=\"col\">Имя</th>"
 		"\r\n\t\t\t\t<th scope=\"col\">Параметр(ы)</th>"
 		"\r\n\t\t\t</tr>"
 		"\r\n\t\t</thead>"//?
+		"\r\n\t\t<tbody>"
 	);
 
 	//Не обработать hidden категорию из 2-х слов
-	for each(KeyValuePair<String^, List<Elements::BaseElement^>^>^ kvp in data) {
-		output->Write("\r\n\t\t\t<tr class=\"section-header\" onclick=\"toggleSection('" + kvp->Key + "')\">");
-		output->Write("\r\n\t\t\t<td colspan=3><span class=\"arrow\">></span><span class=\"category\">" + kvp->Key + "</span></td></tr>");
+	for each(KeyValuePair<Tuple<String^, String^>^, List<Elements::BaseElement^>^>^ kvp in data) {
+		output->Write("\r\n\t\t\t<tr class=\"section-header\" onclick=\"toggleSection('" + kvp->Key->Item2 + "')\">");
+		output->Write("\r\n\t\t\t<td colspan=3><span class=\"arrow\">></span><span class=\"category\">" + kvp->Key->Item1 + "</span></td></tr>");
 
 		for each(Elements::BaseElement^ element in kvp->Value) {
 			output->Write(
-				"\r\n\t\t\t<tr class=\"hidden " + kvp->Key + "-content\">" +
+				"\r\n\t\t\t<tr class=\"hidden " + kvp->Key->Item2 + "-content\">" +
 				"\r\n\t\t\t\t<th scope=\"row\">" + element->GetId() + "</th>"
 				"\r\n\t\t\t\t<td>" + element->GetName() + "</td>"
 				"\r\n\t\t\t\t<td><p class=\"info\">Не заполнен или отсутствует у элемента:</p>"
