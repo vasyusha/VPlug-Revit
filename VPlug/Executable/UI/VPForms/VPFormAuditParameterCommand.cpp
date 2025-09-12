@@ -7,7 +7,7 @@ VPForms::VPFormAuditParameterCommand::VPFormAuditParameterCommand() {
 	this->Size = Drawing::Size(1000, 750);
 	this->FormBorderStyle = ::FormBorderStyle::FixedSingle;
 	this->MinimizeBox = false;
-
+	flag_ = 0;
 	CreateControls();
 }
 
@@ -260,14 +260,13 @@ void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e
 
 void VPForms::VPFormAuditParameterCommand::CheckCheckBox(Object^ sender, EventArgs^ e) {
 	CheckBox^ check_box = safe_cast<CheckBox^>(sender);
-	static int flag = 0;
 	
 	if(check_box->Checked) {
-		++flag;
+		++flag_;
 	} else {
-		--flag;
+		--flag_;
 	}
-	if(flag > 0) {
+	if(flag_ > 0) {
 		this->Controls["start_audit"]->BackColor = Drawing::Color::Green;
 		start_audit_ = true;
 	} else {
