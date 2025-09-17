@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "..\Headlines\VPlug.h"
 
 using namespace System::Windows::Media::Imaging;
@@ -15,18 +15,18 @@ Result VPlug::Main::OnStartup(UIControlledApplication^ app) {
 	
 	String^ path = Assembly::GetExecutingAssembly()->Location;
 
-	RibbonPanel^ panel_check_something = app->CreateRibbonPanel(tab_name, "Проверка");
+	RibbonPanel^ panel_check_something = app->CreateRibbonPanel(tab_name, "РџСЂРѕРІРµСЂРєР°");
 
 	PulldownButtonData^ pull_button_data_check_something = gcnew PulldownButtonData(
 		"check_something",
-		"Проверить"
+		"РџСЂРѕРІРµСЂРёС‚СЊ"
 	);
 
 	PulldownButton^ pull_button_check_something = safe_cast<PulldownButton^>(panel_check_something->AddItem(pull_button_data_check_something));
 
 	PushButtonData^ push_button_data_check_filling_param = gcnew PushButtonData(
 		"check_filling_param",
-		"Заполнение параметров",
+		"Р—Р°РїРѕР»РЅРµРЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ",
 		path,
 		"Commands.AuditParameterCommand"
 	);
