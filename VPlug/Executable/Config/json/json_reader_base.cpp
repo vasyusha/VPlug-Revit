@@ -19,7 +19,7 @@ std::map<std::string, std::string> json_reader::JsonReaderBase::ParseMapStringSt
 
 std::map<std::string, std::vector<std::string>> json_reader::JsonReaderBase::ParseMapStringVectorString() {
 	std::map<std::string, std::vector<std::string>> result;
-
+	
 	if(document_.GetRoot().IsDict()) {
 		for(const auto& [key, value] : document_.GetRoot().AsDict()) {
 			if(value.IsArray()) {
@@ -133,6 +133,62 @@ std::vector<json_reader::JsonReaderBase::DataElement> json_reader::JsonReaderBas
 					data_element.parameters.push_back(value.AsString());
 				}
 				result.push_back(data_element);
+			}
+		}
+	}
+	return result;
+}
+
+std::map<std::string, std::vector<std::string>> json_reader::JsonReaderBase::ParseOneParam() {
+	std::map<std::string, std::vector<std::string>> result;
+
+	if(document_.GetRoot().IsArray()) {
+		for(const auto& cont : document_.GetRoot().AsArray()) {
+			if(cont.IsDict() && cont.AsDict().size() == 2) {
+				json::Node it_user_param;
+				json::Node it_parameters;
+				try {
+					it_user_param = cont.AsDict().at("key");
+					it_parameters = cont.AsDict().at("value");
+				} catch (std::out_of_range) {
+					continue;
+				}
+
+				std::vector<std::string> parameters;
+				for(const auto& param : it_parameters.AsArray()) {
+					parameters.push_back(param.AsString());
+				}
+				result.emplace(std::make_pair(it_user_param.AsString(), parameters));
+			}
+		}
+	}
+	return result;
+}
+
+std::map<std::pair<std::string, std::string>, std::vector<std::string>> json_reader::JsonReaderBase::ParseTwoParam() {
+	std::map<std::pair<std::string, std::string>, std::vector<std::string>> result;
+
+	if(document_.GetRoot().IsArray()) {
+		for(const auto& cont : document_.GetRoot().AsArray()) {
+			if(cont.IsDict() && cont.AsDict().size() == 2) {
+				json::Node it_user_param_one;
+				json::Node it_user_param_two;
+				json::Node it_parameters;
+				try {
+					it_user_param_one = cont.AsDict().at("key");
+					it_parameters = cont.AsDict().at("value");
+				} catch (std::out_of_range) {
+					continue;
+				}
+
+				std::vector<std::string> parameters;
+				for(const auto& param : it_parameters.AsArray()) {
+					parameters.push_back(param.AsString());
+				}
+				result.emplace(std::make_pair(
+					std::make_pair(it_user_param_one.AsArray()[0].AsString()
+						, it_user_param_one.AsArray()[1].AsString())
+					, parameters));
 			}
 		}
 	}
