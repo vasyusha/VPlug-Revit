@@ -26,7 +26,7 @@ private:
 public:
 	virtual Result Execute(ExternalCommandData^ command_data, 
 		String^% message, ElementSet^ elements);
-	
+
 	void SetParseConfigJSON(Object^ sender, EventArgs^ e);
 	void SetParseJSON(Object^ sender, EventArgs^ e);
 	void Audit(Object^ sender, EventArgs^ e);
@@ -34,7 +34,8 @@ public:
 
 	enum class VerificationMethod {
 		Category,
-		IfcExportAs	
+		one_param,
+		two_param
 	};
 private:
 	VerificationMethod verification_method_;

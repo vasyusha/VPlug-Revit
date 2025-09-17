@@ -19,10 +19,14 @@ Result Commands::AuditParameterCommand::Execute(ExternalCommandData^ command_dat
 }
 
 void Commands::AuditParameterCommand::SetParseConfigJSON(Object^ sender, EventArgs^ e) {
-	if(form_->GetVerificationMethod() == "IfcExportAs") {
-		verification_method_ = VerificationMethod::IfcExportAs;
-	} else {
+	String^ method = form_->GetVerificationMethod();
+
+	if(method == "Категория") {
 		verification_method_ = VerificationMethod::Category;
+	} else if(method == "По 1 параметру") {
+		verification_method_ = VerificationMethod::one_param;
+	} else if(method == "По 2 параметрам") {
+		verification_method_ = VerificationMethod::two_param;
 	}
 }
 
@@ -33,19 +37,57 @@ void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e)
 	json_reader::JsonReaderBase js_reader(in);
 	int num_box = 1;
 
-	for(const auto& data : js_reader.ParseDataElement()) {
-		String^ id = gcnew String(data.id.c_str());
-		String^ name = gcnew String(data.built_in_category.c_str());
-		String^ text = gcnew String(data.name.c_str());
+	if(verification_method_ == VerificationMethod::Category) {
+
+	//Category
+		for(const auto& data : js_reader.ParseDataElement()) {
+			String^ id = gcnew String(data.id.c_str());
+			String^ name = gcnew String(data.built_in_category.c_str());
+			String^ text = gcnew String(data.name.c_str());
 		
+			List<String^>^ parameters = gcnew List<String^>();
+
+			for(const auto& param : data.parameters) {
+				parameters->Add(gcnew String(param.c_str()));
+			}
+			form_->CreateCheckBox(name, text, 
+				gcnew Tuple<int, List<String^>^>(Convert::ToInt32(id), parameters), num_box);
+			++num_box;
+		}
+
+	} else if(verification_method_ == VerificationMethod::one_param) {
+
+	//One param
+		for(const auto& data : js_reader.ParseOneParam()) {
+			String^ name = gcnew String(data.first.c_str());
+			String^ text = gcnew String(data.first.c_str());
+
+			List<String^>^ parameters = gcnew List<String^>();
+		
+			for(const auto& param : data.second) {
+				parameters->Add(gcnew String(param.c_str()));
+			}
+			form_->CreateCheckBox(name, text, 
+				gcnew Tuple<int, List<String^>^>(num_box, parameters), num_box);
+			++num_box;
+		} 
+	
+	} else if(verification_method_ == VerificationMethod::two_param) {
+		
+	//Two param
+		for(const auto& data : js_reader.ParseTwoParam()) {
+			String^ name = gcnew String(data.first.first.c_str()) + " - " + gcnew String(data.first.second.c_str());
+			String^ text = gcnew String(data.first.first.c_str()) + " - " + gcnew String(data.first.second.c_str());
+
 		List<String^>^ parameters = gcnew List<String^>();
 
-		for(const auto& param : data.parameters) {
+		for(const auto& param : data.second) {
 			parameters->Add(gcnew String(param.c_str()));
 		}
-		form_->CreateCheckBox(name, text, 
-				gcnew Tuple<int, List<String^>^>(Convert::ToInt32(id), parameters), num_box);
-		++num_box;
+			form_->CreateCheckBox(name, text, 
+				gcnew Tuple<int, List<String^>^>(num_box, parameters), num_box);
+			++num_box;
+		}
 	}
 }
 
