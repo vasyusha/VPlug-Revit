@@ -120,7 +120,8 @@ void VPForms::VPFormAuditParameterCommand::CreatePanel() {
 void VPForms::VPFormAuditParameterCommand::CreateComboBox() {
 	array<Object^>^ category = {
 		"Категория",
-		"IfcExportAs"
+		"По 1 параметру",
+		"По 2 параметрам",
 	};
 
 	ComboBox^ combo_box_verific_method = gcnew ComboBox();
