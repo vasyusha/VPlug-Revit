@@ -15,18 +15,18 @@ Result VPlug::Main::OnStartup(UIControlledApplication^ app) {
 	
 	String^ path = Assembly::GetExecutingAssembly()->Location;
 
-	RibbonPanel^ panel_check_something = app->CreateRibbonPanel(tab_name, "РџСЂРѕРІРµСЂРєР°");
+	RibbonPanel^ panel_check_something = app->CreateRibbonPanel(tab_name, "Проверка");
 
 	PulldownButtonData^ pull_button_data_check_something = gcnew PulldownButtonData(
 		"check_something",
-		"РџСЂРѕРІРµСЂРёС‚СЊ"
+		"Проверить"
 	);
 
 	PulldownButton^ pull_button_check_something = safe_cast<PulldownButton^>(panel_check_something->AddItem(pull_button_data_check_something));
 
 	PushButtonData^ push_button_data_check_filling_param = gcnew PushButtonData(
 		"check_filling_param",
-		"Р—Р°РїРѕР»РЅРµРЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ",
+		"Заполнение параметров",
 		path,
 		"Commands.AuditParameterCommand"
 	);
