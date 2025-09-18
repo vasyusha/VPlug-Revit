@@ -194,3 +194,32 @@ std::map<std::pair<std::string, std::string>, std::vector<std::string>> json_rea
 	}
 	return result;
 }
+
+std::map<std::pair<std::string, std::string>, std::vector<std::string>> json_reader::JsonReaderBase::ParseUserParam() {
+	std::map<std::pair<std::string, std::string>, std::vector<std::string>> result;
+
+	if(document_.GetRoot().IsArray()) {
+		for(const auto& cont : document_.GetRoot().AsArray()) {
+			if(cont.IsDict() && cont.AsDict().size() == 2) {
+				json::Node it_user_param;
+				json::Node it_parameters;
+				try {
+					it_user_param = cont.AsDict().at("key 1");
+					it_parameters = cont.AsDict().at("value");
+				} catch (std::out_of_range) {
+					continue;
+				}
+
+				std::vector<std::string> parameters;
+				for(const auto& param : it_parameters.AsArray()) {
+					parameters.push_back(param.AsString());
+				}
+				result.emplace(std::make_pair(
+					std::make_pair(it_user_param.AsArray()[0].AsString()
+						, it_user_param.AsArray()[1].AsString()),
+					parameters));
+			}
+		}
+	}
+	return result;
+}

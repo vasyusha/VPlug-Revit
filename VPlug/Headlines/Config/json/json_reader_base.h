@@ -31,6 +31,9 @@ public:
 	std::vector<DataElement> ParseDataElement();
 	std::map<std::string, std::vector<std::string>> ParseOneParam();
 	std::map<std::pair<std::string, std::string>, std::vector<std::string>> ParseTwoParam();
+
+	std::map<std::pair<std::string, std::string>, std::vector<std::string>> ParseUserParam();
+
 };
 
 }
