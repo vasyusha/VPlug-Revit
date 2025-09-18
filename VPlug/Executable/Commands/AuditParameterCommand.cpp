@@ -58,6 +58,30 @@ void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e)
 	} else if(verification_method_ == VerificationMethod::one_param) {
 
 	//One param
+		for(const auto& data : js_reader.ParseUserParam()) {
+			String^ user_filter_param = gcnew String(data.first.first.c_str());
+			String^ user_filter_value = gcnew String(data.first.second.c_str());
+
+			String^ name = user_filter_param + " : " + user_filter_value;
+			String^ text = user_filter_param + " : " + user_filter_value;
+
+			List<String^>^ parameters = gcnew List<String^>();
+
+			for(const auto& param : data.second) {
+				parameters->Add(gcnew String(param.c_str()));
+			}
+			Tuple<String^, String^>^ param_value = gcnew Tuple<String^, String^>(user_filter_param, user_filter_value);
+			Tuple<Tuple<String^, String^>^, List<String^>^>^ tag = gcnew Tuple<Tuple<String^, String^>^, List<String^>^>(param_value, parameters);
+			form_->CreateCheckBox(name
+				, text
+				, tag
+				, num_box
+			);
+
+			++num_box;
+		}
+
+		/*
 		for(const auto& data : js_reader.ParseOneParam()) {
 			String^ name = gcnew String(data.first.c_str());
 			String^ text = gcnew String(data.first.c_str());
@@ -70,7 +94,8 @@ void Commands::AuditParameterCommand::SetParseJSON(Object^ sender, EventArgs^ e)
 			form_->CreateCheckBox(name, text, 
 				gcnew Tuple<int, List<String^>^>(num_box, parameters), num_box);
 			++num_box;
-		} 
+		}
+		*/
 	
 	} else if(verification_method_ == VerificationMethod::two_param) {
 		
@@ -102,6 +127,8 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 	Windows::Forms::DataGridView^ table = dynamic_cast<Windows::Forms::DataGridView^>(form_->Controls["table_category"]);
 	table->Rows->Clear();
 
+	if(verification_method_ == VerificationMethod::Category) {
+	
 	for each(Tuple<int, List<String^>^>^ data in form_->GetIdCategory()) {
 
 		Services::BaseService^ base_service = gcnew Services::BaseService(doc_, data->Item1, data->Item2);
@@ -138,6 +165,50 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 			table->Rows->Add(category_name, no_filled, no_parameter);
 			category_base_element_->Add(gcnew Tuple<String^, String^>(category_name,
 				built_in_category), base_elements);
+		}
+	}
+
+	} else if(verification_method_ == VerificationMethod::one_param) {
+		Windows::Forms::TextBox^ text_box = dynamic_cast<Windows::Forms::TextBox^>(form_->Controls["main_text"]);
+		for each(Tuple<Tuple<String^, String^>^, List<String^>^>^ data in form_->GetUserParam()) {
+			
+			text_box->Text += "\r\n" + data->Item1->Item1 + " -> " + data->Item1->Item2;
+
+			Services::BaseService^ base_service = gcnew Services::BaseService(doc_, data->Item1, data->Item2);
+			List<Elements::BaseElement^>^ base_elements = nullptr;
+
+			String^ built_in_category = nullptr;
+			String^ category_name = nullptr;
+			int no_filled = 0;
+			int no_parameter = 0;
+
+		for each(Elements::BaseElement^ element in base_service->GetElemenst()) {
+			if(element->GetParameters() == nullptr) continue;
+			
+			if(base_elements == nullptr) {
+				base_elements = gcnew List<Elements::BaseElement^>();
+			}
+			base_elements->Add(element);
+			if(category_name == nullptr && built_in_category == nullptr) {
+				category_name = data->Item1->Item2;
+				built_in_category = data->Item1->Item2;
+			}
+			
+
+			for each(KeyValuePair<String^, String^>^ param_value in element->GetParameters()) {
+				if(param_value->Value == "Ошибка - параметер не заполнен!") {
+					++no_filled;
+				}
+				if(param_value->Value == "Ошибка - Параметр отсутствует у семейства типа/экземаляра") {
+					++no_parameter;
+				}
+			}
+		}
+			if(category_name != nullptr && base_elements != nullptr) {
+				table->Rows->Add(category_name, no_filled, no_parameter);
+				category_base_element_->Add(gcnew Tuple<String^, String^>(category_name,
+					built_in_category), base_elements);
+			}
 		}
 	}
 }
