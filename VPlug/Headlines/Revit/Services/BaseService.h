@@ -19,8 +19,11 @@ private:
 
 public:
 	BaseService(Document^ doc, int category_id, List<String^>^ parameters);
+	BaseService(Document^ doc, Tuple<String^, String^>^ find_par_val, List<String^>^ parameters);
 
 	void SetElements(List<Element^>^ elements, List<String^>^ parameters);
+	void SetElements(List<Element^>^ elements, Tuple<String^, String^>^ find_par_val, List<String^>^ parameters);
+
 	List<Elements::BaseElement^>^ GetElemenst();	
 };
 
