@@ -153,6 +153,21 @@ void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ 
 	panel->Controls->Add(check_box);
 }
 
+void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ text, Tuple<Tuple<String^, String^>^, List<String^>^>^ tag, int num_box) {
+	Panel^ panel = dynamic_cast<Panel^>(this->Controls["contains_com_box"]);
+
+	CheckBox^ check_box = gcnew CheckBox();
+	check_box->Name = name;
+	check_box->Text = text;
+	check_box->Location = Drawing::Point(10, num_box * 20);
+	check_box->AutoSize = true;
+	check_box->Appearance = Appearance::Normal;
+	check_box->AutoCheck = true;
+	check_box->CheckedChanged += gcnew EventHandler(this, &VPFormAuditParameterCommand::CheckCheckBox);
+	check_box->Tag = tag;
+	panel->Controls->Add(check_box);
+}
+
 void VPForms::VPFormAuditParameterCommand::ClearCheckBox() {
 	this->Controls["contains_com_box"]->Controls->Clear();
 }
@@ -244,15 +259,29 @@ void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e
 	if(start_audit_ == false) {
 		MessageBox::Show("Установите элементы проверки!", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 	}
-	id_category_parameters_ = gcnew List<Tuple<int, List<String^>^>^>();
 
-	for each(Control^ control in this->Controls["contains_com_box"]->Controls) {
-		CheckBox^ check_box = dynamic_cast<CheckBox^>(control);
-		if(check_box != nullptr && check_box->Checked) {
-			Tuple<int, List<String^>^>^ tag = dynamic_cast<Tuple<int, List<String^>^>^>(check_box->Tag);
-			id_category_parameters_->Add(
-				gcnew Tuple<int, List<String^>^>(Convert::ToInt32(tag->Item1)
-					, tag->Item2));
+	if(verification_method_ == "Категория") {
+		id_category_parameters_ = gcnew List<Tuple<int, List<String^>^>^>();
+
+		for each(Control^ control in this->Controls["contains_com_box"]->Controls) {
+			CheckBox^ check_box = dynamic_cast<CheckBox^>(control);
+			if(check_box != nullptr && check_box->Checked) {
+				Tuple<int, List<String^>^>^ tag = dynamic_cast<Tuple<int, List<String^>^>^>(check_box->Tag);
+				id_category_parameters_->Add(
+					gcnew Tuple<int, List<String^>^>(Convert::ToInt32(tag->Item1)
+						, tag->Item2));
+			}
+		}
+	} else if(verification_method_ == "По 1 параметру") {
+		user_param_ = gcnew List<Tuple<Tuple<String^, String^>^, List<String^>^>^>();
+
+		for each(Control^ control in this->Controls["contains_com_box"]->Controls) {
+			CheckBox^ check_box = dynamic_cast<CheckBox^>(control);
+			if(check_box != nullptr && check_box->Checked) {
+				Tuple<Tuple<String^, String^>^, List<String^>^>^ tag = 
+					dynamic_cast<Tuple<Tuple<String^, String^>^, List<String^>^>^>(check_box->Tag);
+				user_param_->Add(tag);
+			}
 		}
 	}
 	audit_(this, EventArgs::Empty);
@@ -292,4 +321,8 @@ String^ VPForms::VPFormAuditParameterCommand::GetPathOutput() {
 
 List<Tuple<int, List<String^>^>^>^ VPForms::VPFormAuditParameterCommand::GetIdCategory() {
 	return id_category_parameters_;
+}
+
+List<Tuple<Tuple<String^, String^>^, List<String^>^>^>^ VPForms::VPFormAuditParameterCommand::GetUserParam() {
+	return user_param_;
 }

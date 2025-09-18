@@ -13,6 +13,7 @@ private:
 	String^ file_path_input_;
 	String^ file_path_output_;
 	List<Tuple<int, List<String^>^>^>^ id_category_parameters_;
+	List<Tuple<Tuple<String^, String^>^, List<String^>^>^>^ user_param_;
 	static int flag_;
 	bool start_audit_ = false;
 	bool compile_audit_ = false;
@@ -26,6 +27,7 @@ public:
 	void CreatePanel();
 	void CreateComboBox();
 	void CreateCheckBox(String^ name, String^ text, Tuple<int, List<String^>^>^ id_pram, int num_box);
+	void CreateCheckBox(String^ name, String^ text, Tuple<Tuple<String^, String^>^, List<String^>^>^ tag, int num_box);
 
 	void ClearCheckBox();
 	void CreateTable();
@@ -41,6 +43,7 @@ public:
 	String^ GetPathInput();
 	String^ GetPathOutput();
 	List<Tuple<int, List<String^>^>^>^ GetIdCategory();
+	List<Tuple<Tuple<String^, String^>^, List<String^>^>^>^ GetUserParam();
 
 	event EventHandler^ input_;
 	event EventHandler^ output_;
