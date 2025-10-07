@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "..\Headlines\VPlug.h"
+#include "..\Headers\VPlug.h"
 
 using namespace System::Windows::Media::Imaging;
 Result VPlug::Main::OnStartup(UIControlledApplication^ app) {

@@ -1,4 +1,4 @@
-﻿#include "..\..\..\Headlines\UI\VPControls\VPBaseControl.h"
+﻿#include "..\..\..\Headers\UI\VPControls\VPBaseControl.h"
 
 VPControls::VPBaseControl::VPBaseControl(String^ name, int x, int y, int width, int height) {
 	Name = name;

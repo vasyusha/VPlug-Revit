@@ -7,17 +7,8 @@
     <Filter Include="Executable">
       <UniqueIdentifier>{90ae0ead-d3a1-43e2-b0d3-015f6892d3c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headlines">
-      <UniqueIdentifier>{6ecd9cb8-831a-40c5-a09a-e13282e22e29}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{53aceb5e-745e-451a-b5d7-e56018eb8fdb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headlines\Revit">
-      <UniqueIdentifier>{667c298f-29e9-45e7-aac4-fc5a55f28fc8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headlines\Revit\Elements">
-      <UniqueIdentifier>{5105f131-c90d-45a2-9fc8-b3ed880e9b83}</UniqueIdentifier>
     </Filter>
     <Filter Include="Executable\Revit">
       <UniqueIdentifier>{77a7611e-5014-45e8-85ae-05150b31deb3}</UniqueIdentifier>
@@ -25,26 +16,14 @@
     <Filter Include="Executable\Revit\Elements">
       <UniqueIdentifier>{be36f743-6d9f-42b2-955c-cf06d4982bc0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headlines\UI">
-      <UniqueIdentifier>{4543d309-fd65-4185-a2e7-600e00f95f84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headlines\UI\VPForms">
-      <UniqueIdentifier>{279926c1-928d-45dd-8a72-f8410233b8c0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Executable\UI">
       <UniqueIdentifier>{286ed6fe-f26b-4c3a-93d3-1d3c6881f42d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Executable\UI\VPForms">
       <UniqueIdentifier>{aa229539-a950-4fb7-90e5-09579d7bba4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headlines\UI\VPControls">
-      <UniqueIdentifier>{db52db82-1000-4a9e-b099-4725fc28dd39}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Executable\UI\VPControls">
       <UniqueIdentifier>{63d6f538-a60e-4d57-b6c4-c63a73c7d00f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headlines\Commands">
-      <UniqueIdentifier>{232065e7-3b14-49be-8ed6-c17ab64f5e02}</UniqueIdentifier>
     </Filter>
     <Filter Include="Executable\Commands">
       <UniqueIdentifier>{a26e5c43-df61-4f04-b50c-614042c1b9ac}</UniqueIdentifier>
@@ -55,35 +34,56 @@
     <Filter Include="Executable\Config\json">
       <UniqueIdentifier>{cd34f828-306e-4080-b9e7-040a9f1aa419}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headlines\Config">
-      <UniqueIdentifier>{1edec81b-b12b-40fe-9030-219f4e3569a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headlines\Config\json">
-      <UniqueIdentifier>{75ec8457-f843-4993-9da2-01e63bf26fed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headlines\Revit\Services">
-      <UniqueIdentifier>{16c9c862-f7ab-4595-be17-33b61904344a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Executable\Revit\Services">
       <UniqueIdentifier>{c6835f07-8bd2-4f0f-beec-f56925e0afbe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headlines\Revit\Filters">
-      <UniqueIdentifier>{83080d26-f7da-4482-afa2-74506fe425e0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Executable\Revit\Filters">
       <UniqueIdentifier>{ce4cf66a-2a2d-43eb-bd4f-742fbb8f10c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headlines\Export">
-      <UniqueIdentifier>{baa3bd2d-e44e-4819-b111-eae8b1361cb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headlines\Export\html">
-      <UniqueIdentifier>{82081d99-b710-403b-b914-e4147a760bfe}</UniqueIdentifier>
     </Filter>
     <Filter Include="Executable\Export">
       <UniqueIdentifier>{765070e7-407a-457f-bb64-9e0473043c75}</UniqueIdentifier>
     </Filter>
     <Filter Include="Executable\Export\html">
       <UniqueIdentifier>{9d31b860-21bb-4ef7-9cba-f4ba476df77b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{6ecd9cb8-831a-40c5-a09a-e13282e22e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Revit">
+      <UniqueIdentifier>{667c298f-29e9-45e7-aac4-fc5a55f28fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Revit\Elements">
+      <UniqueIdentifier>{5105f131-c90d-45a2-9fc8-b3ed880e9b83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Revit\Services">
+      <UniqueIdentifier>{16c9c862-f7ab-4595-be17-33b61904344a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Revit\Filters">
+      <UniqueIdentifier>{83080d26-f7da-4482-afa2-74506fe425e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\UI">
+      <UniqueIdentifier>{4543d309-fd65-4185-a2e7-600e00f95f84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\UI\VPForms">
+      <UniqueIdentifier>{279926c1-928d-45dd-8a72-f8410233b8c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\UI\VPControls">
+      <UniqueIdentifier>{db52db82-1000-4a9e-b099-4725fc28dd39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Commands">
+      <UniqueIdentifier>{232065e7-3b14-49be-8ed6-c17ab64f5e02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Config">
+      <UniqueIdentifier>{1edec81b-b12b-40fe-9030-219f4e3569a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Config\json">
+      <UniqueIdentifier>{75ec8457-f843-4993-9da2-01e63bf26fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Export">
+      <UniqueIdentifier>{baa3bd2d-e44e-4819-b111-eae8b1361cb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Export\html">
+      <UniqueIdentifier>{82081d99-b710-403b-b914-e4147a760bfe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -97,89 +97,89 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headlines\VPlug.h">
-      <Filter>Headlines</Filter>
-    </ClInclude>
     <ClInclude Include="Resources\Resource.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\BaseElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Commands\AuditParameterCommand.h">
+      <Filter>Headers\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\WallElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Config\json\Json.h">
+      <Filter>Headers\Config\json</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\CeilingsElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Config\json\JsonReaderAuditParameter.h">
+      <Filter>Headers\Config\json</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\ColumnElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Export\html\AuditParameter_htmlExport.h">
+      <Filter>Headers\Export\html</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\DoorElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\BaseElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\FloorsElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\CeilingsElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\GenericModelElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\ColumnElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\RampElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\DoorElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\RoofElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\FloorsElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\RoomElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\GenericModelElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\StairsElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\RampElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\StairsRailingElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\RoofElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\StructuralFramingElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\RoomElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\WindowElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\StairsElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Elements\StructuralFoundationElement.h">
-      <Filter>Headlines\Revit\Elements</Filter>
+    <ClInclude Include="Headers\Revit\Elements\StairsRailingElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\UI\VPForms\BaseVPForm.h">
-      <Filter>Headlines\UI\VPForms</Filter>
+    <ClInclude Include="Headers\Revit\Elements\StructuralFoundationElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\UI\VPControls\VPButton.h">
-      <Filter>Headlines\UI\VPControls</Filter>
+    <ClInclude Include="Headers\Revit\Elements\StructuralFramingElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\UI\VPControls\VPBaseControl.h">
-      <Filter>Headlines\UI\VPControls</Filter>
+    <ClInclude Include="Headers\Revit\Elements\WallElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\UI\VPForms\VPFormAuditParameterCommand.h">
-      <Filter>Headlines\UI\VPForms</Filter>
+    <ClInclude Include="Headers\Revit\Elements\WindowElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Commands\AuditParameterCommand.h">
-      <Filter>Headlines\Commands</Filter>
+    <ClInclude Include="Headers\Revit\Filters\ElementCollectorFilter.h">
+      <Filter>Headers\Revit\Filters</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Config\json\json.h">
-      <Filter>Headlines\Config\json</Filter>
+    <ClInclude Include="Headers\Revit\Filters\ParameterFilledFilter.h">
+      <Filter>Headers\Revit\Filters</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Config\json\json_reader_base.h">
-      <Filter>Headlines\Config\json</Filter>
+    <ClInclude Include="Headers\Revit\Services\BaseService.h">
+      <Filter>Headers\Revit\Services</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Services\BaseService.h">
-      <Filter>Headlines\Revit\Services</Filter>
+    <ClInclude Include="Headers\UI\VPControls\VPBaseControl.h">
+      <Filter>Headers\UI\VPControls</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Filters\ElementCollectorFilter.h">
-      <Filter>Headlines\Revit\Filters</Filter>
+    <ClInclude Include="Headers\UI\VPControls\VPButton.h">
+      <Filter>Headers\UI\VPControls</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Revit\Filters\ParameterFilledFilter.h">
-      <Filter>Headlines\Revit\Filters</Filter>
+    <ClInclude Include="Headers\UI\VPForms\BaseVPForm.h">
+      <Filter>Headers\UI\VPForms</Filter>
     </ClInclude>
-    <ClInclude Include="Headlines\Export\html\AuditParameter_htmlExport.h">
-      <Filter>Headlines\Export\html</Filter>
+    <ClInclude Include="Headers\UI\VPForms\VPFormAuditParameterCommand.h">
+      <Filter>Headers\UI\VPForms</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\VPlug.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -249,12 +249,6 @@
     <ClCompile Include="Executable\Commands\AuditParameterCommand.cpp">
       <Filter>Executable\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="Executable\Config\json\json.cpp">
-      <Filter>Executable\Config\json</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Config\json\json_reader_base.cpp">
-      <Filter>Executable\Config\json</Filter>
-    </ClCompile>
     <ClCompile Include="Executable\Revit\Services\BaseService.cpp">
       <Filter>Executable\Revit\Services</Filter>
     </ClCompile>
@@ -266,6 +260,12 @@
     </ClCompile>
     <ClCompile Include="Executable\Export\html\AuditParameter_htmlExport.cpp">
       <Filter>Executable\Export\html</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Config\json\Json.cpp">
+      <Filter>Executable\Config\json</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Config\json\JsonReaderAuditParameter.cpp">
+      <Filter>Executable\Config\json</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

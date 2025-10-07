@@ -142,33 +142,33 @@
     <ResourceCompile Include="Resources\app.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headlines\Commands\AuditParameterCommand.h" />
-    <ClInclude Include="Headlines\Config\json\json.h" />
-    <ClInclude Include="Headlines\Config\json\json_reader_base.h" />
-    <ClInclude Include="Headlines\Export\html\AuditParameter_htmlExport.h" />
-    <ClInclude Include="Headlines\Revit\Elements\BaseElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\CeilingsElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\ColumnElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\DoorElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\FloorsElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\GenericModelElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\RampElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\RoofElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\RoomElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\StairsElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\StairsRailingElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\StructuralFoundationElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\StructuralFramingElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\WallElement.h" />
-    <ClInclude Include="Headlines\Revit\Elements\WindowElement.h" />
-    <ClInclude Include="Headlines\Revit\Filters\ElementCollectorFilter.h" />
-    <ClInclude Include="Headlines\Revit\Filters\ParameterFilledFilter.h" />
-    <ClInclude Include="Headlines\Revit\Services\BaseService.h" />
-    <ClInclude Include="Headlines\UI\VPControls\VPBaseControl.h" />
-    <ClInclude Include="Headlines\UI\VPControls\VPButton.h" />
-    <ClInclude Include="Headlines\UI\VPForms\BaseVPForm.h" />
-    <ClInclude Include="Headlines\UI\VPForms\VPFormAuditParameterCommand.h" />
-    <ClInclude Include="Headlines\VPlug.h" />
+    <ClInclude Include="Headers\Commands\AuditParameterCommand.h" />
+    <ClInclude Include="Headers\Config\json\Json.h" />
+    <ClInclude Include="Headers\Config\json\JsonReaderAuditParameter.h" />
+    <ClInclude Include="Headers\Export\html\AuditParameter_htmlExport.h" />
+    <ClInclude Include="Headers\Revit\Elements\BaseElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\CeilingsElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\ColumnElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\DoorElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\FloorsElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\GenericModelElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\RampElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\RoofElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\RoomElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\StairsElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\StairsRailingElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\StructuralFoundationElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\StructuralFramingElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\WallElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\WindowElement.h" />
+    <ClInclude Include="Headers\Revit\Filters\ElementCollectorFilter.h" />
+    <ClInclude Include="Headers\Revit\Filters\ParameterFilledFilter.h" />
+    <ClInclude Include="Headers\Revit\Services\BaseService.h" />
+    <ClInclude Include="Headers\UI\VPControls\VPBaseControl.h" />
+    <ClInclude Include="Headers\UI\VPControls\VPButton.h" />
+    <ClInclude Include="Headers\UI\VPForms\BaseVPForm.h" />
+    <ClInclude Include="Headers\UI\VPForms\VPFormAuditParameterCommand.h" />
+    <ClInclude Include="Headers\VPlug.h" />
     <ClInclude Include="Resources\Resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -177,8 +177,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Executable\Commands\AuditParameterCommand.cpp" />
-    <ClCompile Include="Executable\Config\json\json.cpp" />
-    <ClCompile Include="Executable\Config\json\json_reader_base.cpp" />
+    <ClCompile Include="Executable\Config\json\Json.cpp" />
+    <ClCompile Include="Executable\Config\json\JsonReaderAuditParameter.cpp" />
     <ClCompile Include="Executable\Export\html\AuditParameter_htmlExport.cpp" />
     <ClCompile Include="Executable\Revit\Elements\BaseElement.cpp" />
     <ClCompile Include="Executable\Revit\Elements\CeilingsElement.cpp" />
