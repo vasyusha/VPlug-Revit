@@ -53,8 +53,7 @@ public:
 
 	enum class VerificationMethod {
 		Category,
-		one_param,
-		two_param
+		Filter
 	};
 private:
 	VerificationMethod verification_method_;
