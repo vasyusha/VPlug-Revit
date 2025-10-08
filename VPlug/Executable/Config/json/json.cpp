@@ -357,7 +357,6 @@ Node^ ParseNumber(CharReader^ rd) {
 	bool IsDouble = false;
 	if(c == '.') {
 		IsDouble = true;
-		//!?
 		sb->Append('.');
 		rd->Read();
 		c = rd->Peek();
@@ -524,7 +523,7 @@ static void WriteNode(Node^ n, TextWriter^ w, int indent, bool pretty) {
 		case Kind::Null:   w->Write("null"); break;
 		case Kind::Bool:   w->Write(n->AsBool() ? "true" : "false"); break;
 		case Kind::Int:    w->Write(n->AsInt().ToString(inv)); break;
-		case Kind::Double: w->Write(n->AsDouble().ToString("R", inv)); break; // "R" -> round-trip
+		case Kind::Double: w->Write(n->AsDouble().ToString("R", inv)); break;
 		case Kind::String: WriteEscapedString(n->AsString(), w); break;
 		case Kind::Array:  WriteArray(n->AsArray(), w, indent, pretty); break;
 		case Kind::Dict:   WriteDict(n->AsDict(), w, indent, pretty); break;
@@ -534,7 +533,6 @@ static void WriteNode(Node^ n, TextWriter^ w, int indent, bool pretty) {
 void Print(Document^ doc, TextWriter^ output) {
 	if (doc == nullptr) throw gcnew ArgumentNullException("doc");
 	if (output == nullptr) throw gcnew ArgumentNullException("output");
-	// Красивый вывод с отступами. Если нужен компактный — поменяй флаг на false.
 	WriteNode(doc->Root, output, 0, true);
 }
 
