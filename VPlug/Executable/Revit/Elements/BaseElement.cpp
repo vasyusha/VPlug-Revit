@@ -1,9 +1,9 @@
 ﻿#include "..\..\..\Headers\Revit\Elements\BaseElement.h"
 
-void Elements::BaseElement::SetId(String^ id) {
+void Elements::BaseElement::SetId(int^ id) {
 	id_ = id;
 }
-String^ Elements::BaseElement::GetId() {
+int^ Elements::BaseElement::GetId() {
 	return id_;
 }
 

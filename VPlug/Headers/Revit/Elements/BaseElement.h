@@ -7,7 +7,7 @@ namespace Elements {
 
 public ref class BaseElement {
 private:
-	String^ id_;
+	int^ id_;
 	String^ name_;
 	String^ guid_;
 	String^ category_;
@@ -15,8 +15,8 @@ private:
 
 	Dictionary<String^, String^>^ parameters_;
 public:
-	virtual void SetId(String^ id);
-	virtual String^ GetId();
+	virtual void SetId(int^ id);
+	virtual int^ GetId();
 
 	virtual void SetName(String^ name);
 	virtual String^ GetName();

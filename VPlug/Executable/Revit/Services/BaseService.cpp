@@ -25,7 +25,7 @@ void Services::BaseService::SetElements(List<Element^>^ elements, List<String^>^
 	for each(Element^ e in elements) {
 		Elements::BaseElement^ element = gcnew Elements::BaseElement();
 
-		element->SetId(e->Id->IntegerValue.ToString());
+		element->SetId(e->Id->IntegerValue);
 		element->SetName(e->Name);
 		element->SetCategoryName(e->Category->Name);
 		element->SetBuiltInCategory(static_cast<BuiltInCategory>(e->Category->Id->IntegerValue).ToString());
@@ -54,7 +54,7 @@ void Services::BaseService::SetElements(List<Element^>^ elements, Tuple<String^,
 		if(filter_prarm == find_par_val->Item2) {
 			Elements::BaseElement^ element = gcnew Elements::BaseElement();
 
-			element->SetId(e->Id->IntegerValue.ToString());
+			element->SetId(e->Id->IntegerValue);
 			element->SetName(e->Name);
 			element->SetCategoryName(e->Category->Name);
 			element->SetBuiltInCategory(static_cast<BuiltInCategory>(e->Category->Id->IntegerValue).ToString());
