@@ -7,7 +7,7 @@ namespace JsonReader {
 
 public ref class CategorySpec {
 public:
-	String^ Id;
+	int Id;
 	String^ BuiltInCategory;
 	String^ Name;
 	List<String^>^ Parameters;
@@ -21,6 +21,7 @@ public:
 
 public ref class UserFilterSpec {
 public:
+	String^ Name;
 	List<Filter^>^ Filters;
 	List<String^>^ Parameters;
 };
@@ -30,6 +31,7 @@ private:
 
 public:
 	static String^ GetStringOrThrow(Json::Dict d, String^ key);
+	static int GetIntOrThrow(Json::Dict d, String^ key);
 	static List<String^>^ GetStringArrayOrThrow(Json::Dict d, String^ key);
 	static CategorySpec^ ParseCategorySpec(Json::Node^ node);
 	static List<CategorySpec^>^ LoadCategorySpecs(String^ path);

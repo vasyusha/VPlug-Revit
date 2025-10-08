@@ -2,12 +2,20 @@
 
 namespace JsonReader {
 
-String^ JsonReaderAuditParameter::GetStringOrThrow(Json::Dict d,	String^ key) {
+String^ JsonReaderAuditParameter::GetStringOrThrow(Json::Dict d, String^ key) {
 	Json::Node^ n;
 	if (!d->TryGetValue(key, n) || !n->IsString())
 		throw gcnew InvalidOperationException("Key '" + key + "' is missing or not a string");
 
 	return n->AsString();
+}
+
+int JsonReaderAuditParameter::GetIntOrThrow(Json::Dict d, String^ key) {
+	Json::Node^ n;
+	if (!d->TryGetValue(key, n) || !n->IsInt())
+		throw gcnew InvalidOperationException("Key '" + key + "' is missing or not a int");
+
+	return n->AsInt();
 }
 
 List<String^>^ JsonReaderAuditParameter::GetStringArrayOrThrow(Json::Dict d, String^ key) {
@@ -32,7 +40,7 @@ CategorySpec^ JsonReaderAuditParameter::ParseCategorySpec(Json::Node^ node) {
 	Json::Dict d = node->AsDict();
 
 	auto spec = gcnew CategorySpec();
-	spec->Id = GetStringOrThrow(d, "Id");                // в файле это строка
+	spec->Id = GetIntOrThrow(d, "Id");
 	spec->BuiltInCategory = GetStringOrThrow(d, "BuiltInCategory");
 	spec->Name = GetStringOrThrow(d, "Name");
 	spec->Parameters = GetStringArrayOrThrow(d, "Parameters");
@@ -99,6 +107,7 @@ UserFilterSpec^ JsonReaderAuditParameter::ParseUserFilterSpec(Json::Node^ node) 
 
 	}
 
+	spec->Name = GetStringOrThrow(d, "Name");
 	spec->Parameters = GetStringArrayOrThrow(d, "Parameters");
 	return spec;
 }
