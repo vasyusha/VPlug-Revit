@@ -26,7 +26,7 @@ public:
 	void CreateLabel();
 	void CreatePanel();
 	void CreateComboBox();
-	void CreateCheckBox(String^ name, String^ text, int id_num_box);
+	void CreateCheckBox(String^ name, String^ text, Object^ tag, int id_num_box);
 
 	void ClearCheckBox();
 	void CreateTable();

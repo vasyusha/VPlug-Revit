@@ -120,8 +120,7 @@ void VPForms::VPFormAuditParameterCommand::CreatePanel() {
 void VPForms::VPFormAuditParameterCommand::CreateComboBox() {
 	array<Object^>^ category = {
 		"Категория",
-		"По 1 параметру",
-		"По 2 параметрам",
+		"Фильтер",
 	};
 
 	ComboBox^ combo_box_verific_method = gcnew ComboBox();
@@ -138,18 +137,18 @@ void VPForms::VPFormAuditParameterCommand::CreateComboBox() {
 	this->Controls->Add(combo_box_verific_method);
 }
 
-void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ text, int id_num_box) {
+void VPForms::VPFormAuditParameterCommand::CreateCheckBox(String^ name, String^ text, Object^ tag, int num_box) {
 	Panel^ panel = dynamic_cast<Panel^>(this->Controls["contains_com_box"]);
 
 	CheckBox^ check_box = gcnew CheckBox();
 	check_box->Name = name;
 	check_box->Text = text;
-	check_box->Location = Drawing::Point(10, id_num_box * 20);
+	check_box->Location = Drawing::Point(10, num_box * 20);
 	check_box->AutoSize = true;
 	check_box->Appearance = Appearance::Normal;
 	check_box->AutoCheck = true;
 	check_box->CheckedChanged += gcnew EventHandler(this, &VPFormAuditParameterCommand::CheckCheckBox);
-	check_box->Tag = id_num_box;
+	check_box->Tag = tag;
 	panel->Controls->Add(check_box);
 }
 
@@ -244,18 +243,6 @@ void VPForms::VPFormAuditParameterCommand::SetAudit(Object^ sender, EventArgs^ e
 	if(start_audit_ == false) {
 		MessageBox::Show("Установите элементы проверки!", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 	}
-
-	if(id_num_box_active_ == nullptr) {
-		id_num_box_active_ = gcnew List<int>();
-	}
-
-	for each(Control^ control in this->Controls["contains_com_box"]->Controls) {
-		CheckBox^ check_box = dynamic_cast<CheckBox^>(control);
-		if(check_box != nullptr && check_box->Checked) {
-			id_num_box_active_->Add(static_cast<int>(check_box->Tag));	
-		}
-	}
-
 	audit_(this, EventArgs::Empty);
 	compile_audit_ = true;
 }
