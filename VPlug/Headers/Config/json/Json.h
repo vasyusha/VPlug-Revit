@@ -68,7 +68,7 @@ public:
 	bool IsArray()		{ return Type == Kind::Array; }
 	bool IsDict()		{ return Type == Kind::Dict; }
 	bool IsBool()		{ return Type == Kind::Bool; }
-	bool IsInd()		{ return Type == Kind::Int; }
+	bool IsInt()		{ return Type == Kind::Int; }
 	bool IsDouble()		{ return Type == Kind::Double; }
 	bool IsString()		{ return Type == Kind::String; }
 

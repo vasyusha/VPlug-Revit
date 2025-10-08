@@ -336,7 +336,7 @@ Node^ ParseNumber(CharReader^ rd) {
 	int c = rd->Peek();
 
 	if(c == '-') {
-		sb->Append('-');
+		sb->Append(wchar_t('-'));
 		rd->Read();
 		c = rd->Peek();
 	}
@@ -357,6 +357,7 @@ Node^ ParseNumber(CharReader^ rd) {
 	bool IsDouble = false;
 	if(c == '.') {
 		IsDouble = true;
+		//!?
 		sb->Append('.');
 		rd->Read();
 		c = rd->Peek();
