@@ -11,9 +11,7 @@ namespace Filters {
 
 public ref class ParameterFilledFilter {
 public:
-	String^ CheckParam(Document^ doc, Element^ element, String^ parameter, bool only_missing);
-	//only_missing - найти параметры которые только отсутствуют или не заполнены
-
+	static String^ CheckParam(Document^ doc, Element^ element, String^ parameter, bool onlyMissing);
 };
 
 }

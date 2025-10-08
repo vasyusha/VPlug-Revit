@@ -1,52 +1,51 @@
 ﻿#include "..\..\..\Headers\Revit\Filters\ParameterFilledFilter.h"
 
-String^ Filters::ParameterFilledFilter::CheckParam(Document^ doc, Element^ element, String^ parameter, bool only_missing) {
-	if(element == nullptr) return nullptr;
+String^ Filters::ParameterFilledFilter::CheckParam(Document^ doc, Element^ element, String^ parameter, bool onlyMissing) {
+		
+	Parameter^ p = element->LookupParameter(parameter);
 
-	Parameter^ find_parameter = element->LookupParameter(parameter);
-
-	if(find_parameter == nullptr) {
-		//!!!TESTs!!! тест конструкции
-		try {
-			Element^ element_type = doc->GetElement(element->GetTypeId());
-			find_parameter = element_type->LookupParameter(parameter);
-
-		} catch(...) { 
-			//NullReferenceException - если элемент не имеет типа
-			//InvalidOperationException - если тип недоступен или элемент не поддерживает типизацию
-			//ArgumentException - если попытка получить тип у неверного объекта
+	if (p == nullptr) {
+		ElementId^ typeId = element->GetTypeId();
+		if (typeId != nullptr && typeId != ElementId::InvalidElementId) {
+			Element^ elementType = doc->GetElement(typeId);
+			if (elementType != nullptr) {
+				p = elementType->LookupParameter(parameter);				
+			}
 		}
 	}
 
-	String^ value = nullptr;
+	if (p == nullptr)
+		return onlyMissing ? gcnew String("Ошибка - Параметр отсутствует у семейства типа/экземаляра") : nullptr;
 
-	if(find_parameter != nullptr && !only_missing) {
-		switch (find_parameter->StorageType) {
-			case StorageType::Double :
-				value = find_parameter->AsValueString();
-				break;
-			case StorageType::Integer : 
-				value = find_parameter->AsInteger().ToString();
-				break;
-			case StorageType::String :
-				value = find_parameter->AsString();
-				break;
-			case StorageType::ElementId :
-				value = find_parameter->AsElementId()->IntegerValue.ToString();
-				break;
-			default:
-				value = "Ошибка, неизвестный элемент";
-				break;
-		}
+	auto invariant = System::Globalization::CultureInfo::InvariantCulture;
+		
+	bool filled;
+	if (!p->HasValue) filled = false;
+	else if (p->StorageType == StorageType::String) {
+		String^ s = p->AsString();
+		filled = !String::IsNullOrWhiteSpace(s);
 	}
+	else filled = true;
 
-	if(find_parameter != nullptr) {
-		if(!find_parameter->HasValue) {
-			value = "Ошибка - параметер не заполнен!";
+	if (onlyMissing) return filled ? nullptr : gcnew String("Ошибка - параметер не заполнен!");
+
+	switch (p->StorageType) {
+		case StorageType::Double : {
+			double v = p->AsDouble();
+			return v.ToString("R", invariant);
 		}
-	} else {
-		value = "Ошибка - Параметр отсутствует у семейства типа/экземаляра";
+		case StorageType::Integer : {
+			int v = p->AsInteger();
+			return v.ToString(invariant);
+		}
+		case StorageType::String : {
+			String^ s = p->AsString();
+			return s != nullptr ? s->Trim() : nullptr;
+		}
+		case StorageType::ElementId : {
+			int id = p->AsElementId()->IntegerValue;
+			return id.ToString(invariant);
+		}
+		default : return nullptr;
 	}
-	
-	return value;
 }
