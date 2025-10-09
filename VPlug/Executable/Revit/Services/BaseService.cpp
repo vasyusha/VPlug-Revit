@@ -32,9 +32,8 @@ void Services::BaseService::SetElements(List<Element^>^ elements, List<String^>^
 		element->SetBuiltInCategory(static_cast<BuiltInCategory>(e->Category->Id->IntegerValue).ToString());
 
 		for each(String^ param in parameters) {
-			Filters::ParameterFilledFilter^ filter = gcnew Filters::ParameterFilledFilter();
 			//А когда нужны все параметры?
-			String^ filter_out = filter->CheckParam(doc_, e, param, true);
+			String^ filter_out = Filters::ParameterFilledFilter::CheckParam(doc_, e, param, true);
 
 			if(filter_out != nullptr) {
 				element->SetParameters(param, filter_out);
@@ -47,13 +46,11 @@ void Services::BaseService::SetElements(List<Element^>^ elements, List<String^>^
 void Services::BaseService::SetElements(List<Element^>^ elements, Dictionary<String^, String^>^ controlParValue, List<String^>^ parameters) {
 	elements_ = gcnew List<Elements::BaseElement^>();
 
-	Filters::ParameterFilledFilter^ filter = gcnew Filters::ParameterFilledFilter();	
-
 	for each (Element^ e in elements) {
 		bool flagControl = true;
 
 		for each (KeyValuePair<String^, String^> kvp in controlParValue) {
-			String^ filterValue = filter->CheckParam(doc_, e, kvp.Key, false);
+			String^ filterValue = Filters::ParameterFilledFilter::CheckParam(doc_, e, kvp.Key, false);
 			if(filterValue != kvp.Value) {
 				flagControl = false;
 				break;
@@ -69,7 +66,7 @@ void Services::BaseService::SetElements(List<Element^>^ elements, Dictionary<Str
 		element->SetBuiltInCategory(static_cast<BuiltInCategory>(e->Category->Id->IntegerValue).ToString());
 
 		for each (String^ p in parameters) {
-			String^ filterValue = filter->CheckParam(doc_, e, p, true);
+			String^ filterValue = Filters::ParameterFilledFilter::CheckParam(doc_, e, p, true);
 			if (filterValue == nullptr) continue;
 
 			element->SetParameters(p, filterValue);
