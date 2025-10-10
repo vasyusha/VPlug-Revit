@@ -16,6 +16,14 @@ using namespace Autodesk::Revit::Attributes;
 
 namespace Commands {
 
+public ref class Param {
+public:
+	String^ _name;
+	String^ _value;
+	bool _filled;
+	Elements::BaseElement^ _element;
+};
+
 [Transaction(TransactionMode::Manual)]
 public ref class AuditParameterCommand : public IExternalCommand {
 private:
@@ -23,24 +31,9 @@ private:
 	VPForms::VPFormAuditParameterCommand^ form_;
 	Dictionary<Tuple<String^, String^>^, List<Elements::BaseElement^>^>^ category_base_element_;
 
-	ref struct CategoryFilter {
-		int32_t id;
-		String^ name;
-		List<String^>^ parameters;
-	};
-
-	ref struct ParameterCheckFilter {
-		String^ name;
-		String^ expected_value;
-	};
-
-	ref struct UniversalFilter {
-		List<ParameterCheckFilter^>^ parameter_value_filter;
-		List<String^>^ parameters;
-	};
-
-	Dictionary<int, CategoryFilter^>^ category_;
-	Dictionary<int, UniversalFilter^>^ universal_;
+	Dictionary<bool, List<Param^>^>^ parameters_;
+	Dictionary<Tuple<String^, bool>^, List<Elements::BaseElement^>^>^ elements_;
+	//Dictionary<bool, List<Elements::BaseElement^>^>^ elements_;
 
 public:
 	virtual Result Execute(ExternalCommandData^ command_data, 

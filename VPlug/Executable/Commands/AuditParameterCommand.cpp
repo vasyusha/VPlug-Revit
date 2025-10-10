@@ -62,10 +62,13 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 
 	category_base_element_ = gcnew Dictionary<Tuple<String^, String^>^, List<Elements::BaseElement^>^>();
 
+	parameters_ = gcnew Dictionary<bool, List<Param^>^>();
+	elements_ = gcnew Dictionary<Tuple<String^, bool>^, List<Elements::BaseElement^>^>();
+
 	List<Tuple<String^, int, int>^>^ category_not_filled_no_parameter = gcnew List<Tuple<String^, int, int>^>();
 
 	table->Rows->Clear();
-
+	
 	if (verification_method_ == VerificationMethod::Category) {
 
 		for each (Windows::Forms::Control^ control in panel->Controls) {
@@ -79,6 +82,9 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 			if (baseService == nullptr || baseService->GetElemenst() == nullptr) continue;
 
 			List<Elements::BaseElement^>^ baseElements = gcnew List<Elements::BaseElement^>();
+
+			List<Elements::BaseElement^>^ baseElementsFilledParam = gcnew List<Elements::BaseElement^>();
+			List<Elements::BaseElement^>^ baseElementsNoFilledParam = gcnew List<Elements::BaseElement^>();
 			String^ builtInCategory = nullptr;
 			String^ categoryName = nullptr;
 			int noFilled = 0;
@@ -92,17 +98,47 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 					categoryName = element->GetCategoryName();
 				}
 
-				for each (KeyValuePair<String^, String^>^ kvp in element->GetParameters()) {
-					if(kvp->Value == "Ошибка - параметер не заполнен!") ++noFilled;
-					if(kvp->Value == "Ошибка - Параметр отсутствует у семейства типа/экземаляра") ++noParameter;
+				bool flagFilled = true;
 
+				for each (Elements::Parameter^ p in element->GetParameters()) {
+					if(p->_value == "Ошибка - параметер не заполнен!") {
+						++noFilled;
+						flagFilled = false;
+					}
+					if(p->_value== "Ошибка - Параметр отсутствует у семейства типа/экземаляра") {
+						++noParameter;
+						flagFilled = false;
+					}
+
+					if (!parameters_->ContainsKey(p->_filled)) {
+						parameters_[p->_filled] = gcnew List<Param^>();
+					}
+
+					Param^ param = gcnew Param();	
+					param->_name = p->_name;
+					param->_value = p->_value;
+					param->_filled = p->_filled;
+					param->_element = element;
+					parameters_[p->_filled]->Add(param);
+
+					if (!elements_->ContainsKey(gcnew Tuple<String^, bool>(element->GetCategoryName(), flagFilled))) {
+					}
+				}
+				
+				baseElements->Add(element);
+
+				if (flagFilled) {
+					baseElementsFilledParam->Add(element);
+				} else {
+					baseElementsNoFilledParam->Add(element);
 				}
 
-				baseElements->Add(element);
 			}
 			if (builtInCategory != nullptr && categoryName != nullptr) {
 				table->Rows->Add(categoryName, noFilled, noParameter);
 				category_base_element_->Add(gcnew Tuple<String^, String^>(categoryName, builtInCategory), baseElements);
+				elements_->Add(gcnew Tuple<String^, bool>(builtInCategory, false), baseElementsNoFilledParam);
+				elements_->Add(gcnew Tuple<String^, bool>(builtInCategory, true), baseElementsFilledParam);
 			}
 		}
 	} else if (verification_method_ == VerificationMethod::Filter) {
@@ -135,12 +171,13 @@ void Commands::AuditParameterCommand::Audit(Object^ sender, EventArgs^ e) {
 					builtInCategory = element->GetBuiltInCategory();
 					name = spec->Name;
 				}
-
+				/*
 				for each (KeyValuePair<String^, String^>^ kvp in element->GetParameters()) {
 					if(kvp->Value == "Ошибка - параметер не заполнен!") ++noFilled;
 					if(kvp->Value == "Ошибка - Параметр отсутствует у семейства типа/экземаляра") ++noParameter;
 
 				}
+				*/
 
 				baseElements->Add(element);
 			}
