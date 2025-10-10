@@ -15,6 +15,24 @@ namespace Services {
 public ref class BaseService {
 private:
 	Document^ doc_;
+
+	static Parameter^ TryGetParam(Document^ doc, Element^ e, String^ name);
+
+	static String^ ReadParamValue(Parameter^ param);
+
+	static bool IsFilled(Parameter^ param);
+
+	static bool MatchFilters(Document^ doc, Element^ e, IDictionary<String^, String^>^ controlFilters);
+
+	static Elements::BaseElement^ BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
+
+	List<Elements::BaseElement^>^ CollectAll(
+		IDictionary<String^, String^>^ controlFilters,
+		IEnumerable<String^>^ requiredParams);
+
+/*
+private:
+	Document^ doc_;
 	List<Elements::BaseElement^>^ elements_;
 
 public:
@@ -24,7 +42,8 @@ public:
 	void SetElements(List<Element^>^ elements, List<String^>^ parameters);
 	void SetElements(List<Element^>^ elements, Dictionary<String^, String^>^ controlParValue, List<String^>^ parameters);
 
-	List<Elements::BaseElement^>^ GetElemenst();	
+	List<Elements::BaseElement^>^ GetElemenst();
+	*/
 };
 
 }
