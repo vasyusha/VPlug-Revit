@@ -1,52 +1,69 @@
 ﻿#include "..\..\..\Headers\Revit\Elements\BaseElement.h"
 
-void Elements::BaseElement::SetId(int^ id) {
-	id_ = id;
+namespace Elements {
+
+BaseElement::BaseElement() {
+	parameters_ = gcnew List<ParamResult^>();
 }
-int^ Elements::BaseElement::GetId() {
+
+int BaseElement::Id::get() {
 	return id_;
 }
 
-void Elements::BaseElement::SetName(String^ name) {
-	name_ = name;
+void BaseElement::Id::set(int value) {
+	id_ = value;
 }
-String^ Elements::BaseElement::GetName() {
+
+String^ BaseElement::UniqueId::get() {
+	return uniqueId_;
+}
+
+void BaseElement::UniqueId::set(String^ value) {
+	uniqueId_ = value;	
+}
+
+String^ BaseElement::Name::get() {
 	return name_;
 }
 
-void Elements::BaseElement::SetGuid(String^ guid) {
-	guid_ = guid;
-}
-String^ Elements::BaseElement::GetGuid() {
-	return guid_;
+void BaseElement::Name::set(String^ value) {
+	name_ = value;
 }
 
-void Elements::BaseElement::SetCategoryName(String^ category) {
-	category_ = category;
+String^ BaseElement::CategoryName::get() {
+	return categoryName_;	
 }
 
-String^ Elements::BaseElement::GetCategoryName() {
-	return category_;
+void BaseElement::CategoryName::set(String^ value) {
+	categoryName_ = value;
 }
 
-void Elements::BaseElement::SetBuiltInCategory(String^ built_in_category) {
-	built_in_category_ = built_in_category;	
+int BaseElement::BuiltInCategory::get() {
+	return builtInCategory_;
 }
 
-String^ Elements::BaseElement::GetBuiltInCategory() {
-	return built_in_category_;
+void BaseElement::BuiltInCategory::set(int value) {
+	builtInCategory_ = value;
 }
 
-void Elements::BaseElement::SetParameters(String^ key, String^ value) {
-	if(parameters_ == nullptr) {
-		parameters_ = gcnew Dictionary<String^, String^>();
-	}
-
-	if(key != nullptr && value != nullptr) {
-		parameters_->Add(key, value);
-	}
-}
-Dictionary<String^, String^>^ Elements::BaseElement::GetParameters() {
-	return parameters_;
+String^ BaseElement::BuiltInCategoryName::get() {
+	return builtInCategoryName_;
 }
 
+void BaseElement::BuiltInCategoryName::set(String^ value) {
+	builtInCategoryName_ = value;
+}
+
+void BaseElement::AddParameter(String^ name, String^ value, bool filled) {
+	auto p = gcnew ParamResult();
+	p->Name = name;
+	p->Value = value;
+	p->Filled = filled;
+	parameters_->Add(p);
+}
+
+IList<ParamResult^>^ BaseElement::Parameters::get() {
+	 return parameters_;
+};
+
+}

@@ -5,33 +5,64 @@ using namespace System::Collections::Generic;
 
 namespace Elements {
 
+ref class BaseElement;
+
+public ref class ParamResult {
+public:
+	property String^ Name;
+	property String^ Value;
+	property bool Filled;
+};
+
 public ref class BaseElement {
 private:
-	int^ id_;
+	int id_;
+	String^ uniqueId_;
 	String^ name_;
-	String^ guid_;
-	String^ category_;
-	String^ built_in_category_;
+	String^ categoryName_;
+	int builtInCategory_;
+	String^ builtInCategoryName_;
+	List<ParamResult^>^ parameters_;
 
-	Dictionary<String^, String^>^ parameters_;
 public:
-	virtual void SetId(int^ id);
-	virtual int^ GetId();
+	BaseElement();
 
-	virtual void SetName(String^ name);
-	virtual String^ GetName();
+	property int Id {
+		int get();
+		void set(int value);
+	};
 
-	virtual void SetGuid(String^ guid);
-	virtual String^ GetGuid();
+	property String^ UniqueId {
+		String^ get();
+		void set(String^ value);
+	};
 
-	virtual void SetCategoryName(String^ category);
-	virtual String^ GetCategoryName();
+	property String^ Name {
+		String^ get();
+		void set(String^ value);
+	};
 
-	virtual void SetBuiltInCategory(String^ built_in_category);
-	virtual String^ GetBuiltInCategory();
+	property String^ CategoryName {
+		String^ get();
+		void set(String^ value);
+	};
 
-	virtual void SetParameters(String^ key, String^ value);
-	virtual Dictionary<String^, String^>^ GetParameters();
+	property int BuiltInCategory {
+		int get();
+		void set(int value);
+	};
+
+	property String^ BuiltInCategoryName {
+		String^ get();
+		void set(String^ value);
+	};
+
+	void AddParameter(String^ name, String^ value, bool filled);
+
+	property IList<ParamResult^>^ Parameters {
+		IList<ParamResult^>^ get();
+	};
+	
 };
 
 }
