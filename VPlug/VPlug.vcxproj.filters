@@ -181,6 +181,9 @@
     <ClInclude Include="Headers\VPlug.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\Export\html\AuditParameterExportHtml.h">
+      <Filter>Headers\Export\html</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -266,6 +269,9 @@
     </ClCompile>
     <ClCompile Include="Executable\Config\json\JsonReaderAuditParameter.cpp">
       <Filter>Executable\Config\json</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Export\html\AuditParameterExportHtml.cpp">
+      <Filter>Executable\Export\html</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
