@@ -105,8 +105,8 @@ void Export::AuditParameterHtmlExport::CompileFile(Dictionary<Tuple<String^, Str
 				"\r\n\t\t\t\t<td><p class=\"info\">Не заполнен или отсутствует у элемента:</p>"
 			);
 
-			for each(KeyValuePair<String^, String^>^ param_value in element->GetParameters()) {
-				output->Write("\r\n\t\t\t\t\t<p>" + param_value->Key + ": " + param_value->Value + "</p>");
+			for each(Elements::Parameter^ param_value in element->GetParameters()) {
+				output->Write("\r\n\t\t\t\t\t<p>" + param_value->_name+ ": " + param_value->_value+ "</p>");
 			}
 
 			output->Write(
