@@ -30,20 +30,16 @@ private:
 		IDictionary<String^, String^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams);
 
-/*
-private:
-	Document^ doc_;
-	List<Elements::BaseElement^>^ elements_;
+	List<Elements::BaseElement^>^ CollectByCategory(
+		BuiltInCategory bic,
+		IDictionary<String^, String^>^ controlFilters,
+		IEnumerable<String^>^ requiredParams);
 
-public:
-	BaseService(Document^ doc, int category_id, List<String^>^ parameters);
-	BaseService(Document^ doc, Dictionary<String^, String^>^ controlParValue, List<String^>^ parameters);
+	Dictionary<String^, List<Elements::BaseElement^>^>^ CollectGroupedByCategory(
+		IDictionary<String^, String^>^ controlFilters,
+		IEnumerable<String^>^ requiredParams);
 
-	void SetElements(List<Element^>^ elements, List<String^>^ parameters);
-	void SetElements(List<Element^>^ elements, Dictionary<String^, String^>^ controlParValue, List<String^>^ parameters);
 
-	List<Elements::BaseElement^>^ GetElemenst();
-	*/
 };
 
 }

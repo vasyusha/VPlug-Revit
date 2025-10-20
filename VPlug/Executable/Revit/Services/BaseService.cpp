@@ -87,90 +87,61 @@ Elements::BaseElement^ BaseService::BuildBaseElement(Document^ doc, Element^ e, 
 	return be;
 }
 
-}
+List<Elements::BaseElement^>^ BaseService::CollectAll(
+	IDictionary<String^, String^>^ controlFilters,
+	IEnumerable<String^>^ requiredParams) {
 
+	auto result = gcnew List<Elements::BaseElement^>();
 
-/*
-Services::BaseService::BaseService(Document^ doc, int category_id, List<String^>^ parameters) 
-	: doc_(doc) {
-	
-	Filters::ElementCollectorFilter^ collector = gcnew Filters::ElementCollectorFilter(doc, category_id);
-	List<Element^>^ elements = collector->FindElements();
-	
-	SetElements(elements, parameters);
-}
+	FilteredElementCollector^ col = gcnew FilteredElementCollector(doc_);
+	IList<Element^>^ elems = col->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
 
-Services::BaseService::BaseService(Document^ doc, Dictionary<String^, String^>^ controlParValue, List<String^>^ parameters) 
-	: doc_(doc) {
-
-	FilteredElementCollector^ collector = gcnew FilteredElementCollector(doc);
-	IList<Element^>^ model_element = collector->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
-	List<Element^>^ list = gcnew List<Element^>(model_element);
-
-	SetElements(list, controlParValue, parameters);
-}
-
-
-void Services::BaseService::SetElements(List<Element^>^ elements, List<String^>^ parameters) {
-	elements_ = gcnew List<Elements::BaseElement^>();
-
-	for each(Element^ e in elements) {
-		Elements::BaseElement^ element = gcnew Elements::BaseElement();
-
-		element->SetId(e->Id->IntegerValue);
-		element->SetName(e->Name);
-		element->SetCategoryName(e->Category->Name);
-		element->SetBuiltInCategory(static_cast<BuiltInCategory>(e->Category->Id->IntegerValue).ToString());
-
-		for each(String^ p in parameters) {
-			String^ filterValue= Filters::ParameterFilledFilter::CheckParam(doc_, e, p, true);
-
-			Elements::Parameter^ param = gcnew Elements::Parameter();
-			param->_name = p;
-			param->_value = filterValue;
-			if(filterValue == nullptr) param->_filled = false;
-			element->SetParameters(param);
-		}
-		elements_->Add(element);
+	for each (Element^ e in elems) {
+		if (!MatchFilters(doc_, e, controlFilters)) continue;
+		result->Add(BuildBaseElement(doc_, e, requiredParams));
 	}
+	return result;
 }
 
-void Services::BaseService::SetElements(List<Element^>^ elements, Dictionary<String^, String^>^ controlParValue, List<String^>^ parameters) {
-	elements_ = gcnew List<Elements::BaseElement^>();
+List<Elements::BaseElement^>^ BaseService::CollectByCategory(
+		BuiltInCategory bic,
+		IDictionary<String^, String^>^ controlFilters,
+		IEnumerable<String^>^ requiredParams) {
+	
+	auto result = gcnew List<Elements::BaseElement^>();
 
-	for each (Element^ e in elements) {
-		bool flagControl = true;
+	FilteredElementCollector^ col = gcnew FilteredElementCollector(doc_);
+	col->OfCategory(bic);
+	IList<Element^>^ elems = col->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
 
-		for each (KeyValuePair<String^, String^> kvp in controlParValue) {
-			String^ filterValue = Filters::ParameterFilledFilter::CheckParam(doc_, e, kvp.Key, false);
-			if(filterValue != kvp.Value) {
-				flagControl = false;
-				break;
-			}
-		}
-
-		if(!flagControl) continue;
-
-		Elements::BaseElement^ element = gcnew Elements::BaseElement();
-		element->SetId(e->Id->IntegerValue);
-		element->SetName(e->Name);
-		element->SetCategoryName(e->Category->Name);
-		element->SetBuiltInCategory(static_cast<BuiltInCategory>(e->Category->Id->IntegerValue).ToString());
-
-		for each (String^ p in parameters) {
-			String^ filterValue = Filters::ParameterFilledFilter::CheckParam(doc_, e, p, true);
-
-			Elements::Parameter^ param = gcnew Elements::Parameter();
-			param->_name = p;
-			param->_value = filterValue;
-			if(filterValue == nullptr) param->_filled = false;
-			element->SetParameters(param);
-		}
-		elements_->Add(element);
+	for each (Element ^ e in elems) {
+		if (!MatchFilters(doc_, e, controlFilters)) continue;
+		result->Add(BuildBaseElement(doc_, e, requiredParams));
 	}
+	return result;
 }
 
-List<Elements::BaseElement^>^ Services::BaseService::GetElemenst() {
-	return elements_;
+Dictionary<String^, List<Elements::BaseElement^>^>^ BaseService::CollectGroupedByCategory(
+		IDictionary<String^, String^>^ controlFilters,
+		IEnumerable<String^>^ requiredParams) {
+
+	auto map = gcnew Dictionary<String^, List<Elements::BaseElement^>^>();
+
+	FilteredElementCollector^ col = gcnew FilteredElementCollector(doc_);
+	IList<Element^>^ elems = col->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
+
+	for each (Element ^ e in elems) {
+		if (!MatchFilters(doc_, e, controlFilters)) continue;
+
+		String^ cname = (e->Category != nullptr) ? e->Category->Name : "<Без категории>";
+		List<Elements::BaseElement^>^ bucket;
+		if (!map->TryGetValue(cname, bucket)) {
+			bucket = gcnew List<Elements::BaseElement^>();
+			map[cname] = bucket;
+		}
+		bucket->Add(BuildBaseElement(doc_, e, requiredParams));
+	}
+	return map;
 }
-*/
+	
+}// namespace Service
