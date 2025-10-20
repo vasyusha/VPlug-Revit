@@ -81,6 +81,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <XMLDocumentationFileName>$(OutDir)\VPlug.xml</XMLDocumentationFileName>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
@@ -115,6 +117,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <XMLDocumentationFileName>$(OutDir)\VPlug.xml</XMLDocumentationFileName>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
@@ -146,29 +150,11 @@
     <ClInclude Include="Headers\Config\json\Json.h" />
     <ClInclude Include="Headers\Config\json\JsonReaderAuditParameter.h" />
     <ClInclude Include="Headers\Export\html\AuditParameterExportHtml.h" />
-    <ClInclude Include="Headers\Export\html\AuditParameter_htmlExport.h" />
     <ClInclude Include="Headers\Revit\Elements\BaseElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\CeilingsElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\ColumnElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\DoorElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\FloorsElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\GenericModelElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\RampElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\RoofElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\RoomElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\StairsElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\StairsRailingElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\StructuralFoundationElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\StructuralFramingElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\WallElement.h" />
-    <ClInclude Include="Headers\Revit\Elements\WindowElement.h" />
     <ClInclude Include="Headers\Revit\Filters\ElementCollectorFilter.h" />
     <ClInclude Include="Headers\Revit\Filters\ParameterFilledFilter.h" />
     <ClInclude Include="Headers\Revit\Services\BaseService.h" />
-    <ClInclude Include="Headers\UI\VPControls\VPBaseControl.h" />
-    <ClInclude Include="Headers\UI\VPControls\VPButton.h" />
-    <ClInclude Include="Headers\UI\VPForms\BaseVPForm.h" />
-    <ClInclude Include="Headers\UI\VPForms\VPFormAuditParameterCommand.h" />
+    <ClInclude Include="Headers\UI\MyForms\FormAuditParameter.h" />
     <ClInclude Include="Headers\VPlug.h" />
     <ClInclude Include="Resources\Resource.h" />
   </ItemGroup>
@@ -181,29 +167,11 @@
     <ClCompile Include="Executable\Config\json\Json.cpp" />
     <ClCompile Include="Executable\Config\json\JsonReaderAuditParameter.cpp" />
     <ClCompile Include="Executable\Export\html\AuditParameterExportHtml.cpp" />
-    <ClCompile Include="Executable\Export\html\AuditParameter_htmlExport.cpp" />
     <ClCompile Include="Executable\Revit\Elements\BaseElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\CeilingsElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\ColumnElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\DoorElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\FloorsElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\GenericModelElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\RampElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\RoofElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\RoomElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\StairsElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\StairsRailingElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\StructuralFoundationElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\StructuralFramingElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\WallElement.cpp" />
-    <ClCompile Include="Executable\Revit\Elements\WindowElement.cpp" />
     <ClCompile Include="Executable\Revit\Filters\ElementCollectorFilter.cpp" />
     <ClCompile Include="Executable\Revit\Filters\ParameterFilledFilter.cpp" />
     <ClCompile Include="Executable\Revit\Services\BaseService.cpp" />
-    <ClCompile Include="Executable\UI\VPControls\VPBaseControl.cpp" />
-    <ClCompile Include="Executable\UI\VPControls\VPButton.cpp" />
-    <ClCompile Include="Executable\UI\VPForms\BaseVPForm.cpp" />
-    <ClCompile Include="Executable\UI\VPForms\VPFormAuditParameterCommand.cpp" />
+    <ClCompile Include="Executable\UI\MyForms\FormAuditParameter.cpp" />
     <ClCompile Include="Executable\VPlug.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

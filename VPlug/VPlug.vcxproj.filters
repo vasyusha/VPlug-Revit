@@ -19,12 +19,6 @@
     <Filter Include="Executable\UI">
       <UniqueIdentifier>{286ed6fe-f26b-4c3a-93d3-1d3c6881f42d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Executable\UI\VPForms">
-      <UniqueIdentifier>{aa229539-a950-4fb7-90e5-09579d7bba4d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Executable\UI\VPControls">
-      <UniqueIdentifier>{63d6f538-a60e-4d57-b6c4-c63a73c7d00f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Executable\Commands">
       <UniqueIdentifier>{a26e5c43-df61-4f04-b50c-614042c1b9ac}</UniqueIdentifier>
     </Filter>
@@ -64,12 +58,6 @@
     <Filter Include="Headers\UI">
       <UniqueIdentifier>{4543d309-fd65-4185-a2e7-600e00f95f84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headers\UI\VPForms">
-      <UniqueIdentifier>{279926c1-928d-45dd-8a72-f8410233b8c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\UI\VPControls">
-      <UniqueIdentifier>{db52db82-1000-4a9e-b099-4725fc28dd39}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headers\Commands">
       <UniqueIdentifier>{232065e7-3b14-49be-8ed6-c17ab64f5e02}</UniqueIdentifier>
     </Filter>
@@ -84,6 +72,12 @@
     </Filter>
     <Filter Include="Headers\Export\html">
       <UniqueIdentifier>{82081d99-b710-403b-b914-e4147a760bfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\UI\MyForms">
+      <UniqueIdentifier>{279926c1-928d-45dd-8a72-f8410233b8c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Executable\UI\MyForms">
+      <UniqueIdentifier>{aa229539-a950-4fb7-90e5-09579d7bba4d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,52 +103,7 @@
     <ClInclude Include="Headers\Config\json\JsonReaderAuditParameter.h">
       <Filter>Headers\Config\json</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Export\html\AuditParameter_htmlExport.h">
-      <Filter>Headers\Export\html</Filter>
-    </ClInclude>
     <ClInclude Include="Headers\Revit\Elements\BaseElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\CeilingsElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\ColumnElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\DoorElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\FloorsElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\GenericModelElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\RampElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\RoofElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\RoomElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\StairsElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\StairsRailingElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\StructuralFoundationElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\StructuralFramingElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\WallElement.h">
-      <Filter>Headers\Revit\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Revit\Elements\WindowElement.h">
       <Filter>Headers\Revit\Elements</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Revit\Filters\ElementCollectorFilter.h">
@@ -166,23 +115,14 @@
     <ClInclude Include="Headers\Revit\Services\BaseService.h">
       <Filter>Headers\Revit\Services</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\UI\VPControls\VPBaseControl.h">
-      <Filter>Headers\UI\VPControls</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\UI\VPControls\VPButton.h">
-      <Filter>Headers\UI\VPControls</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\UI\VPForms\BaseVPForm.h">
-      <Filter>Headers\UI\VPForms</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\UI\VPForms\VPFormAuditParameterCommand.h">
-      <Filter>Headers\UI\VPForms</Filter>
-    </ClInclude>
     <ClInclude Include="Headers\VPlug.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Export\html\AuditParameterExportHtml.h">
       <Filter>Headers\Export\html</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\UI\MyForms\FormAuditParameter.h">
+      <Filter>Headers\UI\MyForms</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,60 +134,6 @@
     </ClCompile>
     <ClCompile Include="Executable\Revit\Elements\BaseElement.cpp">
       <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\WallElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\CeilingsElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\ColumnElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\DoorElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\FloorsElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\GenericModelElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\RampElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\RoofElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\RoomElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\StairsElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\StairsRailingElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\StructuralFramingElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\WindowElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Revit\Elements\StructuralFoundationElement.cpp">
-      <Filter>Executable\Revit\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\UI\VPForms\BaseVPForm.cpp">
-      <Filter>Executable\UI\VPForms</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\UI\VPControls\VPBaseControl.cpp">
-      <Filter>Executable\UI\VPControls</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\UI\VPControls\VPButton.cpp">
-      <Filter>Executable\UI\VPControls</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\UI\VPForms\VPFormAuditParameterCommand.cpp">
-      <Filter>Executable\UI\VPForms</Filter>
     </ClCompile>
     <ClCompile Include="Executable\Commands\AuditParameterCommand.cpp">
       <Filter>Executable\Commands</Filter>
@@ -261,9 +147,6 @@
     <ClCompile Include="Executable\Revit\Filters\ParameterFilledFilter.cpp">
       <Filter>Executable\Revit\Filters</Filter>
     </ClCompile>
-    <ClCompile Include="Executable\Export\html\AuditParameter_htmlExport.cpp">
-      <Filter>Executable\Export\html</Filter>
-    </ClCompile>
     <ClCompile Include="Executable\Config\json\Json.cpp">
       <Filter>Executable\Config\json</Filter>
     </ClCompile>
@@ -272,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="Executable\Export\html\AuditParameterExportHtml.cpp">
       <Filter>Executable\Export\html</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\UI\MyForms\FormAuditParameter.cpp">
+      <Filter>Executable\UI\MyForms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
