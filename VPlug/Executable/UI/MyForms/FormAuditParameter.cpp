@@ -8,8 +8,17 @@ FormAuditParameter::FormAuditParameter() {
 	this->Size = Drawing::Size(1000, 700);
     this->MinimumSize = Drawing::Size(900, 600);
     this->MaximumSize = Drawing::Size(1500, 1300);
+
+    auditStage = AuditStage::None;
     
     BuildUi();
+    SubscriptionEvent();
+    UpdateUiState();
+
+    List<String^>^ test = gcnew List<String^>();
+    test->Add("Категория");
+    test->Add("Фильтер");
+    SetAvailableMethods(test);
 }
 
 void FormAuditParameter::BuildUi() {
@@ -116,5 +125,66 @@ void FormAuditParameter::BuildUi() {
 
 	this->ResumeLayout(false);
 }
+
+void FormAuditParameter::SubscriptionEvent() {
+    cbMethod_->SelectedIndexChanged += gcnew EventHandler(this, &FormAuditParameter::OnMethodChanged);
+    btnPrepare_->Click += gcnew EventHandler(this, &FormAuditParameter::OnPrepare);
+    btnBrowseConfig_->Click += gcnew EventHandler(this, &FormAuditParameter::OnBrowseConfig);
+
+    btnRun_->Click += gcnew EventHandler(this, &FormAuditParameter::OnRun);
+    btnExportBrowse_->Click += gcnew EventHandler(this, &FormAuditParameter::OnBrowseExport);
+    btnExport_->Click += gcnew EventHandler(this, &FormAuditParameter::OnExport); 
+}
+
+void FormAuditParameter::UpdateUiState() {
+    btnPrepare_->Enabled = auditStage == AuditStage::MethodSelected ? true : false;
+    btnBrowseConfig_->Enabled = auditStage == AuditStage::Prepare ? true : false;
+    btnRun_->Enabled = auditStage == AuditStage::ChecksSelected ? true : false;
+    btnExportBrowse_->Enabled = auditStage == AuditStage::RunningDone ? true : false;
+    btnExport_->Enabled = auditStage == AuditStage::ExportPathLoaded ? true : false;
+}
+
+void FormAuditParameter::SetStatus(String^ text) {
+   statusText_->Text = text; 
+}
+
+void FormAuditParameter::SetAvailableMethods(IList<String^>^ methods) {
+    cbMethod_->Items->Clear();
+
+    for each (String^ method in methods) {
+        cbMethod_->Items->Add(method);
+    }
+
+    if (cbMethod_->Items->Count == 0) cbMethod_->SelectedIndex = -1;
+}
+
+void FormAuditParameter::OnMethodChanged(Object^ sender, EventArgs^ e) {
+   if (cbMethod_->SelectedIndex > -1) auditStage = AuditStage::MethodSelected; 
+
+   UpdateUiState();
+}
+
+void FormAuditParameter::OnPrepare(Object^ sender, EventArgs^ e) {
+
+}
+
+void FormAuditParameter::OnBrowseConfig(Object^ sender, EventArgs^ e) {
+
+}
+
+void FormAuditParameter::OnRun(Object^ sender, EventArgs^ e) {
+
+}
+
+void FormAuditParameter::OnBrowseExport(Object^ sender, EventArgs^ e) {
+
+}
+
+void FormAuditParameter::OnExport(Object^ sender, EventArgs^ e) {
+
+}
+
+
+
 
 }//namespace MyForm
