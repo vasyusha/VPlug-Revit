@@ -47,13 +47,26 @@ private:
 
 	void BuildUi();
 
+	Windows::Forms::ComboBox^ cbMethod_;
+	Button^ btnPrepare_;
+
+	Windows::Forms::TextBox^ tbConfig_;
+	Button^ btnBrowseConfig_;
+
+	Windows::Forms::Panel^ pnlChecks_;
+	DataGridView^ dgvTable_;
+	Button^ btnRun_;
+
+	Windows::Forms::TextBox^ tbExport_;
+	Button^ btnExportBrowse_;
+	Button^ btnExport_;
+
+	StatusStrip^ status_;
+	ToolStripStatusLabel^ statusText_;
 
 public:
 	FormAuditParameter();
 
 };
-
-
-
 
 }//namespace MyForm
