@@ -68,7 +68,6 @@ private:
 	void UpdateUiState();
 	void SetStatus(String^ text);
 
-
 	void OnMethodChanged(Object^ sender, EventArgs^ e);
 	void OnPrepare(Object^ sender, EventArgs^ e);
 	void OnBrowseConfig(Object^ sender, EventArgs^ e);

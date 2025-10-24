@@ -154,8 +154,6 @@ void FormAuditParameter::AddRowTable(AuditSummaryRow^ row) {
     );
 }
 
-
-
 void FormAuditParameter::SetAvailableMethods(IList<String^>^ methods) {
     cbMethod_->Items->Clear();
 
