@@ -3,6 +3,8 @@
 
 namespace Services {
 
+BaseService::BaseService(Document^ doc) : doc_(doc) {}
+
 Parameter^ BaseService::TryGetParam(Document^ doc, Element^ e, String^ name) {
 	if (e == nullptr || String::IsNullOrEmpty(name)) return nullptr;
 
@@ -105,7 +107,7 @@ List<Elements::BaseElement^>^ BaseService::CollectAll(
 
 List<Elements::BaseElement^>^ BaseService::CollectByCategory(
 		BuiltInCategory bic,
-		IDictionary<String^, String^>^ controlFilters,
+		//IDictionary<String^, String^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams) {
 	
 	auto result = gcnew List<Elements::BaseElement^>();
@@ -115,7 +117,7 @@ List<Elements::BaseElement^>^ BaseService::CollectByCategory(
 	IList<Element^>^ elems = col->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
 
 	for each (Element ^ e in elems) {
-		if (!MatchFilters(doc_, e, controlFilters)) continue;
+		//if (!MatchFilters(doc_, e, controlFilters)) continue;
 		result->Add(BuildBaseElement(doc_, e, requiredParams));
 	}
 	return result;

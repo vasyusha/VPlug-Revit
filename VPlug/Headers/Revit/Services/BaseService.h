@@ -26,13 +26,17 @@ private:
 
 	static Elements::BaseElement^ BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
 
+public:
+
+	BaseService(Document^ doc);
+
 	List<Elements::BaseElement^>^ CollectAll(
 		IDictionary<String^, String^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams);
 
 	List<Elements::BaseElement^>^ CollectByCategory(
 		BuiltInCategory bic,
-		IDictionary<String^, String^>^ controlFilters,
+		//IDictionary<String^, String^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams);
 
 	Dictionary<String^, List<Elements::BaseElement^>^>^ CollectGroupedByCategory(
