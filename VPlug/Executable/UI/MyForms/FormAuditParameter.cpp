@@ -3,26 +3,22 @@
 namespace MyForm {
 
 FormAuditParameter::FormAuditParameter() {
-	this->Text = "Проверка параметров";
-	this->StartPosition = FormStartPosition::CenterScreen;
-	this->Size = Drawing::Size(1000, 700);
+    this->Text = "Проверка параметров";
+    this->StartPosition = FormStartPosition::CenterScreen;
+    this->Size = Drawing::Size(1000, 700);
     this->MinimumSize = Drawing::Size(900, 600);
     this->MaximumSize = Drawing::Size(1500, 1300);
 
     auditStage = AuditStage::None;
-    
+
     BuildUi();
     SubscriptionEvent();
     UpdateUiState();
-
-    List<String^>^ test = gcnew List<String^>();
-    test->Add("Категория");
-    test->Add("Фильтер");
-    SetAvailableMethods(test);
+    SetStatus("Установите метод проверки");
 }
 
 void FormAuditParameter::BuildUi() {
-	this->SuspendLayout();
+    this->SuspendLayout();
 
     auto grid = gcnew TableLayoutPanel();
     grid->Dock = DockStyle::Fill;
@@ -75,7 +71,6 @@ void FormAuditParameter::BuildUi() {
     dgvTable_ = gcnew DataGridView();
     dgvTable_->Dock = DockStyle::Fill;
     dgvTable_->Columns->Add("Scope", "Проверка по");
-    dgvTable_->Columns->Add("Name", "Имя");
     dgvTable_->Columns->Add("Total", "Всего");
     dgvTable_->Columns->Add("Passed", "Пройдено");
     dgvTable_->Columns->Add("Failed", "Не пройдено");
@@ -123,7 +118,7 @@ void FormAuditParameter::BuildUi() {
     status_->Items->Add(statusText_);
     this->Controls->Add(status_);
 
-	this->ResumeLayout(false);
+    this->ResumeLayout(false);
 }
 
 void FormAuditParameter::SubscriptionEvent() {
@@ -133,7 +128,7 @@ void FormAuditParameter::SubscriptionEvent() {
 
     btnRun_->Click += gcnew EventHandler(this, &FormAuditParameter::OnRun);
     btnExportBrowse_->Click += gcnew EventHandler(this, &FormAuditParameter::OnBrowseExport);
-    btnExport_->Click += gcnew EventHandler(this, &FormAuditParameter::OnExport); 
+    btnExport_->Click += gcnew EventHandler(this, &FormAuditParameter::OnExport);
 }
 
 void FormAuditParameter::UpdateUiState() {
@@ -145,46 +140,163 @@ void FormAuditParameter::UpdateUiState() {
 }
 
 void FormAuditParameter::SetStatus(String^ text) {
-   statusText_->Text = text; 
+    statusText_->Text = text;
 }
+
+void FormAuditParameter::AddRowTable(AuditSummaryRow^ row) {
+    dgvTable_->Rows->Add(
+        row->Scope,
+        row->Total,
+        row->Passed,
+        row->Failed,
+        row->MissedValue,
+        row->NoParam
+    );
+}
+
+
 
 void FormAuditParameter::SetAvailableMethods(IList<String^>^ methods) {
     cbMethod_->Items->Clear();
 
-    for each (String^ method in methods) {
+    for each (String ^ method in methods) {
         cbMethod_->Items->Add(method);
     }
 
     if (cbMethod_->Items->Count == 0) cbMethod_->SelectedIndex = -1;
 }
 
-void FormAuditParameter::OnMethodChanged(Object^ sender, EventArgs^ e) {
-   if (cbMethod_->SelectedIndex > -1) auditStage = AuditStage::MethodSelected; 
+void FormAuditParameter::SetChecks(IDictionary<String^, String^>^ methods) {
+    pnlChecks_->Controls->Clear();
+    int numBox = 1;
+    for each (KeyValuePair<String^, String^> kvp in methods) {
+        CheckBox^ cb = gcnew CheckBox();
+        cb->Name = kvp.Key;
+        cb->Text = kvp.Value;
+        cb->AutoSize = true;
+        cb->Location = Drawing::Point(10, numBox * 20);
+        cb->CheckedChanged += gcnew EventHandler(this, &FormAuditParameter::OnCheckBox);
 
-   UpdateUiState();
+        pnlChecks_->Controls->Add(cb);
+        ++numBox;
+    }
+}
+/*
+void FormAuditParameter::MarkAuditPrepared(bool ok) {
+    auditPrepared_ = ok;
+    SetStatus(ok ? "Подготовка завершена" : "Подготовка не выполнена");
+    UpdateUiState();
+}
+
+void FormAuditParameter::MarkAuditFinished(bool ok) {
+    auditRan_ = ok;
+    SetStatus(ok ? "Проверка выполнена" : "Проверка не выполнена");
+    UpdateUiState();
+}
+*/
+void FormAuditParameter::OnMethodChanged(Object^ sender, EventArgs^ e) {
+    if (cbMethod_->SelectedIndex > -1) {
+        auditStage = AuditStage::MethodSelected;
+        SetStatus("Метод проверки установлен");
+    }
+
+    UpdateUiState();
 }
 
 void FormAuditParameter::OnPrepare(Object^ sender, EventArgs^ e) {
+    if (auditStage == AuditStage::MethodSelected) {
+        auditStage = AuditStage::Prepare;
+        cbMethod_->Enabled = false;
+        selectedMethod_ = safe_cast<String^>(cbMethod_->SelectedItem);
+        MethodChanged(selectedMethod_);
+        SetStatus("Подготовка выполнена");
+    }
 
+    UpdateUiState();
 }
 
 void FormAuditParameter::OnBrowseConfig(Object^ sender, EventArgs^ e) {
+    OpenFileDialog^ dlg = gcnew OpenFileDialog();
+    dlg->Filter = "JSON (*.json)|*.json|All files (*.*)|*.*";
+    dlg->RestoreDirectory = true;
 
+    if (dlg->ShowDialog(this) == ::DialogResult::OK) {
+        configPath_ = dlg->FileName;
+        tbConfig_->Text = configPath_;
+
+        auditStage = AuditStage::ConfigLoaded;
+
+        LoadConfigRequest(configPath_);
+        UpdateUiState();
+        SetStatus("Файл конфигурации выбран");
+    }
+}
+
+void FormAuditParameter::OnCheckBox(Object^ sender, EventArgs^ e) {
+    bool flag = false;
+    List<String^>^ selected = gcnew List<String^>();
+
+    for each (Control ^ cl in pnlChecks_->Controls) {
+        CheckBox^ cb = dynamic_cast<CheckBox^>(cl);
+
+        if (cb->Checked) {
+            flag = true;
+            selected->Add(cb->Name);
+        }
+    }
+
+    if (flag) {
+        auditStage = AuditStage::ChecksSelected;
+
+        ChecksSelectedRequest(selected);
+
+        SetStatus("Элемент(ы) выбраны");
+    } else {
+        auditStage = AuditStage::ConfigLoaded;
+        SetStatus("Файл конфигурации выбран");
+    }
+    auditStage = flag ? AuditStage::ChecksSelected : AuditStage::ConfigLoaded;
+    UpdateUiState();
 }
 
 void FormAuditParameter::OnRun(Object^ sender, EventArgs^ e) {
+    auditStage = AuditStage::Running;
+    SetStatus("Проверка...");
 
+    RunRequest();
+
+    auditStage = AuditStage::RunningDone;
+    UpdateUiState();
+    SetStatus("Проверка выполнена");
 }
 
 void FormAuditParameter::OnBrowseExport(Object^ sender, EventArgs^ e) {
+    SaveFileDialog^ dlg = gcnew SaveFileDialog();
+    dlg->Filter = "HTML (*.html)|*.html|All files (*.*)|*.*";
+    dlg->RestoreDirectory = true;
+
+    if (dlg->ShowDialog(this) == ::DialogResult::OK) {
+        exportPath_ = dlg->FileName;
+        tbExport_->Text = exportPath_;
+
+        auditStage = AuditStage::ExportPathLoaded;
+
+        UpdateUiState();
+        SetStatus("Выбран путь для отчёта");
+    }
 
 }
 
 void FormAuditParameter::OnExport(Object^ sender, EventArgs^ e) {
 
+    if (String::IsNullOrWhiteSpace(exportPath_)) {
+        MessageBox::Show(this, "Выберите путь для сохранения отчёта", "Внимание",
+            MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        return;
+    }
+
+    SetStatus("Экспорт запущен");
+    ExportRequest(exportPath_);
 }
-
-
-
 
 }//namespace MyForm

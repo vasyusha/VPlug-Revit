@@ -23,7 +23,6 @@ enum class AuditStage {
 public ref class AuditSummaryRow {
 public:
 	property String^ Scope;
-	property String^ Name;
 	property int Total;
 	property int Passed;
 	property int Failed;
@@ -33,14 +32,14 @@ public:
 
 public delegate void AuditMethodSelectedHandler(String^ method);
 public delegate void AuditConfigLoadedHandler(String^ path);
-public delegate void AuditChecksSelectedHandler();
+public delegate void AuditChecksSelectedHandler(List<String^>^ selected);
 public delegate void AuditRunningHandler();
 public delegate void AuditExportHandler(String^ path);
 
-public ref class FormAuditParameter : public Windows::Forms::Form{
+public ref class FormAuditParameter : public Windows::Forms::Form {
 private:
 	AuditStage auditStage;
-	
+
 	String^ selectedMethod_;
 	String^ configPath_;
 	String^ exportPath_;
@@ -69,16 +68,20 @@ private:
 	void UpdateUiState();
 	void SetStatus(String^ text);
 
+
 	void OnMethodChanged(Object^ sender, EventArgs^ e);
 	void OnPrepare(Object^ sender, EventArgs^ e);
 	void OnBrowseConfig(Object^ sender, EventArgs^ e);
+	void OnCheckBox(Object^ sender, EventArgs^ e);
 	void OnRun(Object^ sender, EventArgs^ e);
 	void OnBrowseExport(Object^ sender, EventArgs^ e);
-	void OnExport(Object^ sender, EventArgs^ e); 
+	void OnExport(Object^ sender, EventArgs^ e);
 
 public:
 	FormAuditParameter();
-	
+
+	void AddRowTable(AuditSummaryRow^ row);
+
 	event AuditMethodSelectedHandler^ MethodChanged;
 	event AuditConfigLoadedHandler^ LoadConfigRequest;
 	event AuditChecksSelectedHandler^ ChecksSelectedRequest;
@@ -86,8 +89,8 @@ public:
 	event AuditExportHandler^ ExportRequest;
 
 	void SetAvailableMethods(IList<String^>^ methods);
-	/*
 	void SetChecks(IDictionary<String^, String^>^ checks);
+	/*
 	void MarkAuditPrepared(bool ok);
 	void MarkAuditFinished(bool ok);
 	*/
