@@ -70,6 +70,10 @@ void FormAuditParameter::BuildUi() {
 
     dgvTable_ = gcnew DataGridView();
     dgvTable_->Dock = DockStyle::Fill;
+    dgvTable_->ReadOnly = true;
+    dgvTable_->AllowUserToAddRows = false;
+    dgvTable_->RowHeadersVisible = false;
+    dgvTable_->AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode::Fill;
     dgvTable_->Columns->Add("Scope", "Проверка по");
     dgvTable_->Columns->Add("Total", "Всего");
     dgvTable_->Columns->Add("Passed", "Пройдено");
@@ -123,7 +127,7 @@ void FormAuditParameter::BuildUi() {
 
 void FormAuditParameter::SubscriptionEvent() {
     cbMethod_->SelectedIndexChanged += gcnew EventHandler(this, &FormAuditParameter::OnMethodChanged);
-    btnPrepare_->Click += gcnew EventHandler(this, &FormAuditParameter::OnPrepare);
+    btnPrepare_->Click += gcnew EventHandler(this, &FormAuditParameter::OnMethodPrepare);
     btnBrowseConfig_->Click += gcnew EventHandler(this, &FormAuditParameter::OnBrowseConfig);
 
     btnRun_->Click += gcnew EventHandler(this, &FormAuditParameter::OnRun);
@@ -133,7 +137,11 @@ void FormAuditParameter::SubscriptionEvent() {
 
 void FormAuditParameter::UpdateUiState() {
     btnPrepare_->Enabled = auditStage == AuditStage::MethodSelected ? true : false;
-    btnBrowseConfig_->Enabled = auditStage == AuditStage::Prepare ? true : false;
+    btnBrowseConfig_->Enabled = 
+        (auditStage == AuditStage::MethodPrepare) ||
+        (auditStage == AuditStage::ConfigLoaded) ||
+        (auditStage == AuditStage::ConfigPrepare);
+
     btnRun_->Enabled = auditStage == AuditStage::ChecksSelected ? true : false;
     btnExportBrowse_->Enabled = auditStage == AuditStage::RunningDone ? true : false;
     btnExport_->Enabled = auditStage == AuditStage::ExportPathLoaded ? true : false;
@@ -164,34 +172,6 @@ void FormAuditParameter::SetAvailableMethods(IList<String^>^ methods) {
     if (cbMethod_->Items->Count == 0) cbMethod_->SelectedIndex = -1;
 }
 
-void FormAuditParameter::SetChecks(IDictionary<String^, String^>^ methods) {
-    pnlChecks_->Controls->Clear();
-    int numBox = 1;
-    for each (KeyValuePair<String^, String^> kvp in methods) {
-        CheckBox^ cb = gcnew CheckBox();
-        cb->Name = kvp.Key;
-        cb->Text = kvp.Value;
-        cb->AutoSize = true;
-        cb->Location = Drawing::Point(10, numBox * 20);
-        cb->CheckedChanged += gcnew EventHandler(this, &FormAuditParameter::OnCheckBox);
-
-        pnlChecks_->Controls->Add(cb);
-        ++numBox;
-    }
-}
-/*
-void FormAuditParameter::MarkAuditPrepared(bool ok) {
-    auditPrepared_ = ok;
-    SetStatus(ok ? "Подготовка завершена" : "Подготовка не выполнена");
-    UpdateUiState();
-}
-
-void FormAuditParameter::MarkAuditFinished(bool ok) {
-    auditRan_ = ok;
-    SetStatus(ok ? "Проверка выполнена" : "Проверка не выполнена");
-    UpdateUiState();
-}
-*/
 void FormAuditParameter::OnMethodChanged(Object^ sender, EventArgs^ e) {
     if (cbMethod_->SelectedIndex > -1) {
         auditStage = AuditStage::MethodSelected;
@@ -201,16 +181,14 @@ void FormAuditParameter::OnMethodChanged(Object^ sender, EventArgs^ e) {
     UpdateUiState();
 }
 
-void FormAuditParameter::OnPrepare(Object^ sender, EventArgs^ e) {
+void FormAuditParameter::OnMethodPrepare(Object^ sender, EventArgs^ e) {
     if (auditStage == AuditStage::MethodSelected) {
-        auditStage = AuditStage::Prepare;
         cbMethod_->Enabled = false;
         selectedMethod_ = safe_cast<String^>(cbMethod_->SelectedItem);
         MethodChanged(selectedMethod_);
-        SetStatus("Подготовка выполнена");
+    } else {
+        UpdateUiState();
     }
-
-    UpdateUiState();
 }
 
 void FormAuditParameter::OnBrowseConfig(Object^ sender, EventArgs^ e) {
@@ -223,10 +201,25 @@ void FormAuditParameter::OnBrowseConfig(Object^ sender, EventArgs^ e) {
         tbConfig_->Text = configPath_;
 
         auditStage = AuditStage::ConfigLoaded;
+        SetStatus("Файл конфигурации выбран");
+        UpdateUiState();
 
         LoadConfigRequest(configPath_);
-        UpdateUiState();
-        SetStatus("Файл конфигурации выбран");
+    }
+}
+
+void FormAuditParameter::SetChecks(IList<String^>^ methods) {
+    pnlChecks_->Controls->Clear();
+    int numBox = 1;
+    for each (String^ s in methods) {
+        CheckBox^ cb = gcnew CheckBox();
+        cb->Text = s;
+        cb->AutoSize = true;
+        cb->Location = Drawing::Point(10, numBox * 20);
+        cb->CheckedChanged += gcnew EventHandler(this, &FormAuditParameter::OnCheckBox);
+
+        pnlChecks_->Controls->Add(cb);
+        ++numBox;
     }
 }
 
@@ -239,7 +232,7 @@ void FormAuditParameter::OnCheckBox(Object^ sender, EventArgs^ e) {
 
         if (cb->Checked) {
             flag = true;
-            selected->Add(cb->Name);
+            selected->Add(cb->Text);
         }
     }
 
@@ -248,12 +241,12 @@ void FormAuditParameter::OnCheckBox(Object^ sender, EventArgs^ e) {
 
         ChecksSelectedRequest(selected);
 
-        SetStatus("Элемент(ы) выбраны");
+        SetStatus("Группы выбраны");
     } else {
         auditStage = AuditStage::ConfigLoaded;
-        SetStatus("Файл конфигурации выбран");
+        SetStatus("Конфигурация подготовлена");
     }
-    auditStage = flag ? AuditStage::ChecksSelected : AuditStage::ConfigLoaded;
+
     UpdateUiState();
 }
 
@@ -262,10 +255,6 @@ void FormAuditParameter::OnRun(Object^ sender, EventArgs^ e) {
     SetStatus("Проверка...");
 
     RunRequest();
-
-    auditStage = AuditStage::RunningDone;
-    UpdateUiState();
-    SetStatus("Проверка выполнена");
 }
 
 void FormAuditParameter::OnBrowseExport(Object^ sender, EventArgs^ e) {
@@ -295,6 +284,28 @@ void FormAuditParameter::OnExport(Object^ sender, EventArgs^ e) {
 
     SetStatus("Экспорт запущен");
     ExportRequest(exportPath_);
+}
+
+void FormAuditParameter::ClearTable() {
+    dgvTable_->Rows->Clear();
+}
+
+void FormAuditParameter::MarkAuditMethodPrepared(bool ok) {
+    auditStage = ok ? AuditStage::MethodPrepare : AuditStage::MethodSelected; 
+    SetStatus(ok ? "Подготовка завершена" : "Подготовка не выполнена");
+    UpdateUiState();
+}
+
+void FormAuditParameter::MarkAuditConfigPrepared(bool ok) {
+    auditStage = ok ? AuditStage::ConfigPrepare : AuditStage::ConfigLoaded;
+    SetStatus(ok ? "Конфигурация подготовлена" : "Ошибка загрузки конйигурации");
+    UpdateUiState();
+}
+
+void FormAuditParameter::MarkAuditFinished(bool ok) {
+    auditStage = ok ? AuditStage::RunningDone : AuditStage::Running;
+    SetStatus(ok ? "Проверка произведена" : "Ошибка проверки");
+    UpdateUiState();
 }
 
 }//namespace MyForm

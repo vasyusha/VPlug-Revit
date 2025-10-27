@@ -10,8 +10,9 @@ namespace MyForm {
 enum class AuditStage {
 	None,
 	MethodSelected,
-	Prepare,
+	MethodPrepare,
 	ConfigLoaded,
+	ConfigPrepare,
 	ChecksSelected,
 	Running,
 	RunningDone,
@@ -44,7 +45,7 @@ private:
 	String^ configPath_;
 	String^ exportPath_;
 
-	List<AuditSummaryRow^>^ summaryRows_;
+	//List<AuditSummaryRow^>^ summaryRows_;
 
 	Windows::Forms::ComboBox^ cbMethod_;
 	Button^ btnPrepare_;
@@ -69,7 +70,7 @@ private:
 	void SetStatus(String^ text);
 
 	void OnMethodChanged(Object^ sender, EventArgs^ e);
-	void OnPrepare(Object^ sender, EventArgs^ e);
+	void OnMethodPrepare(Object^ sender, EventArgs^ e);
 	void OnBrowseConfig(Object^ sender, EventArgs^ e);
 	void OnCheckBox(Object^ sender, EventArgs^ e);
 	void OnRun(Object^ sender, EventArgs^ e);
@@ -88,11 +89,13 @@ public:
 	event AuditExportHandler^ ExportRequest;
 
 	void SetAvailableMethods(IList<String^>^ methods);
-	void SetChecks(IDictionary<String^, String^>^ checks);
-	/*
-	void MarkAuditPrepared(bool ok);
+	void SetChecks(IList<String^>^ checks);
+	void ClearTable();
+
+	void MarkAuditMethodPrepared(bool ok);
+	void MarkAuditConfigPrepared(bool ok);
 	void MarkAuditFinished(bool ok);
-	*/
+	//void MarkAuditExportFinished(bool ok);
 
 };
 
