@@ -43,7 +43,8 @@ bool BaseService::IsFilled(Parameter^ param) {
 }
 
 bool BaseService::MatchFilters(Document^ doc, Element^ e, IDictionary<String^, String^>^ controlFilters) {
-	if (controlFilters == nullptr || controlFilters->Count == 0) return false;
+	//если фильтров нет — считаем, что элемент подходит
+	if (controlFilters == nullptr || controlFilters->Count == 0) return true;
 
 	for each (KeyValuePair<String^, String^> kvp in controlFilters) {
 		Parameter^ p = TryGetParam(doc, e, kvp.Key);
@@ -65,25 +66,29 @@ Elements::BaseElement^ BaseService::BuildBaseElement(Document^ doc, Element^ e, 
 	Category^ cat = e->Category;
 	if (cat != nullptr) {
 		be->CategoryName = cat->Name;
-		be->BuiltInCategory = cat->Id->IntegerValue;
-		be->BuiltInCategoryName = cat->Name;
+
+		BuiltInCategory bic = static_cast<BuiltInCategory>(cat->Id->IntegerValue);
+		be->BuiltInCategory = (int)bic;
+		be->BuiltInCategoryName = bic.ToString();
 	}
 
 	if (requiredParams != nullptr) {
 		for each (String^ pname in requiredParams) {
 			Parameter^ p = TryGetParam(doc, e, pname);
 			bool filled = IsFilled(p);
+			Elements::ParamState stage;
 			String^ val = nullptr;
 
 			if (p == nullptr) {
-				val = "Параметр отсутствует у типа/экземпляра";
+				stage = Elements::ParamState::MissingParam;
 			} else if (!filled) {
-				val = "Параметр не заполнен";
+				stage = Elements::ParamState::EmptyValue;
 			} else {
+				stage = Elements::ParamState::Ok;
 				val = ReadParamValue(p);
-				if (String::IsNullOrEmpty(val)) val = "(Пусто)";
+				if (String::IsNullOrEmpty(val)) stage = Elements::ParamState::EmptyValue;
 			}
-			be->AddParameter(pname, val, filled);
+			be->AddParameter(pname, val, filled, stage);
 		}
 	}
 	return be;
