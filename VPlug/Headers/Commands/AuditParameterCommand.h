@@ -15,7 +15,7 @@ using namespace Autodesk::Revit::Attributes;
 
 namespace Commands {
 
-public ref class DataScope {
+public ref class AuditScopeSummary {
 public:
 	property String^ Scope;
 	property int Total;
@@ -51,11 +51,11 @@ private:
 	void AuditCategory();
 	void AuditUserFilter();
 
-	DataScope^ CreateDataScope(String^ scope, IList<Elements::BaseElement^>^ elements);
+	AuditScopeSummary^ CreateDataScope(String^ scope, IList<Elements::BaseElement^>^ elements);
 
 	void FillTable();
 
-	Dictionary<String^, String^>^ checks_;
+	List<String^>^ checks_;
 	List<String^>^ checksSelected_;
 
 	Dictionary<String^, JsonReader::CategorySpec^>^ categorySpecs_;
@@ -63,11 +63,11 @@ private:
 
 	Dictionary<String^, List<Elements::BaseElement^>^>^ elements_;
 
-	Dictionary<String^, DataScope^>^ dataScops_;
+	Dictionary<String^, AuditScopeSummary^>^ dataScopes_;
 
 public:
 	virtual Result Execute(ExternalCommandData^ commandData,
 		String^% message, ElementSet^ elements);
 };
 
-}
+}// namespace Command

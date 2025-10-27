@@ -28,27 +28,37 @@ void AuditParameterCommand::SubscriptionEvent() {
 void AuditParameterCommand::SetAvailableMethods() {
 	List<String^>^ methods = gcnew List<String^>();
 	methods->Add("Категория");
-	methods->Add("Фильтер");
+	methods->Add("Фильтр");
 
 	form_->SetAvailableMethods(methods);
 }
 
 void AuditParameterCommand::GetMethod(String^ method) {
-	method_ = method;
+	if (method != nullptr ) {
+		method_ = method;
+	}
+	form_->MarkAuditMethodPrepared(method != nullptr);
 }
 
 void AuditParameterCommand::GetConfigPath(String^ path) {
-	configPath_ = path;
-	StartPrepare();
+	form_->MarkAuditConfigPrepared(path != nullptr);
+
+	if (path != nullptr) {
+		configPath_ = path;
+		StartPrepare();
+	}
 }
 
 void AuditParameterCommand::StartPrepare() {
-	checks_ = gcnew Dictionary<String^, String^>();
+	checks_ = gcnew List<String^>();
 
 	if (method_ == "Категория") {
 		PrepareCategory();
-	} else {
+	} else if (method_ == "Фильтр") {
 		PrepareUserFilterSpec();
+	} else {
+		MessageBox::Show("Ошибка подготовки", "Ошибка");
+		return;
 	}
 	form_->SetChecks(checks_);
 }
@@ -61,7 +71,7 @@ void AuditParameterCommand::PrepareCategory() {
 	categorySpecs_ = gcnew Dictionary<String^, JsonReader::CategorySpec^>();
 
 	for each (JsonReader::CategorySpec^ spec in specs) {
-		checks_->Add(spec->Name, spec->Name);
+		checks_->Add(spec->Name);
 		categorySpecs_->Add(spec->Name, spec);
 	}
 }
@@ -74,7 +84,7 @@ void AuditParameterCommand::PrepareUserFilterSpec() {
 	userFilterSpecs_ = gcnew Dictionary<String^, JsonReader::UserFilterSpec^>();
 
 	for each (JsonReader::UserFilterSpec^ spec in specs) {
-		checks_->Add(spec->Name, spec->Name);
+		checks_->Add(spec->Name);
 		userFilterSpecs_->Add(spec->Name, spec);
 	}
 }
@@ -84,17 +94,28 @@ void AuditParameterCommand::GetOnChecks(List<String^>^ selected) {
 }
 
 void AuditParameterCommand::Audit() {
+	if (checksSelected_ == nullptr || checksSelected_->Count == 0) {
+		MessageBox::Show("Не выбрано ни одной группы для проверки");
+		form_->MarkAuditFinished(false);
+		return;
+	}
+
 	if (method_ == "Категория") {
 		AuditCategory();
-	} else {
+	} else if (method_ == "Фильтр") {
 		AuditUserFilter();
+	} else {
+		MessageBox::Show("Неизвестный метод проверки");
+		form_->MarkAuditFinished(false);
+		return;
 	}
+	form_->MarkAuditFinished(true);
 }
 
 void AuditParameterCommand::AuditCategory() {
 	elements_ = gcnew Dictionary<String^, List<Elements::BaseElement^>^>();
 
-	dataScops_ = gcnew Dictionary<String^, DataScope^>();
+	dataScopes_ = gcnew Dictionary<String^, AuditScopeSummary^>();
 	
 	Services::BaseService^ service = gcnew Services::BaseService(doc_);	
 
@@ -108,7 +129,7 @@ void AuditParameterCommand::AuditCategory() {
 
 		elements_->Add(scope, es);
 
-		dataScops_->Add(scope, CreateDataScope(scope, es));
+		dataScopes_->Add(scope, CreateDataScope(scope, es));
 	}
 	FillTable();
 }
@@ -116,7 +137,7 @@ void AuditParameterCommand::AuditCategory() {
 void AuditParameterCommand::AuditUserFilter() {
 	elements_ = gcnew Dictionary<String^, List<Elements::BaseElement^>^>();
 	
-	dataScops_ = gcnew Dictionary<String^, DataScope^>();
+	dataScopes_ = gcnew Dictionary<String^, AuditScopeSummary^>();
 
 	Services::BaseService^ service = gcnew Services::BaseService(doc_);	
 
@@ -135,13 +156,13 @@ void AuditParameterCommand::AuditUserFilter() {
 
 		elements_->Add(scope, es);
 
-		dataScops_->Add(scope, CreateDataScope(scope, es));
+		dataScopes_->Add(scope, CreateDataScope(scope, es));
 	}
 	FillTable();
 }
 
-DataScope^ AuditParameterCommand::CreateDataScope(String^ scope, IList<Elements::BaseElement^>^ elements) {
-	DataScope^ dataScope = gcnew DataScope();
+AuditScopeSummary^ AuditParameterCommand::CreateDataScope(String^ scope, IList<Elements::BaseElement^>^ elements) {
+	AuditScopeSummary^ dataScope = gcnew AuditScopeSummary();
 
 	dataScope->Scope = scope;
 	dataScope->Total = elements->Count;
@@ -151,16 +172,17 @@ DataScope^ AuditParameterCommand::CreateDataScope(String^ scope, IList<Elements:
 		bool elementPassed = true;
 
 		for each (Elements::ParamResult^ p in e->Parameters) {
-			if (!p->Filled) {
-				elementPassed = false;
-				if (p->Value == "Параметр отсутствует у типа/экземпляра") {
-					++dataScope->NoParam;
-				} else if (p->Value == "Параметр не заполнен" || p->Value == "(Пусто)") {
-					++dataScope->MissedValue;
-				}
+			
+			switch (p->Stage) {
+				case Elements::ParamState::MissingParam : ++dataScope->NoParam;
+					break;
+				case Elements::ParamState::EmptyValue : ++dataScope->MissedValue;
+					break;
 			}
+
+			if (p->Stage != Elements::ParamState::Ok) elementPassed = false;
 		}
-	
+
 		if (elementPassed) {
 			++dataScope->Passed;
 		} else {
@@ -171,7 +193,8 @@ DataScope^ AuditParameterCommand::CreateDataScope(String^ scope, IList<Elements:
 }
 
 void AuditParameterCommand::FillTable() {
-	for each (KeyValuePair<String^, DataScope^> ds in dataScops_) {
+	form_->ClearTable();
+	for each (KeyValuePair<String^, AuditScopeSummary^> ds in dataScopes_) {
 		MyForm::AuditSummaryRow^ row = gcnew MyForm::AuditSummaryRow();
 
 		row->Scope = ds.Value->Scope;
@@ -185,7 +208,5 @@ void AuditParameterCommand::FillTable() {
 	}
 }
 
-
-
-}
+}// namespace Command
 
