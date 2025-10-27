@@ -23,6 +23,7 @@ void AuditParameterCommand::SubscriptionEvent() {
 	form_->LoadConfigRequest += gcnew MyForm::AuditConfigLoadedHandler(this, &AuditParameterCommand::GetConfigPath);
 	form_->ChecksSelectedRequest += gcnew MyForm::AuditChecksSelectedHandler(this, &AuditParameterCommand::GetOnChecks);
 	form_->RunRequest += gcnew MyForm::AuditRunningHandler(this, &AuditParameterCommand::Audit);		
+	form_->ExportRequest += gcnew MyForm::AuditExportHandler(this, &AuditParameterCommand::Export);
 }
 
 void AuditParameterCommand::SetAvailableMethods() {
@@ -208,5 +209,9 @@ void AuditParameterCommand::FillTable() {
 	}
 }
 
-}// namespace Command
+void AuditParameterCommand::Export(String^ path) {
+
+}
+
+}// namespace Commands
 

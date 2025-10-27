@@ -3,6 +3,7 @@
 #include "../../Headers/UI/MyForms/FormAuditParameter.h"
 #include "../../Headers/Config/json/JsonReaderAuditParameter.h"
 #include "../../Headers/Revit/Services/BaseService.h"
+#include "../../Headers/Export/html/AuditParameterExportHtml.h"
 
 using namespace System;
 using namespace System::Drawing;
@@ -33,6 +34,7 @@ private:
 
 	String^ method_;
 	String^ configPath_;
+	String^ exportPath_;
 
 	void SubscriptionEvent();
 
@@ -54,6 +56,8 @@ private:
 	AuditScopeSummary^ CreateDataScope(String^ scope, IList<Elements::BaseElement^>^ elements);
 
 	void FillTable();
+
+	void Export(String^ path);	
 
 	List<String^>^ checks_;
 	List<String^>^ checksSelected_;
