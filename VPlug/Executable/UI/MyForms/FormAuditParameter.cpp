@@ -281,7 +281,7 @@ void FormAuditParameter::OnExport(Object^ sender, EventArgs^ e) {
             MessageBoxButtons::OK, MessageBoxIcon::Warning);
         return;
     }
-
+    auditStage = AuditStage::Export;
     SetStatus("Экспорт запущен");
     ExportRequest(exportPath_);
 }
@@ -305,6 +305,12 @@ void FormAuditParameter::MarkAuditConfigPrepared(bool ok) {
 void FormAuditParameter::MarkAuditFinished(bool ok) {
     auditStage = ok ? AuditStage::RunningDone : AuditStage::Running;
     SetStatus(ok ? "Проверка произведена" : "Ошибка проверки");
+    UpdateUiState();
+}
+
+void FormAuditParameter::MarkAuditExportFinished(bool ok) {
+    auditStage = ok ? AuditStage::ExportDone : AuditStage::Export;
+    SetStatus(ok ? "Экспорт завершен" : "Ошибка экспорта");
     UpdateUiState();
 }
 

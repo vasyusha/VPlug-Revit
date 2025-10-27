@@ -95,7 +95,7 @@ public:
 	void MarkAuditMethodPrepared(bool ok);
 	void MarkAuditConfigPrepared(bool ok);
 	void MarkAuditFinished(bool ok);
-	//void MarkAuditExportFinished(bool ok);
+	void MarkAuditExportFinished(bool ok);
 
 };
 
