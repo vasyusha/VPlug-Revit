@@ -7,11 +7,18 @@ namespace Elements {
 
 ref class BaseElement;
 
+public enum class ParamState {
+	Ok,
+	MissingParam,
+	EmptyValue
+};
+
 public ref class ParamResult {
 public:
 	property String^ Name;
 	property String^ Value;
 	property bool Filled;
+	property ParamState Stage;
 };
 
 public ref class BaseElement {
@@ -57,7 +64,7 @@ public:
 		void set(String^ value);
 	};
 
-	void AddParameter(String^ name, String^ value, bool filled);
+	void AddParameter(String^ name, String^ value, bool filled, ParamState stage);
 
 	property IList<ParamResult^>^ Parameters {
 		IList<ParamResult^>^ get();
@@ -65,4 +72,4 @@ public:
 	
 };
 
-}
+}// namespace Elements

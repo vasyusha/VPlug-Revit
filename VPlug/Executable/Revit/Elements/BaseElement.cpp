@@ -54,11 +54,12 @@ void BaseElement::BuiltInCategoryName::set(String^ value) {
 	builtInCategoryName_ = value;
 }
 
-void BaseElement::AddParameter(String^ name, String^ value, bool filled) {
+void BaseElement::AddParameter(String^ name, String^ value, bool filled, ParamState stage) {
 	auto p = gcnew ParamResult();
 	p->Name = name;
 	p->Value = value;
 	p->Filled = filled;
+	p->Stage = stage;
 	parameters_->Add(p);
 }
 
@@ -66,4 +67,4 @@ IList<ParamResult^>^ BaseElement::Parameters::get() {
 	 return parameters_;
 };
 
-}
+}// namespaec Elements
