@@ -173,11 +173,13 @@ AuditScopeSummary^ AuditParameterCommand::CreateDataScope(String^ scope, IList<E
 		bool elementPassed = true;
 
 		for each (Elements::ParamResult^ p in e->Parameters) {
-			
+			++dataScope->TotalParam;
 			switch (p->Stage) {
 				case Elements::ParamState::MissingParam : ++dataScope->NoParam;
 					break;
 				case Elements::ParamState::EmptyValue : ++dataScope->MissedValue;
+					break;
+				case Elements::ParamState::Ok : ++dataScope->PassedParam;
 					break;
 			}
 
@@ -210,7 +212,42 @@ void AuditParameterCommand::FillTable() {
 }
 
 void AuditParameterCommand::Export(String^ path) {
+	ExportHtml::CategoryReport^ category = gcnew ExportHtml::CategoryReport();
 
+	for each (KeyValuePair<String^, AuditScopeSummary^> kvp in dataScopes_) {
+		if (!elements_->ContainsKey(kvp.Key)) continue;
+
+		category->ChecksPass = kvp.Value->PassedParam;
+		category->ChecksTotal = kvp.Value->TotalParam;
+		category->ElementsTotal = kvp.Value->Total;
+		category->ElementsPass = kvp.Value->Passed;
+		category->Percent = (kvp.Value->TotalParam * kvp.Value->PassedParam) / 100;
+		category->Slug = kvp.Value->Scope;
+
+		for each (Elements::BaseElement^ e in elements_[kvp.Key]) {
+			ExportHtml::RequirementRow^ row = gcnew ExportHtml::RequirementRow();
+			row->Id = e->Id;
+			row->Name = e->Name;
+			
+			bool pass = true;
+
+			for each (Elements::ParamResult^ p in e->Parameters) {
+				if (p->Filled == false) pass = false;
+				
+				ExportHtml::RequirementRow::Param^ ep = gcnew ExportHtml::RequirementRow::Param();
+				
+				ep->Name = p->Name;
+				ep->Value = p->Value;
+				ep->Filled = p->Filled;
+
+				row->Params->Add(ep);
+			}
+
+			row->Pass = pass;
+			category->Requirements->Add(row);
+		}
+
+	}
 }
 
 }// namespace Commands

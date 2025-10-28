@@ -22,6 +22,8 @@ public:
 	property int Total;
 	property int Passed;
 	property int Failed;
+	property int TotalParam;
+	property int PassedParam;
 	property int MissedValue;
 	property int NoParam;
 };
