@@ -2,6 +2,7 @@
 
 using namespace System;
 using namespace System::IO;
+using namespace System::Text;
 using namespace System::Collections::Generic;
 
 namespace ExportHtml {
@@ -10,16 +11,17 @@ public ref class RequirementRow {
 public:
 	RequirementRow();
 
-	property String^ Title;
+	property int Id;
+	property String^ Name;
 	property bool Pass;
 
-	ref struct Row {
-		int Id;
+	ref struct Param{
 		String^ Name;
-		String^ Comment;
+		String^ Value;
+		bool Filled;
 	};
 
-	List<Row^>^ Rows;
+	List<Param^>^ Params;
 };
 
 public ref class CategoryReport {
@@ -126,8 +128,12 @@ public:
 
 public ref class AuditParameterExportHtml {
 private:
+	void AppendHeader(StringBuilder^ sb, ReportModel^ model);
+	void AppendBody(StringBuilder^ sb, ReportModel^ model);
 
 public:
+	String^ BuildHtml(ReportModel^ model);
+	void SaveHtmlToFile(ReportModel^ model, String^ path);
 
 };
 

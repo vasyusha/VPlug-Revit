@@ -3,7 +3,7 @@
 namespace ExportHtml {
 
 RequirementRow::RequirementRow() {
-	Rows = gcnew List<Row^>();
+	Params = gcnew List<Param^>();
 }
 
 CategoryReport::CategoryReport() {
@@ -125,5 +125,77 @@ void ReportModel::Percent::set(int value) {
 	if (value > 100) value = 100;
 	percent_ = value;
 }
+
+String^ AuditParameterExportHtml::BuildHtml(ReportModel^ model) {
+	if (model == nullptr)
+		throw gcnew ArgumentNullException("model");
+
+	StringBuilder^ sb = gcnew StringBuilder();
+
+	AppendHeader(sb, model);
+
+	return sb->ToString();
+}
+
+void AuditParameterExportHtml::SaveHtmlToFile(ReportModel^ model, String^ path) {
+	String^ html = BuildHtml(model);
+	StreamWriter^ w = gcnew StreamWriter(path, false, System::Text::Encoding::UTF8);
+	w->Write(html);
+	w->Close();
+}
+
+void AuditParameterExportHtml::AppendHeader(StringBuilder^ sb, ReportModel^ model) {
+	sb->AppendLine("<!doctype html>");
+	sb->AppendLine("<html lang=\"ru\">");
+	sb->AppendLine("<head>");
+	sb->AppendLine("	<meta charset=\"utf-8\"/>");
+	sb->AppendLine("	<title>Отче: заполнение параметров</title>");
+	sb->AppendLine("	<meta name=\"viewport\" content=\"width = device - width, initial - scale = 1\"/>");
+	sb->AppendLine("	<style>");
+	sb->AppendLine("		:root {");
+	sb->AppendLine("			--bg: #f7f7f7;");
+	sb->AppendLine("			--green: #97cc64;");
+	sb->AppendLine("			--light-green: #b6cca1;");
+	sb->AppendLine("			--red: #fb5a3e;");
+	sb->AppendLine("			--light-red: #fbb4a8;");
+	sb->AppendLine("		}");
+	sb->AppendLine("	</style>");
+	sb->AppendLine("</head>");
+}
+
+
+void AuditParameterExportHtml::AppendBody(StringBuilder^ sb, ReportModel^ model) { 
+	sb->AppendLine("<body>");
+	sb->AppendLine("	<header>");
+	sb->AppendLine("		<h1>Vplug - отчет по параметрам</h1>");
+	sb->AppendLine("		<div>");
+	sb->AppendLine("			<p>Файл:<span>" + model->ProjectName + "</span></p>");
+	sb->AppendLine("			<p>Дата:<span>" + model->DataTimeStr + "</span></p>");
+	sb->AppendLine("		</div>");
+	sb->AppendLine("	</header>");
+	sb->AppendLine("	<hr>");
+	sb->AppendLine("	<h2>Краткое содержание<h2>");
+	String^ passOrFailed = model->ReqPass == model->ReqPass ? "pass" : "fail";
+	sb->AppendLine("	<div class=\"" + passOrFailed + " percent\" style=\"width: " + model->Percent + ";\">" + model->Percent +"%</div>");
+	sb->AppendLine("	<p>");
+	String^ RuPassOrFailed = passOrFailed == "pass" ? "Успех" : "Ошибки";
+	sb->AppendLine("		<span class=\"item pass\">" + RuPassOrFailed + "</span>");
+	sb->AppendLine("		<span class=\"item\">");
+	sb->AppendLine("			Спецификации пройдены: <strong>" + model->ReqPass + "</strong>/<strong>" + model->ReqTotal + "</strong>");
+	sb->AppendLine("		</span>");
+	sb->AppendLine("		<span class=\"item\">");
+	sb->AppendLine("			Требования приняты: <strong>" + model->ElPass + "</strong>/<strong>" + model->ElTotal + "</strong>");
+	sb->AppendLine("		</span>");
+	sb->AppendLine("		<span class=\"item\">");
+	sb->AppendLine("			Проверки пройдены: <strong>" + model->CheckPass + "</strong>/<strong>" + model->CheckTotal + "</strong>");
+	sb->AppendLine("		</span>");
+	sb->AppendLine("	</p>");
+	sb->AppendLine("	<hr>");
+
+	sb->AppendLine("</body>");
+}
+
+
+
 
 }// namespace ExportHtml
