@@ -2,6 +2,138 @@
 
 namespace Commands {
 
+String^ AuditScopeSummary::Scope::get() {
+	return scope_;
+}
+
+void AuditScopeSummary::Scope::set(String^ value) {
+	scope_ = value;
+}
+
+bool AuditScopeSummary::Pass::get() {
+	return pass_;
+}
+
+void AuditScopeSummary::Pass::set(bool value) {
+	pass_ = value;
+}
+
+int AuditScopeSummary::TotalElement::get() {
+	return totalElement_;
+}
+
+void AuditScopeSummary::TotalElement::set(int value) {
+	totalElement_ = value;
+}
+
+int AuditScopeSummary::PassedElement::get() {
+	return passElement_;
+}
+
+void AuditScopeSummary::PassedElement::set(int value) {
+	passElement_ = value;
+}
+
+int AuditScopeSummary::FailedElement::get() {
+	return failedElement_;
+}
+
+void AuditScopeSummary::FailedElement::set(int value) {
+	failedElement_ = value;
+}
+
+int AuditScopeSummary::TotalParam::get() {
+	return totalParam_;
+}
+
+void AuditScopeSummary::TotalParam::set(int value) {
+	totalParam_ = value;
+}
+
+int AuditScopeSummary::PassedParam::get() {
+	return passedParam_;
+}
+
+void AuditScopeSummary::PassedParam::set(int value) {
+	passedParam_ = value;
+}
+
+int AuditScopeSummary::MissedValue::get() {
+	return missedValue_;
+}
+
+void AuditScopeSummary::MissedValue::set(int value) {
+	missedValue_ = value;
+}
+
+int AuditScopeSummary::NoParam::get() {
+	return noParam_;
+}
+
+void AuditScopeSummary::NoParam::set(int value) {
+	noParam_ = value;
+}
+
+AuditResults::AuditResults() {
+	auditScopeSummary = gcnew List<AuditScopeSummary^>();
+}
+
+bool AuditResults::Pass::get() {
+	return pass_;
+}
+
+void AuditResults::Pass::set(bool value) {
+	pass_ = value;
+}
+
+int AuditResults::SpecPass::get() {
+	return specPass_;
+}
+
+void AuditResults::SpecPass::set(int value) {
+	specPass_ = value;
+}
+
+int AuditResults::SpecTotal::get() {
+	return specTotal_;
+}
+
+void AuditResults::SpecTotal::set(int value) {
+	specTotal_ = value;
+}
+
+int AuditResults::ReqPass::get() {
+	return reqPass_;
+}
+
+void AuditResults::ReqPass::set(int value) {
+	reqPass_ = value;
+}
+
+int AuditResults::ReqTotal::get() {
+	return reqTotal_;
+}
+
+void AuditResults::ReqTotal::set(int value) {
+	reqTotal_ = value;
+}
+
+int AuditResults::CheckPass::get() {
+	return checkPass_;
+}
+
+void AuditResults::CheckPass::set(int value) {
+	checkPass_ = value;
+}
+
+int AuditResults::CheckTotal::get() {
+	return checkTotal_;
+}
+
+void AuditResults::CheckTotal::set(int value) {
+	checkTotal_ = value;
+}
+
 Result AuditParameterCommand::Execute(ExternalCommandData^ commandData,
 	String^% message, ElementSet^ elements) {
 
@@ -120,6 +252,8 @@ void AuditParameterCommand::AuditCategory() {
 	
 	Services::BaseService^ service = gcnew Services::BaseService(doc_);	
 
+	groupCheckParameters_ = gcnew Dictionary<String^, List<String^>^>();
+
 	for each (String^ scope in checksSelected_) {
 		if (!categorySpecs_->ContainsKey(scope)) continue;
 
@@ -128,9 +262,13 @@ void AuditParameterCommand::AuditCategory() {
 			categorySpecs_[scope]->Parameters
 		);
 
+		groupCheckParameters_->Add(scope, categorySpecs_[scope]->Parameters);	
+
 		elements_->Add(scope, es);
 
 		dataScopes_->Add(scope, CreateDataScope(scope, es));
+
+		CompileAuditResult(dataScopes_[scope]);
 	}
 	FillTable();
 }
@@ -141,6 +279,8 @@ void AuditParameterCommand::AuditUserFilter() {
 	dataScopes_ = gcnew Dictionary<String^, AuditScopeSummary^>();
 
 	Services::BaseService^ service = gcnew Services::BaseService(doc_);	
+
+	groupCheckParameters_ = gcnew Dictionary<String^, List<String^>^>();
 
 	for each(String^ scope in checksSelected_) {
 		if (!userFilterSpecs_->ContainsKey(scope)) continue;
@@ -155,9 +295,13 @@ void AuditParameterCommand::AuditUserFilter() {
 			userFilterSpecs_[scope]->Parameters
 		);
 
+		groupCheckParameters_->Add(scope, categorySpecs_[scope]->Parameters);	
+
 		elements_->Add(scope, es);
 
 		dataScopes_->Add(scope, CreateDataScope(scope, es));
+
+		CompileAuditResult(dataScopes_[scope]);
 	}
 	FillTable();
 }
@@ -166,8 +310,8 @@ AuditScopeSummary^ AuditParameterCommand::CreateDataScope(String^ scope, IList<E
 	AuditScopeSummary^ dataScope = gcnew AuditScopeSummary();
 
 	dataScope->Scope = scope;
-	dataScope->Total = elements->Count;
-
+	dataScope->TotalElement = elements->Count;
+	bool passScope = true;
 	for each (Elements::BaseElement^ e in elements) {
 		
 		bool elementPassed = true;
@@ -187,12 +331,34 @@ AuditScopeSummary^ AuditParameterCommand::CreateDataScope(String^ scope, IList<E
 		}
 
 		if (elementPassed) {
-			++dataScope->Passed;
+			++dataScope->PassedElement;
 		} else {
-			++dataScope->Failed;
+			++dataScope->FailedElement;
+			passScope = false;
 		}
 	}
+	dataScope->Pass = passScope;
 	return dataScope;
+}
+
+void AuditParameterCommand::CompileAuditResult(AuditScopeSummary^ scopeSummary) {
+	if (res_ == nullptr) {
+		res_ = gcnew AuditResults();
+	}
+
+	if (res_->Pass == true) {
+		res_->Pass = scopeSummary->Pass;
+	}
+
+	res_->SpecPass = scopeSummary->Pass == true ? ++res_->SpecPass : res_->SpecPass;
+	++res_->SpecTotal;
+	res_->ReqPass += scopeSummary->PassedElement;
+	res_->ReqTotal += scopeSummary->TotalElement;
+	res_->CheckPass += scopeSummary->PassedParam;
+	res_->CheckTotal += scopeSummary->TotalParam;
+
+	res_->auditScopeSummary->Add(scopeSummary);
+
 }
 
 void AuditParameterCommand::FillTable() {
@@ -201,9 +367,9 @@ void AuditParameterCommand::FillTable() {
 		MyForm::AuditSummaryRow^ row = gcnew MyForm::AuditSummaryRow();
 
 		row->Scope = ds.Value->Scope;
-		row->Total = ds.Value->Total;
-		row->Passed = ds.Value->Passed;
-		row->Failed = ds.Value->Failed;
+		row->Total = ds.Value->TotalElement;
+		row->Passed = ds.Value->PassedElement;
+		row->Failed = ds.Value->FailedElement;
 		row->MissedValue = ds.Value->MissedValue;
 		row->NoParam = ds.Value->NoParam;
 
@@ -214,15 +380,19 @@ void AuditParameterCommand::FillTable() {
 void AuditParameterCommand::Export(String^ path) {
 	ExportHtml::CategoryReport^ category = gcnew ExportHtml::CategoryReport();
 
+	ExportHtml::ReportModel^ repModel = gcnew ExportHtml::ReportModel();
 	for each (KeyValuePair<String^, AuditScopeSummary^> kvp in dataScopes_) {
 		if (!elements_->ContainsKey(kvp.Key)) continue;
 
 		category->ChecksPass = kvp.Value->PassedParam;
 		category->ChecksTotal = kvp.Value->TotalParam;
-		category->ElementsTotal = kvp.Value->Total;
-		category->ElementsPass = kvp.Value->Passed;
+		category->ElementsTotal = kvp.Value->TotalElement;
+		category->ElementsPass = kvp.Value->PassedElement;
 		category->Percent = (kvp.Value->TotalParam * kvp.Value->PassedParam) / 100;
 		category->Slug = kvp.Value->Scope;
+		category->Name = kvp.Key;
+
+		category->CheckedParameters = groupCheckParameters_[kvp.Key];
 
 		for each (Elements::BaseElement^ e in elements_[kvp.Key]) {
 			ExportHtml::RequirementRow^ row = gcnew ExportHtml::RequirementRow();
@@ -235,7 +405,7 @@ void AuditParameterCommand::Export(String^ path) {
 				if (p->Filled == false) pass = false;
 				
 				ExportHtml::RequirementRow::Param^ ep = gcnew ExportHtml::RequirementRow::Param();
-				
+		
 				ep->Name = p->Name;
 				ep->Value = p->Value;
 				ep->Filled = p->Filled;
@@ -246,8 +416,26 @@ void AuditParameterCommand::Export(String^ path) {
 			row->Pass = pass;
 			category->Requirements->Add(row);
 		}
+		repModel->Categories->Add(category);
 
 	}
+
+	repModel->SpecPass = res_->SpecPass;
+	repModel->SpecTotal = res_->SpecTotal;
+	repModel->ReqPass = res_->ReqPass;
+	repModel->ReqTotal = res_->ReqTotal;
+	repModel->CheckPass = res_->CheckPass;
+	repModel->CheckTotal = res_->CheckTotal;
+	repModel->ElPass = 400;
+	repModel->ElTotal = 410;
+	repModel->Percent = static_cast<int>((res_->SpecPass / res_->SpecTotal) * 100);
+	
+	repModel->FilePath = "file path";
+	repModel->ProjectName = "project name";
+	repModel->DataTimeStr = "data time";
+
+	ExportHtml::AuditParameterExportHtml^ exp = gcnew ExportHtml::AuditParameterExportHtml();
+	exp->SaveHtmlToFile(repModel, path);
 }
 
 }// namespace Commands
