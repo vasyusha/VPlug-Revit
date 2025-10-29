@@ -69,14 +69,19 @@ public:
 	};
 
 	List<RequirementRow^>^ Requirements;
+	List<String^>^ CheckedParameters;
 };
 
 public ref class ReportModel {
 private:
+	int specPass_;
+	int specTotal_;
 	int reqPass_;
 	int reqTotal_;
 	int checkPass_;
 	int checkTotal_;
+
+
 	int elPass_;
 	int elTotal_;
 	int percent_;
@@ -87,6 +92,16 @@ public:
 	property String^ FilePath;
 	property String^ ProjectName;
 	property String^ DataTimeStr;
+
+	property int SpecPass {
+		int get();
+		void set(int value);
+	};
+
+	property int SpecTotal {
+		int get();
+		void set(int value);
+	};
 
 	property int ReqPass {
 		int get();
@@ -130,6 +145,7 @@ public ref class AuditParameterExportHtml {
 private:
 	void AppendHeader(StringBuilder^ sb, ReportModel^ model);
 	void AppendBody(StringBuilder^ sb, ReportModel^ model);
+	void AppendSection(StringBuilder^ sb, ReportModel^ model);
 
 public:
 	String^ BuildHtml(ReportModel^ model);
