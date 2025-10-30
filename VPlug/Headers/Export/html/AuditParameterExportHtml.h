@@ -26,21 +26,31 @@ public:
 
 public ref class CategoryReport {
 private:
+	String^ name_;
+	String^ slug_;
+	bool pass_;
 	int checksPass_;
 	int checksTotal_;
 	int elementsPass_;
 	int elementsTotal_;
 	int percent_;
-	String^ slug_;
 
 public:
 	CategoryReport();
 
-	property String^ Name;
+	property String^ Name {
+		String^ get();
+		void set(String^ value);
+	};
 
 	property String^ Slug {
 		String^ get();
 		void set(String^ value);
+	};
+
+	property bool Pass {
+		bool get();
+		void set(bool value);
 	};
 
 	property int ChecksPass {
@@ -74,16 +84,13 @@ public:
 
 public ref class ReportModel {
 private:
+	bool pass_;
 	int specPass_;
 	int specTotal_;
 	int reqPass_;
 	int reqTotal_;
 	int checkPass_;
 	int checkTotal_;
-
-
-	int elPass_;
-	int elTotal_;
 	int percent_;
 
 public:
@@ -92,6 +99,11 @@ public:
 	property String^ FilePath;
 	property String^ ProjectName;
 	property String^ DataTimeStr;
+
+	property bool Pass {
+		bool get();
+		void set(bool value);
+	};
 
 	property int SpecPass {
 		int get();
@@ -119,16 +131,6 @@ public:
 	};
 
 	property int CheckTotal {
-		int get();
-		void set(int value);
-	};
-
-	property int ElPass {
-		int get();
-		void set(int value);
-	};
-
-	property int ElTotal {
 		int get();
 		void set(int value);
 	};
