@@ -377,48 +377,61 @@ void AuditParameterCommand::FillTable() {
 	}
 }
 
-void AuditParameterCommand::Export(String^ path) {
-	ExportHtml::CategoryReport^ category;
+void AuditParameterCommand::ExportPrepareCategory(ExportHtml::ReportModel^ repM) {
 
-	ExportHtml::ReportModel^ repModel = gcnew ExportHtml::ReportModel();
+	if (repM == nullptr) return;
+
 	for each (KeyValuePair<String^, AuditScopeSummary^> kvp in dataScopes_) {
 		if (!elements_->ContainsKey(kvp.Key)) continue;
-		category = gcnew ExportHtml::CategoryReport();
-		category->ChecksPass = kvp.Value->PassedParam;
-		category->ChecksTotal = kvp.Value->TotalParam;
-		category->ElementsTotal = kvp.Value->TotalElement;
-		category->ElementsPass = kvp.Value->PassedElement;
-		category->Percent = System::Math::Floor(((double)kvp.Value->PassedElement / kvp.Value->TotalElement) * 100);
-		category->Slug = kvp.Value->Scope;
-		category->Name = kvp.Key;
-		category->Pass = kvp.Value->Pass;
-		category->CheckedParameters = groupCheckParameters_[kvp.Key];
+	
+		ExportHtml::CategoryReport^ cr = gcnew ExportHtml::CategoryReport();
+
+		cr->Name = kvp.Key;
+		cr->Slug = kvp.Value->Scope;
+		cr->Pass = kvp.Value->Pass;
+		cr->ChecksPass = kvp.Value->PassedParam;
+		cr->ChecksTotal = kvp.Value->TotalParam;
+		cr->ElementsPass = kvp.Value->PassedElement;
+		cr->ElementsTotal = kvp.Value->TotalElement;
+		cr->Percent = System::Math::Floor(((double)kvp.Value->PassedElement / kvp.Value->TotalElement) * 100);
+
+		if (groupCheckParameters_->ContainsKey(kvp.Key)) {
+			cr->CheckedParameters = groupCheckParameters_[kvp.Key];
+		}
 
 		for each (Elements::BaseElement^ e in elements_[kvp.Key]) {
-			ExportHtml::RequirementRow^ row = gcnew ExportHtml::RequirementRow();
-			row->Id = e->Id;
-			row->Name = e->Name;
-			
+			ExportHtml::RequirementRow^ rr = gcnew ExportHtml::RequirementRow();
+
+			rr->Id = e->Id;
+			rr->Name = e->Name;
+
 			bool pass = true;
 
-			for each (Elements::ParamResult^ p in e->Parameters) {
-				if (p->Filled == false) pass = false;
-				
-				ExportHtml::RequirementRow::Param^ ep = gcnew ExportHtml::RequirementRow::Param();
-		
-				ep->Name = p->Name;
-				ep->Value = p->Value;
-				ep->Filled = p->Filled;
+			for each (Elements::ParamResult^ pr in e->Parameters) {
+				if (pr->Filled == false) pass = false;
 
-				row->Params->Add(ep);
+				ExportHtml::RequirementRow::Param^ rrP = gcnew ExportHtml::RequirementRow::Param();
+				rrP->Name = pr->Name;
+				rrP->Value = pr->Value;
+				rrP->Filled = pr->Filled;
+
+				rr->Params->Add(rrP);
 			}
 
-			row->Pass = pass;
-			category->Requirements->Add(row);
+			rr->Pass = pass;
+			cr->Requirements->Add(rr);
 		}
-		if (category != nullptr) repModel->Categories->Add(category);
-
+		if (cr != nullptr) repM->Categories->Add(cr);
 	}
+}
+
+void AuditParameterCommand::Export(String^ path) {
+
+	ExportHtml::ReportModel^ repModel = gcnew ExportHtml::ReportModel();
+
+	repModel->FilePath = doc_->PathName;
+	repModel->ProjectName = doc_->Title;
+	repModel->DataTimeStr = System::DateTime::Now.ToString("yyyy-MM-dd HH:mm:ss", System::Globalization::CultureInfo::InvariantCulture);
 
 	repModel->SpecPass = res_->SpecPass;
 	repModel->SpecTotal = res_->SpecTotal;
@@ -428,12 +441,12 @@ void AuditParameterCommand::Export(String^ path) {
 	repModel->CheckTotal = res_->CheckTotal;
 	repModel->Percent = (int)System::Math::Floor(((double)res_->SpecPass / res_->SpecTotal) * 100);
 	
-	repModel->FilePath = "file path";
-	repModel->ProjectName = "project name";
-	repModel->DataTimeStr = "data time";
+	ExportPrepareCategory(repModel);
 
 	ExportHtml::AuditParameterExportHtml^ exp = gcnew ExportHtml::AuditParameterExportHtml();
 	exp->SaveHtmlToFile(repModel, path);
+	
+	form_->MarkAuditExportFinished(true);
 }
 
 }// namespace Commands

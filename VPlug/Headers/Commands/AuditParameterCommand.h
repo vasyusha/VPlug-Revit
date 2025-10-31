@@ -159,7 +159,8 @@ private:
 
 	void FillTable();
 
-	void Export(String^ path);	
+	void Export(String^ path);
+	void ExportPrepareCategory(ExportHtml::ReportModel^ repM);
 
 	List<String^>^ checks_;
 	List<String^>^ checksSelected_;
