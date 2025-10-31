@@ -144,7 +144,7 @@ void FormAuditParameter::UpdateUiState() {
 
     btnRun_->Enabled = auditStage == AuditStage::ChecksSelected ? true : false;
     btnExportBrowse_->Enabled = auditStage == AuditStage::RunningDone ? true : false;
-    btnExport_->Enabled = auditStage == AuditStage::ExportPathLoaded ? true : false;
+    btnExport_->Enabled = auditStage == AuditStage::ExportPathLoaded && auditStage != AuditStage::ExportDone ? true : false;
 }
 
 void FormAuditParameter::SetStatus(String^ text) {
