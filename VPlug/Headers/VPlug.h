@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Commands/AuditParameterCommand.h"
+#include "Commands/AuditWallOpeningCommand.h"
 
 using namespace System;
 using namespace System::IO;
