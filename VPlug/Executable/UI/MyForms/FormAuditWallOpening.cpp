@@ -183,4 +183,14 @@ void FormAuditWallOpening::OnValueChanged(Object^ sender, EventArgs^ e) {
 	}
 }
 
+void FormAuditWallOpening::AddRowTable(String^ type) {
+	dgvTable_->Rows->Add(
+		"test",
+		type,
+		"test",
+		"test",
+		"test"
+	);
+}
+
 }//namespace MyForm

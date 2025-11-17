@@ -51,6 +51,8 @@ private:
 public:
 	FormAuditWallOpening();
 
+	void AddRowTable(String^ type);//test
+
 	event AuditWallOpeningRunningHandler^ RunRequest;
 };
 
