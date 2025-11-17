@@ -124,6 +124,12 @@
     <ClInclude Include="Headers\UI\MyForms\FormAuditParameter.h">
       <Filter>Headers\UI\MyForms</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\UI\MyForms\FormAuditWallOpening.h">
+      <Filter>Headers\UI\MyForms</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Commands\AuditWallOpeningCommand.h">
+      <Filter>Headers\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -158,6 +164,12 @@
     </ClCompile>
     <ClCompile Include="Executable\UI\MyForms\FormAuditParameter.cpp">
       <Filter>Executable\UI\MyForms</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\UI\MyForms\FormAuditWallOpening.cpp">
+      <Filter>Executable\UI\MyForms</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Commands\AuditWallOpeningCommand.cpp">
+      <Filter>Executable\Commands</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

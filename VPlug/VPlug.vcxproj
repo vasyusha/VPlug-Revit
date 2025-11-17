@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Commands\AuditParameterCommand.h" />
+    <ClInclude Include="Headers\Commands\AuditWallOpeningCommand.h" />
     <ClInclude Include="Headers\Config\json\Json.h" />
     <ClInclude Include="Headers\Config\json\JsonReaderAuditParameter.h" />
     <ClInclude Include="Headers\Export\html\AuditParameterExportHtml.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Headers\Revit\Filters\ParameterFilledFilter.h" />
     <ClInclude Include="Headers\Revit\Services\BaseService.h" />
     <ClInclude Include="Headers\UI\MyForms\FormAuditParameter.h" />
+    <ClInclude Include="Headers\UI\MyForms\FormAuditWallOpening.h" />
     <ClInclude Include="Headers\VPlug.h" />
     <ClInclude Include="Resources\Resource.h" />
   </ItemGroup>
@@ -165,6 +167,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Executable\Commands\AuditParameterCommand.cpp" />
+    <ClCompile Include="Executable\Commands\AuditWallOpeningCommand.cpp" />
     <ClCompile Include="Executable\Config\json\Json.cpp" />
     <ClCompile Include="Executable\Config\json\JsonReaderAuditParameter.cpp" />
     <ClCompile Include="Executable\Export\html\AuditParameterExportHtml.cpp" />
@@ -173,6 +176,7 @@
     <ClCompile Include="Executable\Revit\Filters\ParameterFilledFilter.cpp" />
     <ClCompile Include="Executable\Revit\Services\BaseService.cpp" />
     <ClCompile Include="Executable\UI\MyForms\FormAuditParameter.cpp" />
+    <ClCompile Include="Executable\UI\MyForms\FormAuditWallOpening.cpp" />
     <ClCompile Include="Executable\VPlug.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
