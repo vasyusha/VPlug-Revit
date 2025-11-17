@@ -153,9 +153,11 @@
     <ClInclude Include="Headers\Config\json\JsonReaderAuditParameter.h" />
     <ClInclude Include="Headers\Export\html\AuditParameterExportHtml.h" />
     <ClInclude Include="Headers\Revit\Elements\BaseElement.h" />
+    <ClInclude Include="Headers\Revit\Elements\WallElement.h" />
     <ClInclude Include="Headers\Revit\Filters\ElementCollectorFilter.h" />
     <ClInclude Include="Headers\Revit\Filters\ParameterFilledFilter.h" />
     <ClInclude Include="Headers\Revit\Services\BaseService.h" />
+    <ClInclude Include="Headers\Revit\Services\WallService.h" />
     <ClInclude Include="Headers\UI\MyForms\FormAuditParameter.h" />
     <ClInclude Include="Headers\UI\MyForms\FormAuditWallOpening.h" />
     <ClInclude Include="Headers\VPlug.h" />
@@ -172,9 +174,11 @@
     <ClCompile Include="Executable\Config\json\JsonReaderAuditParameter.cpp" />
     <ClCompile Include="Executable\Export\html\AuditParameterExportHtml.cpp" />
     <ClCompile Include="Executable\Revit\Elements\BaseElement.cpp" />
+    <ClCompile Include="Executable\Revit\Elements\WallElement.cpp" />
     <ClCompile Include="Executable\Revit\Filters\ElementCollectorFilter.cpp" />
     <ClCompile Include="Executable\Revit\Filters\ParameterFilledFilter.cpp" />
     <ClCompile Include="Executable\Revit\Services\BaseService.cpp" />
+    <ClCompile Include="Executable\Revit\Services\WallService.cpp" />
     <ClCompile Include="Executable\UI\MyForms\FormAuditParameter.cpp" />
     <ClCompile Include="Executable\UI\MyForms\FormAuditWallOpening.cpp" />
     <ClCompile Include="Executable\VPlug.cpp" />

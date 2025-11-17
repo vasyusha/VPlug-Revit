@@ -130,6 +130,12 @@
     <ClInclude Include="Headers\Commands\AuditWallOpeningCommand.h">
       <Filter>Headers\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\Revit\Elements\WallElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Revit\Services\WallService.h">
+      <Filter>Headers\Revit\Services</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -170,6 +176,12 @@
     </ClCompile>
     <ClCompile Include="Executable\Commands\AuditWallOpeningCommand.cpp">
       <Filter>Executable\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\WallElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Services\WallService.cpp">
+      <Filter>Executable\Revit\Services</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
