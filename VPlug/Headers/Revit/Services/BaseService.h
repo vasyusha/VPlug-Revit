@@ -13,7 +13,7 @@ using namespace System::Collections::Generic;
 namespace Services {
 
 public ref class BaseService {
-private:
+protected:
 	Document^ doc_;
 
 	static Parameter^ TryGetParam(Document^ doc, Element^ e, String^ name);
