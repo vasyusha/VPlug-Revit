@@ -55,9 +55,9 @@ bool BaseService::MatchFilters(Document^ doc, Element^ e, IDictionary<String^, S
 	}
 	return true;
 }
-
-Elements::BaseElement^ BaseService::BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
-	auto be = gcnew Elements::BaseElement();
+generic <typename TElement>
+ TElement BaseService::BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
+	auto be = gcnew TElement();
 
 	be->Id = e->Id->IntegerValue;
 	be->UniqueId = e->UniqueId;
@@ -105,7 +105,7 @@ List<Elements::BaseElement^>^ BaseService::CollectAll(
 
 	for each (Element^ e in elems) {
 		if (!MatchFilters(doc_, e, controlFilters)) continue;
-		result->Add(BuildBaseElement(doc_, e, requiredParams));
+		result->Add(BuildBaseElement<Elements::BaseElement^>(doc_, e, requiredParams));
 	}
 	return result;
 }
@@ -123,7 +123,7 @@ List<Elements::BaseElement^>^ BaseService::CollectByCategory(
 
 	for each (Element ^ e in elems) {
 		//if (!MatchFilters(doc_, e, controlFilters)) continue;
-		result->Add(BuildBaseElement(doc_, e, requiredParams));
+		result->Add(BuildBaseElement<Elements::BaseElement^>(doc_, e, requiredParams));
 	}
 	return result;
 }
@@ -146,7 +146,7 @@ Dictionary<String^, List<Elements::BaseElement^>^>^ BaseService::CollectGroupedB
 			bucket = gcnew List<Elements::BaseElement^>();
 			map[cname] = bucket;
 		}
-		bucket->Add(BuildBaseElement(doc_, e, requiredParams));
+		bucket->Add(BuildBaseElement<Elements::BaseElement^>(doc_, e, requiredParams));
 	}
 	return map;
 }

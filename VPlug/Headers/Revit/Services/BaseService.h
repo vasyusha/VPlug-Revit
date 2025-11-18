@@ -24,7 +24,9 @@ protected:
 
 	static bool MatchFilters(Document^ doc, Element^ e, IDictionary<String^, String^>^ controlFilters);
 
-	static Elements::BaseElement^ BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
+	generic <typename TElement>
+	where TElement : Elements::BaseElement, gcnew()
+	static TElement BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
 
 public:
 
