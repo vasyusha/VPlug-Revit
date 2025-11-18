@@ -51,7 +51,13 @@ private:
 public:
 	FormAuditWallOpening();
 
-	void AddRowTable(String^ type);//test
+	void AddRowTable(String^ name, 
+		String^ totalWalls,
+		String^ totalArea, 
+		String^ totalAreaHasOnening,
+		String^ totalAreaNoOpening,
+		String^ totalOpening
+	);//test
 
 	event AuditWallOpeningRunningHandler^ RunRequest;
 };

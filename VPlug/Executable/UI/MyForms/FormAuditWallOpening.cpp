@@ -83,10 +83,12 @@ void FormAuditWallOpening::BuildUi() {
 	dgvTable_->AllowUserToAddRows = false;
 	dgvTable_->RowHeadersVisible = false;
 	dgvTable_->AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode::Fill;
-	dgvTable_->Columns->Add("NumFilters", "Номер по фильтру");
+	//dgvTable_->Columns->Add("NumFilters", "Номер по фильтру");
 	dgvTable_->Columns->Add("NameType", "Имя типа");
-	dgvTable_->Columns->Add("CountExample", "Кол-во экземпляров");
-	dgvTable_->Columns->Add("TotalArea", "Сумма площадей");
+	dgvTable_->Columns->Add("CountExample", "Кол-во экземпляров(всего)");
+	dgvTable_->Columns->Add("TotalArea", "Сумма площадей(общая)");
+	dgvTable_->Columns->Add("TotalArea", "Сумма площадей(c проёмами)");
+	dgvTable_->Columns->Add("TotalArea", "Сумма площадей(без проёмов)");
 	dgvTable_->Columns->Add("quantityOpening", "Кол-во проёмов");
 	grid->Controls->Add(dgvTable_, 0, 4);
 
@@ -183,13 +185,21 @@ void FormAuditWallOpening::OnValueChanged(Object^ sender, EventArgs^ e) {
 	}
 }
 
-void FormAuditWallOpening::AddRowTable(String^ type) {
+void FormAuditWallOpening::AddRowTable(String^ name, 
+		String^ totalWalls,
+		String^ totalArea, 
+		String^ totalAreaHasOnening,
+		String^ totalAreaNoOpening,
+		String^ totalOpening
+)
+ {
 	dgvTable_->Rows->Add(
-		"test",
-		type,
-		"test",
-		"test",
-		"test"
+		name,
+		totalWalls,
+		totalArea,
+		totalAreaHasOnening,
+		totalAreaNoOpening,
+		totalOpening
 	);
 }
 
