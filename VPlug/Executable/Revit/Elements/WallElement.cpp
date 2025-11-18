@@ -18,4 +18,12 @@ void WallElement::HasOpening::set(bool value) {
 	hasOpening_ = value;
 }
 
+int WallElement::CountOpening::get() {
+	return countOpening_;
+}
+
+void WallElement::CountOpening::set(int value) {
+	countOpening_ = value;
+}
+
 }//namespace Elements

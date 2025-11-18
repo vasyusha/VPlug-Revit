@@ -11,6 +11,7 @@ public ref class WallElement : BaseElement {
 private:
 	double area_;
 	bool hasOpening_;
+	int countOpening_;
 
 public:
 
@@ -22,6 +23,11 @@ public:
 	property bool HasOpening {
 		bool get();
 		void set(bool value);
+	};
+
+	property int CountOpening {
+		int get();
+		void set(int value);
 	};
 };
 
