@@ -6,40 +6,56 @@ WallService::WallService(Document^ doc) : BaseService(doc) {
 }
 
 Elements::WallElement^ WallService::BuildWallElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
-	auto we = gcnew Elements::WallElement();
 
-	we->Id = e->Id->IntegerValue;
-	we->UniqueId = e->UniqueId;
-	we->Name = e->Name;
+	Elements::WallElement^ we = Services::BaseService::BuildBaseElement<Elements::WallElement^>(doc, e, requiredParams);
 
-	Category^ cat = e->Category;
-	if (cat != nullptr) {
-		we->CategoryName = cat->Name;
+	Autodesk::Revit::DB::Wall^ wall = dynamic_cast<Autodesk::Revit::DB::Wall^>(e);
 
-		BuiltInCategory bic = static_cast<BuiltInCategory>(cat->Id->IntegerValue);
-		we->BuiltInCategory = (int)bic;
-		we->BuiltInCategoryName = bic.ToString();
-	}
 
-	if (requiredParams != nullptr) {
-		for each (String^ pname in requiredParams) {
-			Parameter^ p = TryGetParam(doc, e, pname);
-			bool filled = IsFilled(p);
-			Elements::ParamState stage;
-			String^ val = nullptr;
+	we->HasOpening = wall->FindInserts(true, true, false, false)->Count > 0;
+	
+	IList<ElementId^>^ rawInstens = wall->FindInserts(true, true, false, false);
 
-			if (p == nullptr) {
-				stage = Elements::ParamState::MissingParam;
-			} else if (!filled) {
-				stage = Elements::ParamState::EmptyValue;
+	int openingHosts = 0;
+	int openingShadows = 0;
+	for each (ElementId^ id in rawInstens) {
+		Element^ ins = doc->GetElement(id);
+		FamilyInstance^ fi = dynamic_cast<FamilyInstance^>(ins);
+		if (fi != nullptr) {
+			Wall^ hostWall = dynamic_cast<Wall^>(fi->Host);
+			if (hostWall != nullptr && hostWall->Id == wall->Id) {
+				++openingHosts;
 			} else {
-				stage = Elements::ParamState::Ok;
-				val = ReadParamValue(p);
-				if (String::IsNullOrEmpty(val)) stage = Elements::ParamState::EmptyValue;
+				++openingShadows;
 			}
-			we->AddParameter(pname, val, filled, stage);
+		} else {
+			++openingShadows;
 		}
 	}
+
+	we->CountOpening += openingHosts;
+	we->CountOpening += openingShadows;
+
+	/*
+	if (we->HasOpening) {
+		we->CountOpening = wall->FindInserts(true, true, false, false)->Count;
+	}
+
+	ForgeTypeId^ areaId = ParameterUtils::GetParameterTypeId(BuiltInParameter::HOST_AREA_COMPUTED);
+	Parameter^ areaParam = wall->GetParameter(areaId);
+	
+
+
+	if (areaParam != nullptr && areaParam->HasValue) {
+		double areaFt = areaParam->AsDouble();
+		double areaM2 = UnitUtils::ConvertFromInternalUnits(areaFt, UnitTypeId::SquareMeters);
+		we->Area = areaM2;
+
+	} else {
+		TaskDialog::Show("Area", "null");
+	}
+	*/
+
 	return we;
 }
 
