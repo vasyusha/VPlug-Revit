@@ -152,6 +152,7 @@
     <ClInclude Include="Headers\Config\json\Json.h" />
     <ClInclude Include="Headers\Config\json\JsonReaderAuditParameter.h" />
     <ClInclude Include="Headers\Export\html\AuditParameterExportHtml.h" />
+    <ClInclude Include="Headers\Export\html\AuditWallOpeningExportHtml.h" />
     <ClInclude Include="Headers\Revit\Elements\BaseElement.h" />
     <ClInclude Include="Headers\Revit\Elements\WallElement.h" />
     <ClInclude Include="Headers\Revit\Filters\ElementCollectorFilter.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="Executable\Config\json\Json.cpp" />
     <ClCompile Include="Executable\Config\json\JsonReaderAuditParameter.cpp" />
     <ClCompile Include="Executable\Export\html\AuditParameterExportHtml.cpp" />
+    <ClCompile Include="Executable\Export\html\AuditWallOpeningExportHtml.cpp" />
     <ClCompile Include="Executable\Revit\Elements\BaseElement.cpp" />
     <ClCompile Include="Executable\Revit\Elements\WallElement.cpp" />
     <ClCompile Include="Executable\Revit\Filters\ElementCollectorFilter.cpp" />
