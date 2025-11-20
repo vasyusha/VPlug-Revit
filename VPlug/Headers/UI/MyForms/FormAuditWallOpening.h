@@ -11,7 +11,6 @@ enum class AuditStageWallOpening {
 	None,
 	NumberFiltersInstalled,
 	FiltersCreated,
-	FiltersAreFull,
 	Running,
 	RunningDone,
 	ExportPathLoaded,
@@ -20,10 +19,13 @@ enum class AuditStageWallOpening {
 };
 
 public delegate void AuditWallOpeningRunningHandler(List<Tuple<int, String^, String^>^>^ numFilterValue);
+public delegate void AuditWallOpeningExportHandler(String^ path);
 
 public ref class FormAuditWallOpening : public Windows::Forms::Form {
 private:
 	AuditStageWallOpening auditStage_;
+
+	String^ exportPath_;
 
 	NumericUpDown^ nudCountFilters_;
 
@@ -34,6 +36,10 @@ private:
 	Button^ btnRun_;
 
 	DataGridView^ dgvTable_;
+
+	Windows::Forms::TextBox^ tbExport_;
+	Button^ btnExportBrows_;
+	Button^ btnExport_;
 
 	StatusStrip^ status_;
 	ToolStripStatusLabel^ statusText_;
@@ -47,36 +53,25 @@ private:
 	void OnValueChanged(Object^ sender, EventArgs^ e);
 	void OnSetCountFilters(Object^ sender, EventArgs^ e);
 	void OnRun(Object^ sender, EventArgs^ e);
+	void OnBrowsExport(Object^ sender, EventArgs^ e);
+	void OnExport(Object^ sender, EventArgs^ e);
 
 public:
 	FormAuditWallOpening();
 
-	void AddRowTable(String^ name, 
+	void AddRowTable(String^ name,
 		String^ totalWalls,
-		String^ totalArea, 
+		String^ totalArea,
 		String^ totalAreaHasOnening,
 		String^ totalAreaNoOpening,
 		String^ totalOpening
 	);//test
 
 	event AuditWallOpeningRunningHandler^ RunRequest;
+	event AuditWallOpeningExportHandler^ ExportRequest;
+
+	void MarkAuditFinished(bool ok);
+	void MarkAuditExportFinished(bool ok);
 };
 
-
-
 }//namespace MyForm
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -28,6 +28,10 @@ void FormAuditWallOpening::BuildUi() {
 	grid->RowCount = 4;
 	grid->Padding = Windows::Forms::Padding(10);
 	grid->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 100));
+	grid->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
+	grid->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
+	grid->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
+	grid->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 100));
 
 	TableLayoutPanel^ gridTop = gcnew TableLayoutPanel();
 	gridTop->Dock = DockStyle::Top;
@@ -39,7 +43,7 @@ void FormAuditWallOpening::BuildUi() {
 	gridTop->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 50));
 	gridTop->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 50));
 	gridTop->ColumnStyles->Add(gcnew ColumnStyle(SizeType::AutoSize));
-	grid->Controls->Add(gridTop);
+	grid->Controls->Add(gridTop, 0, 0);
 	this->Controls->Add(grid);
 
 	//Row 0
@@ -68,14 +72,14 @@ void FormAuditWallOpening::BuildUi() {
 	gridFilters_->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 50));
 	gridFilters_->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 50));
 	gridFilters_->ColumnStyles->Add(gcnew ColumnStyle(SizeType::AutoSize));
-	grid->Controls->Add(gridFilters_);
+	grid->Controls->Add(gridFilters_, 0, 1);
 
 	btnRun_ = gcnew Button();
 	btnRun_->Anchor = AnchorStyles::Top | AnchorStyles::Right;
 	btnRun_->Text = "Выполнить";
 	//btnRun_->Enabled = false;
 	btnRun_->Visible = false;
-	grid->Controls->Add(btnRun_, 0, 3);
+	grid->Controls->Add(btnRun_, 0, 2);
 
 	dgvTable_ = gcnew DataGridView();
 	dgvTable_->Dock = DockStyle::Fill;
@@ -90,11 +94,40 @@ void FormAuditWallOpening::BuildUi() {
 	dgvTable_->Columns->Add("TotalArea", "Сумма площадей(c проёмами)");
 	dgvTable_->Columns->Add("TotalArea", "Сумма площадей(без проёмов)");
 	dgvTable_->Columns->Add("quantityOpening", "Кол-во проёмов");
-	grid->Controls->Add(dgvTable_, 0, 4);
+	grid->Controls->Add(dgvTable_, 0, 3);
 
 	TableLayoutPanel^ gridExport = gcnew TableLayoutPanel();
 	gridExport->Dock = DockStyle::Bottom;
 	gridExport->AutoSize = true;
+	gridExport->ColumnCount = 4;
+	gridExport->RowCount = 2;
+	gridExport->Padding = Windows::Forms::Padding(10);
+	gridExport->ColumnStyles->Add(gcnew ColumnStyle(SizeType::AutoSize));
+	gridExport->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 65));
+	gridExport->ColumnStyles->Add(gcnew ColumnStyle(SizeType::AutoSize));
+	gridExport->ColumnStyles->Add(gcnew ColumnStyle(SizeType::AutoSize));
+	grid->Controls->Add(gridExport, 0, 4);
+
+	Label^ lblExport = gcnew Label();
+	lblExport->Text = "Экспорт";
+	lblExport->AutoSize = true;
+	gridExport->Controls->Add(lblExport, 0, 0);
+
+	tbExport_ = gcnew Windows::Forms::TextBox();
+	tbExport_->Dock = DockStyle::Fill;
+	tbExport_->ReadOnly = true;
+	gridExport->Controls->Add(tbExport_, 1, 0);
+
+	btnExportBrows_ = gcnew Button();
+	btnExportBrows_->Text = "Сохранить...";
+	btnExportBrows_->AutoSize = true;
+	btnExportBrows_->Dock = DockStyle::Right;
+	gridExport->Controls->Add(btnExportBrows_, 3, 0);
+
+	btnExport_ = gcnew Button();
+	btnExport_->Text = "Сформировать отчёт";
+	btnExport_->AutoSize = true;
+	gridExport->Controls->Add(btnExport_, 3, 1);
 
 	//Status bar
 	status_ = gcnew StatusStrip();
@@ -127,10 +160,39 @@ void FormAuditWallOpening::BuildUiFilters(int quantity) {
 	}
 }
 
+void FormAuditWallOpening::UpdateUiState() {
+	nudCountFilters_->Enabled =
+		(auditStage_ == AuditStageWallOpening::None) ||
+		(auditStage_ == AuditStageWallOpening::NumberFiltersInstalled);
+
+	btnSetCountFilters_->Enabled = auditStage_ == AuditStageWallOpening::NumberFiltersInstalled;
+
+	btnRun_->Visible = auditStage_ == AuditStageWallOpening::FiltersCreated;
+
+	btnExportBrows_->Enabled = auditStage_ == AuditStageWallOpening::RunningDone;
+	btnExport_->Enabled = auditStage_ == AuditStageWallOpening::ExportPathLoaded;
+}
+
+void FormAuditWallOpening::SetStatus(String^ text) {
+	statusText_->Text = text;
+}
+
 void FormAuditWallOpening::SubscriptionEvent() {
 	nudCountFilters_->ValueChanged += gcnew EventHandler(this, &FormAuditWallOpening::OnValueChanged);
 	btnSetCountFilters_->Click += gcnew EventHandler(this, &FormAuditWallOpening::OnSetCountFilters);
 	btnRun_->Click += gcnew EventHandler(this, &FormAuditWallOpening::OnRun);
+	btnExportBrows_->Click += gcnew EventHandler(this, &FormAuditWallOpening::OnBrowsExport);
+	btnExport_->Click += gcnew EventHandler(this, &FormAuditWallOpening::OnExport);
+}
+void FormAuditWallOpening::OnValueChanged(Object^ sender, EventArgs^ e) {
+	if (nudCountFilters_->Value > 0 && nudCountFilters_->Value < 10) {
+		auditStage_ = AuditStageWallOpening::NumberFiltersInstalled;
+		SetStatus("Кол-во фильтров установленно");
+	} else {
+		auditStage_ = AuditStageWallOpening::None;
+		SetStatus("Установите кол-во фильтров");
+	}
+	UpdateUiState();
 }
 
 void FormAuditWallOpening::OnSetCountFilters(Object^ sender, EventArgs^ e) {
@@ -145,15 +207,6 @@ void FormAuditWallOpening::OnSetCountFilters(Object^ sender, EventArgs^ e) {
 	} else {
 		MessageBox::Show(this, "Установите кол-во фильтров > 0 && < 10", "Внимание");
 	}
-}
-
-void FormAuditWallOpening::UpdateUiState() {
-	btnRun_->Visible = auditStage_ == AuditStageWallOpening::FiltersCreated ? true : false;
-
-}
-
-void FormAuditWallOpening::SetStatus(String^ text) {
-	statusText_->Text = text;
 }
 
 void FormAuditWallOpening::OnRun(Object^ sender, EventArgs^ e) {
@@ -171,28 +224,50 @@ void FormAuditWallOpening::OnRun(Object^ sender, EventArgs^ e) {
 	}
 
 	if (numFilterValue->Count > 0) {
+		auditStage_ = AuditStageWallOpening::Running;
+		SetStatus("Проверка...");
 		RunRequest(numFilterValue);
-	}
-}
-
-void FormAuditWallOpening::OnValueChanged(Object^ sender, EventArgs^ e) {
-	if (nudCountFilters_->Value > 0 && nudCountFilters_->Value < 10) {
-		auditStage_ = AuditStageWallOpening::NumberFiltersInstalled;
-		SetStatus("Кол-во фильтров установленно");
 	} else {
-		auditStage_ = AuditStageWallOpening::None;
-		SetStatus("Установите кол-во фильтров");
+		auditStage_ = AuditStageWallOpening::FiltersCreated;
+		SetStatus("Ошибка запуска проверки, проверь фильтры!");
 	}
 }
 
-void FormAuditWallOpening::AddRowTable(String^ name, 
-		String^ totalWalls,
-		String^ totalArea, 
-		String^ totalAreaHasOnening,
-		String^ totalAreaNoOpening,
-		String^ totalOpening
-)
- {
+void FormAuditWallOpening::OnBrowsExport(Object^ sender, EventArgs^ e) {
+	SaveFileDialog^ dlg = gcnew SaveFileDialog();
+	dlg->Filter = "HTML (*.html)|*.html|All files (*.*)|*.*";
+	dlg->RestoreDirectory = true;
+
+	if (dlg->ShowDialog(this) == ::DialogResult::OK) {
+		exportPath_ = dlg->FileName;
+		tbExport_->Text = exportPath_;
+
+		auditStage_ = AuditStageWallOpening::ExportPathLoaded;
+
+		UpdateUiState();
+		SetStatus("Выбран путь для отчёта");
+	}
+}
+
+void FormAuditWallOpening::OnExport(Object^ sender, EventArgs^ e) {
+	if (String::IsNullOrWhiteSpace(exportPath_)) {
+		MessageBox::Show(this, "Выберите путь для сохранения отчёта", "Внимание",
+			MessageBoxButtons::OK, MessageBoxIcon::Warning);
+		return;
+	}
+
+	auditStage_ == AuditStageWallOpening::Export;
+	SetStatus("Экспорт запущен");
+	ExportRequest(exportPath_);
+}
+
+void FormAuditWallOpening::AddRowTable(String^ name,
+	String^ totalWalls,
+	String^ totalArea,
+	String^ totalAreaHasOnening,
+	String^ totalAreaNoOpening,
+	String^ totalOpening
+) {
 	dgvTable_->Rows->Add(
 		name,
 		totalWalls,
@@ -201,6 +276,18 @@ void FormAuditWallOpening::AddRowTable(String^ name,
 		totalAreaNoOpening,
 		totalOpening
 	);
+}
+
+void FormAuditWallOpening::MarkAuditFinished(bool ok) {
+	auditStage_ = ok ? AuditStageWallOpening::RunningDone : AuditStageWallOpening::Running;
+	SetStatus(ok ? "Проверка произведена" : "Ошибка проверки");
+	UpdateUiState();
+}
+
+void FormAuditWallOpening::MarkAuditExportFinished(bool ok) {
+	auditStage_ = ok ? AuditStageWallOpening::ExportDone : AuditStageWallOpening::Export;
+	SetStatus(ok ? "Экспорт завершен" : "Ошибка экспорта");
+	UpdateUiState();
 }
 
 }//namespace MyForm
