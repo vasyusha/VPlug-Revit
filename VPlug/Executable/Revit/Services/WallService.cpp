@@ -20,7 +20,7 @@ bool BoxesIntersect(BoundingBoxXYZ^ a, BoundingBoxXYZ^ b) {
 	return overlapX && overlapY && overlapZ;
 }
 
-int CountRealOpeningsForWall(Document^ doc, Wall^ wall) {
+int WallService::CountRealOpeningsForWall(Document^ doc, Wall^ wall, Elements::WallElement^ wallElement) {
 	/*Получили список проёмов*/
 	IList<ElementId^>^ inserts = wall->FindInserts(
 		true,
@@ -75,8 +75,13 @@ int CountRealOpeningsForWall(Document^ doc, Wall^ wall) {
 
 		/*1) Окно хостится в ЭТОЙ же стене*/
 		if (hostWall->Id == wall->Id) {
-			if (BoxesIntersect(wallBox, boxIns))
+			if (BoxesIntersect(wallBox, boxIns)) {
+				/*Закидываем логические вставки*/
+				Elements::BaseElement^ baseElement = Services::BaseService::BuildBaseElement<Elements::BaseElement^>(doc, e);
+				wallElement->LogicChildren->Add(baseElement);
 				count++;
+			}
+
 			continue;
 		}
 
@@ -105,8 +110,12 @@ int CountRealOpeningsForWall(Document^ doc, Wall^ wall) {
 		movedWallBox->Max = wallBox->Max + shift;
 
 		/*Проверяем, пересекается ли "пододвинутая" стена с окном*/
-		if (!BoxesIntersect(movedWallBox, boxIns))
+		if (!BoxesIntersect(movedWallBox, boxIns)) {
 			continue;
+		}
+			/*Закидываем логические вставки*/
+			Elements::BaseElement^ baseElement = Services::BaseService::BuildBaseElement<Elements::BaseElement^>(doc, e);
+			wallElement->LogicChildren->Add(baseElement);
 
 		count++;
 	}
@@ -115,22 +124,26 @@ int CountRealOpeningsForWall(Document^ doc, Wall^ wall) {
 
 Elements::WallElement^ WallService::BuildWallElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
 
-	Elements::WallElement^ we = Services::BaseService::BuildBaseElement<Elements::WallElement^>(doc, e, requiredParams);
+	Elements::WallElement^ wallElement = Services::BaseService::BuildBaseElement<Elements::WallElement^>(doc, e, requiredParams);
+
+	wallElement->LogicChildren = gcnew List<Elements::BaseElement^>();
 
 	Autodesk::Revit::DB::Wall^ wall = dynamic_cast<Autodesk::Revit::DB::Wall^>(e);
 
-	we->HasOpening = wall->FindInserts(true, true, false, false)->Count > 0;
+	wallElement->HasOpening = wall->FindInserts(true, true, false, false)->Count > 0;
 
-	we->CountOpening = CountRealOpeningsForWall(doc, wall);
+	wallElement->CountOpening = CountRealOpeningsForWall(doc, wall, wallElement);
 	ForgeTypeId^ areaId = ParameterUtils::GetParameterTypeId(BuiltInParameter::HOST_AREA_COMPUTED);
 	Parameter^ areaParam = wall->GetParameter(areaId);
+
+	TaskDialog::Show("Test", wallElement->LogicChildren->Count.ToString());
 
 	if (areaParam != nullptr && areaParam->HasValue) {
 		double areaFt = areaParam->AsDouble();
 		double areaM2 = UnitUtils::ConvertFromInternalUnits(areaFt, UnitTypeId::SquareMeters);
-		we->Area = areaM2;
+		wallElement->Area = areaM2;
 	} 
-	return we;
+	return wallElement;
 }
 
 List<Elements::WallElement^>^ WallService::CollectByCategory(

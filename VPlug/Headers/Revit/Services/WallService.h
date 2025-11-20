@@ -26,6 +26,7 @@ public:
 		IDictionary<String^, String^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams);
 
+	int CountRealOpeningsForWall(Document^ doc, Wall^ wall, Elements::WallElement^ wallElement);
 
 
 };
