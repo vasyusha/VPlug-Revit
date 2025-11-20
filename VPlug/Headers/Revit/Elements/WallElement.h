@@ -13,6 +13,9 @@ private:
 	bool hasOpening_;
 	int countOpening_;
 
+	/*Логические дочерние элементы, включая FindInserts(addRectOpenings, includeShadows)*/
+	IList<BaseElement^>^ logicChildren_;
+
 public:
 
 	property double Area {
@@ -28,6 +31,11 @@ public:
 	property int CountOpening {
 		int get();
 		void set(int value);
+	};
+
+	property IList<BaseElement^>^ LogicChildren {
+		IList<BaseElement^>^ get();
+		void set(IList<BaseElement^>^ value);
 	};
 };
 

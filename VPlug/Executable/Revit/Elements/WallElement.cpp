@@ -26,4 +26,12 @@ void WallElement::CountOpening::set(int value) {
 	countOpening_ = value;
 }
 
+IList<BaseElement^>^ WallElement::LogicChildren::get() {
+	return logicChildren_;
+}
+
+void WallElement::LogicChildren::set(IList<BaseElement^>^ value) {
+	logicChildren_ = value;
+}
+
 }//namespace Elements
