@@ -55,6 +55,7 @@ bool BaseService::MatchFilters(Document^ doc, Element^ e, IDictionary<String^, S
 	}
 	return true;
 }
+
 generic <typename TElement>
  TElement BaseService::BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
 	auto be = gcnew TElement();
@@ -93,6 +94,26 @@ generic <typename TElement>
 	}
 	return be;
 }
+
+generic <typename TElement>
+ TElement BaseService::BuildBaseElement(Document^ doc, Element^ e) {
+	auto be = gcnew TElement();
+
+	be->Id = e->Id->IntegerValue;
+	be->UniqueId = e->UniqueId;
+	be->Name = e->Name;
+
+	Category^ cat = e->Category;
+	if (cat != nullptr) {
+		be->CategoryName = cat->Name;
+
+		BuiltInCategory bic = static_cast<BuiltInCategory>(cat->Id->IntegerValue);
+		be->BuiltInCategory = (int)bic;
+		be->BuiltInCategoryName = bic.ToString();
+	}
+	return be;
+}
+
 
 List<Elements::BaseElement^>^ BaseService::CollectAll(
 	IDictionary<String^, String^>^ controlFilters,

@@ -28,6 +28,10 @@ protected:
 	where TElement : Elements::BaseElement, gcnew()
 	static TElement BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
 
+	generic <typename TElement>
+	where TElement : Elements::BaseElement, gcnew()
+	static TElement BuildBaseElement(Document^ doc, Element^ e);
+
 public:
 
 	BaseService(Document^ doc);
