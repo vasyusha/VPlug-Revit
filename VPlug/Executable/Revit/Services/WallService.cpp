@@ -136,8 +136,6 @@ Elements::WallElement^ WallService::BuildWallElement(Document^ doc, Element^ e, 
 	ForgeTypeId^ areaId = ParameterUtils::GetParameterTypeId(BuiltInParameter::HOST_AREA_COMPUTED);
 	Parameter^ areaParam = wall->GetParameter(areaId);
 
-	TaskDialog::Show("Test", wallElement->LogicChildren->Count.ToString());
-
 	if (areaParam != nullptr && areaParam->HasValue) {
 		double areaFt = areaParam->AsDouble();
 		double areaM2 = UnitUtils::ConvertFromInternalUnits(areaFt, UnitTypeId::SquareMeters);
