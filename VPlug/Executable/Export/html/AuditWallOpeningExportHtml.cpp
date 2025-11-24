@@ -51,8 +51,17 @@ void AuditWallOpeningExportHtml::AppendHeader(StringBuilder^ sb, MyDomain::WallO
 	sb->AppendLine("		}");
 	sb->AppendLine("		tbody td {");
 	sb->AppendLine("			padding: 10px 12px;");
-	sb->AppendLine("			vertical-aling: top;");
+	sb->AppendLine("			vertical-align: top;");
 	sb->AppendLine("			border: 1px solid #bfb6c9;");
+	sb->AppendLine("		}");
+	sb->AppendLine("		span.data-row {");
+	sb->AppendLine("			position: sticky;");
+	sb->AppendLine("			top: 20px;");
+	sb->AppendLine("			background: #fff;;");
+	sb->AppendLine("			z-index: 1;");
+	sb->AppendLine("		}");
+	sb->AppendLine("		summary.opening-sum {");
+	sb->AppendLine("			font-size: 16px;");
 	sb->AppendLine("		}");
 	sb->AppendLine("		td.opening-col {");
 	sb->AppendLine("			font-size: 12px;");
@@ -110,13 +119,15 @@ void AuditWallOpeningExportHtml::AppendBody(StringBuilder^ sb, MyDomain::WallOpe
 
 	for each (KeyValuePair<String^, MyDomain::WallOpening::WallTypeInfo^> kvp in report->WallTypes) {
 		sb->AppendLine("					<tr>");
-		sb->AppendLine("						<td>" + kvp.Value->Name + "</td>");
-		sb->AppendLine("						<td>" + kvp.Value->TotalWalls + "</td>");
-		sb->AppendLine("						<td>" + kvp.Value->TotalArea.ToString("F3") + "</td>");
-		sb->AppendLine("						<td>" + kvp.Value->TotalAreaWallsWithOpenings.ToString("F3") + "</td>");
-		sb->AppendLine("						<td>" + kvp.Value->TotalAreaWallsWithoutOpenings.ToString("F3") + "</td>");
-		sb->AppendLine("						<td>" + kvp.Value->TotalOpenings + "</td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + kvp.Value->Name + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + kvp.Value->TotalWalls + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + kvp.Value->TotalArea.ToString("F3") + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + kvp.Value->TotalAreaWallsWithOpenings.ToString("F3") + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + kvp.Value->TotalAreaWallsWithoutOpenings.ToString("F3") + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + kvp.Value->TotalOpenings + "</span></td>");
 		sb->AppendLine("						<td class=\"opening-col\">");
+		sb->AppendLine("						<details>");
+		sb->AppendLine("						<summary class=\"opening-sum\">Проёмы</summary>");
 
 		for each (MyDomain::WallOpening::OpeningInfo^ openingInfo in kvp.Value->Openings) {
 			sb->AppendLine("							<div class=\"opening\">");
@@ -126,6 +137,7 @@ void AuditWallOpeningExportHtml::AppendBody(StringBuilder^ sb, MyDomain::WallOpe
 			sb->AppendLine("							</div>");
 		}
 
+		sb->AppendLine("						</details>");
 		sb->AppendLine("						</td>");
 		sb->AppendLine("					</tr>");
 	}
@@ -151,10 +163,10 @@ void AuditWallOpeningExportHtml::AppendBody(StringBuilder^ sb, MyDomain::WallOpe
 
 	for each (MyDomain::WallOpening::WallElementInfo^ wallElement in report->WallElemnts) {
 		sb->AppendLine("					<tr>");
-		sb->AppendLine("						<td>" + wallElement->Id + "</td>");
-		sb->AppendLine("						<td>" + wallElement->Name + "</td>");
-		sb->AppendLine("						<td>" + wallElement->Area.ToString("F3") + "</td>");
-		sb->AppendLine("						<td>" + wallElement->CountOpenings + "</td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + wallElement->Id + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + wallElement->Name + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + wallElement->Area.ToString("F3") + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + wallElement->CountOpenings + "</span></td>");
 		sb->AppendLine("						<td class=\"opening-col\">");
 
 		for each (MyDomain::WallOpening::OpeningInfo^ openingInfo in wallElement->Openings) {
