@@ -210,7 +210,7 @@ void FormAuditWallOpening::OnSetCountFilters(Object^ sender, EventArgs^ e) {
 }
 
 void FormAuditWallOpening::OnRun(Object^ sender, EventArgs^ e) {
-	List<Tuple<int, String^, String^>^>^ numFilterValue = gcnew List<Tuple<int, String^, String^>^>();
+	Dictionary<String^, String^>^ filters = gcnew Dictionary<String^, String^>();
 
 	for (int i = 0; i <= nudCountFilters_->Value; ++i) {
 		TextBox^ filterTb = dynamic_cast<TextBox^>(gridFilters_->Controls[String::Format("Filter{0}", i)]);
@@ -218,15 +218,15 @@ void FormAuditWallOpening::OnRun(Object^ sender, EventArgs^ e) {
 
 		if (filterTb != nullptr && valueTb != nullptr) {
 			if (!String::IsNullOrEmpty(filterTb->Text) && !String::IsNullOrEmpty(valueTb->Text)) {
-				numFilterValue->Add(gcnew Tuple<int, String^, String^>(i, filterTb->Text, valueTb->Text));
+				filters->Add(filterTb->Text, valueTb->Text);
 			}
 		}
 	}
 
-	if (numFilterValue->Count > 0) {
+	if (filters->Count > 0) {
 		auditStage_ = AuditStageWallOpening::Running;
 		SetStatus("Проверка...");
-		RunRequest(numFilterValue);
+		RunRequest(filters);
 	} else {
 		auditStage_ = AuditStageWallOpening::FiltersCreated;
 		SetStatus("Ошибка запуска проверки, проверь фильтры!");

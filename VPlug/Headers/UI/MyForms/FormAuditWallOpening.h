@@ -18,7 +18,7 @@ enum class AuditStageWallOpening {
 	ExportDone
 };
 
-public delegate void AuditWallOpeningRunningHandler(List<Tuple<int, String^, String^>^>^ numFilterValue);
+public delegate void AuditWallOpeningRunningHandler(IDictionary<String^, String^>^ filters);
 public delegate void AuditWallOpeningExportHandler(String^ path);
 
 public ref class FormAuditWallOpening : public Windows::Forms::Form {
