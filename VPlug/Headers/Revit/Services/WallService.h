@@ -23,7 +23,7 @@ public:
 
 	List<Elements::WallElement^>^ CollectByCategory(
 		BuiltInCategory bic,
-		IDictionary<String^, String^>^ controlFilters,
+		IDictionary<String^, IList<String^>^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams);
 
 	int CountRealOpeningsForWall(Document^ doc, Wall^ wall, Elements::WallElement^ wallElement);

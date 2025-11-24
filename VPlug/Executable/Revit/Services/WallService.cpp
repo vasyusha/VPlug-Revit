@@ -146,7 +146,7 @@ Elements::WallElement^ WallService::BuildWallElement(Document^ doc, Element^ e, 
 
 List<Elements::WallElement^>^ WallService::CollectByCategory(
 	BuiltInCategory bic,
-	IDictionary<String^, String^>^ controlFilters,
+	IDictionary<String^, IList<String^>^>^ controlFilters,
 	IEnumerable<String^>^ requiredParams) {
 
 	auto result = gcnew List<Elements::WallElement^>();
