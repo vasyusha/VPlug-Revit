@@ -24,7 +24,9 @@ private:
 
 	void SubscriptionEvent();
 
-	void Audit(List<Tuple<int, String^, String^>^>^ numFilterValue);
+	void Audit(IDictionary<String^, String^>^ filters);
+
+	List<String^>^ PrepareFilterValue(String^ value);
 	void PrepareElement(Elements::WallElement^ wallElement);
 	void PrepareType(Elements::WallElement^ wallElement);
 

@@ -72,18 +72,20 @@ void AuditWallOpeningCommand::PrepareType(Elements::WallElement^ wallElement) {
 	}
 }
 
-void AuditWallOpeningCommand::Audit(List<Tuple<int, String^, String^>^>^ numFilterValue) {
+void AuditWallOpeningCommand::Audit(IDictionary<String^, String^>^ filters) {
 	Dictionary<String^, String^>^ filtersValue = gcnew Dictionary<String^, String^>();
 
 	List<String^>^ findParam = gcnew List<String^>();
-	for each (Tuple<int, String^, String^>^ te in numFilterValue) {
-		filtersValue->Add(te->Item2, te->Item3);
-		findParam->Add(te->Item2);
+
+	Dictionary<String^, IList<String^>^>^ prepareFilters = gcnew Dictionary<String^, IList<String^>^>();	
+
+	for each (KeyValuePair<String^, String^> kvp in filters) {
+		prepareFilters->Add(kvp.Key, PrepareFilterValue(kvp.Value));
 	}
 
 	Services::WallService^ wallService = gcnew Services::WallService(doc_);
 
-	List<Elements::WallElement^>^ wallElements = wallService->CollectByCategory(BuiltInCategory::OST_Walls, filtersValue, findParam);
+	List<Elements::WallElement^>^ wallElements = wallService->CollectByCategory(BuiltInCategory::OST_Walls, prepareFilters, findParam);
 
 	for each (Elements::WallElement^ wallElement in wallElements) {
 		PrepareElement(wallElement);
@@ -93,6 +95,38 @@ void AuditWallOpeningCommand::Audit(List<Tuple<int, String^, String^>^>^ numFilt
 	FillTable();
 
 	form_->MarkAuditFinished(true);
+}
+
+List<String^>^ AuditWallOpeningCommand::PrepareFilterValue(String^ value) {
+	List<String^>^ result = gcnew List<String^>();
+
+	if (String::IsNullOrEmpty(value)) return result;
+
+	if (value[0] == '(') {
+		String^ buffer = "";
+
+		for each (Char cr in value) {
+			if (cr == '(') continue;
+			if (cr == ')') {
+				if (!String::IsNullOrEmpty(buffer)) {
+					result->Add(buffer);
+				}
+				buffer = "";
+				continue;
+			}
+			if (cr == '|') {
+				if (!String::IsNullOrEmpty(buffer)) {
+					result->Add(buffer);
+				}
+				buffer = "";
+				continue;
+			}
+			buffer += cr;
+		}
+	} else {
+		result->Add(value);
+	}
+	return result;
 }
 
 void AuditWallOpeningCommand::FillTable() {
