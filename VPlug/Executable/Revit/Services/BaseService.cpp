@@ -56,6 +56,22 @@ bool BaseService::MatchFilters(Document^ doc, Element^ e, IDictionary<String^, S
 	return true;
 }
 
+bool BaseService::MatchFilters(Document^ doc, Element^ e, IDictionary<String^, IList<String^>^>^ controlFilters) {
+	//если фильтров нет — считаем, что элемент подходит
+	if (controlFilters == nullptr || controlFilters->Count == 0) return true;
+
+	for each (KeyValuePair<String^, IList<String^>^> kvp in controlFilters) {
+		Parameter^ p = TryGetParam(doc, e, kvp.Key);
+		String^ actual = ReadParamValue(p);
+		bool pass = false;	
+		for each (String^ expected in kvp.Value) {
+			if (Object::Equals(actual, expected)) pass = true;
+		}
+		if (pass == false) return false;
+	}
+	return true;
+}
+
 generic <typename TElement>
  TElement BaseService::BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
 	auto be = gcnew TElement();

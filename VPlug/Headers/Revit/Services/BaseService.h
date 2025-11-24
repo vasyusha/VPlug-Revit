@@ -21,8 +21,10 @@ protected:
 	static String^ ReadParamValue(Parameter^ param);
 
 	static bool IsFilled(Parameter^ param);
-
+	//Жесткое
 	static bool MatchFilters(Document^ doc, Element^ e, IDictionary<String^, String^>^ controlFilters);
+	//Мягкое
+	static bool MatchFilters(Document^ doc, Element^ e, IDictionary<String^, IList<String^>^>^ controlFilters);
 
 	generic <typename TElement>
 	where TElement : Elements::BaseElement, gcnew()
