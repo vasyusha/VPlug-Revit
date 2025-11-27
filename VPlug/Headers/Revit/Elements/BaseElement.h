@@ -22,7 +22,7 @@ public:
 };
 
 public ref class BaseElement {
-private:
+protected:
 	int id_;
 	String^ uniqueId_;
 	String^ name_;

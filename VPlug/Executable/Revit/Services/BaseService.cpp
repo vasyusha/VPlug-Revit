@@ -56,8 +56,25 @@ bool BaseService::MatchFilters(Document^ doc, Element^ e, IDictionary<String^, S
 	return true;
 }
 
-Elements::BaseElement^ BaseService::BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
-	auto be = gcnew Elements::BaseElement();
+bool BaseService::MatchFilters(Document^ doc, Element^ e, IDictionary<String^, IList<String^>^>^ controlFilters) {
+	//если фильтров нет — считаем, что элемент подходит
+	if (controlFilters == nullptr || controlFilters->Count == 0) return true;
+
+	for each (KeyValuePair<String^, IList<String^>^> kvp in controlFilters) {
+		Parameter^ p = TryGetParam(doc, e, kvp.Key);
+		String^ actual = ReadParamValue(p);
+		bool pass = false;	
+		for each (String^ expected in kvp.Value) {
+			if (Object::Equals(actual, expected)) pass = true;
+		}
+		if (pass == false) return false;
+	}
+	return true;
+}
+
+generic <typename TElement>
+ TElement BaseService::BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
+	auto be = gcnew TElement();
 
 	be->Id = e->Id->IntegerValue;
 	be->UniqueId = e->UniqueId;
@@ -94,6 +111,26 @@ Elements::BaseElement^ BaseService::BuildBaseElement(Document^ doc, Element^ e, 
 	return be;
 }
 
+generic <typename TElement>
+ TElement BaseService::BuildBaseElement(Document^ doc, Element^ e) {
+	auto be = gcnew TElement();
+
+	be->Id = e->Id->IntegerValue;
+	be->UniqueId = e->UniqueId;
+	be->Name = e->Name;
+
+	Category^ cat = e->Category;
+	if (cat != nullptr) {
+		be->CategoryName = cat->Name;
+
+		BuiltInCategory bic = static_cast<BuiltInCategory>(cat->Id->IntegerValue);
+		be->BuiltInCategory = (int)bic;
+		be->BuiltInCategoryName = bic.ToString();
+	}
+	return be;
+}
+
+
 List<Elements::BaseElement^>^ BaseService::CollectAll(
 	IDictionary<String^, String^>^ controlFilters,
 	IEnumerable<String^>^ requiredParams) {
@@ -105,7 +142,7 @@ List<Elements::BaseElement^>^ BaseService::CollectAll(
 
 	for each (Element^ e in elems) {
 		if (!MatchFilters(doc_, e, controlFilters)) continue;
-		result->Add(BuildBaseElement(doc_, e, requiredParams));
+		result->Add(BuildBaseElement<Elements::BaseElement^>(doc_, e, requiredParams));
 	}
 	return result;
 }
@@ -123,7 +160,7 @@ List<Elements::BaseElement^>^ BaseService::CollectByCategory(
 
 	for each (Element ^ e in elems) {
 		//if (!MatchFilters(doc_, e, controlFilters)) continue;
-		result->Add(BuildBaseElement(doc_, e, requiredParams));
+		result->Add(BuildBaseElement<Elements::BaseElement^>(doc_, e, requiredParams));
 	}
 	return result;
 }
@@ -146,7 +183,7 @@ Dictionary<String^, List<Elements::BaseElement^>^>^ BaseService::CollectGroupedB
 			bucket = gcnew List<Elements::BaseElement^>();
 			map[cname] = bucket;
 		}
-		bucket->Add(BuildBaseElement(doc_, e, requiredParams));
+		bucket->Add(BuildBaseElement<Elements::BaseElement^>(doc_, e, requiredParams));
 	}
 	return map;
 }

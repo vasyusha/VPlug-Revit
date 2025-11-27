@@ -13,7 +13,7 @@ using namespace System::Collections::Generic;
 namespace Services {
 
 public ref class BaseService {
-private:
+protected:
 	Document^ doc_;
 
 	static Parameter^ TryGetParam(Document^ doc, Element^ e, String^ name);
@@ -21,10 +21,18 @@ private:
 	static String^ ReadParamValue(Parameter^ param);
 
 	static bool IsFilled(Parameter^ param);
-
+	//Жесткое
 	static bool MatchFilters(Document^ doc, Element^ e, IDictionary<String^, String^>^ controlFilters);
+	//Мягкое
+	static bool MatchFilters(Document^ doc, Element^ e, IDictionary<String^, IList<String^>^>^ controlFilters);
 
-	static Elements::BaseElement^ BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
+	generic <typename TElement>
+	where TElement : Elements::BaseElement, gcnew()
+	static TElement BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
+
+	generic <typename TElement>
+	where TElement : Elements::BaseElement, gcnew()
+	static TElement BuildBaseElement(Document^ doc, Element^ e);
 
 public:
 

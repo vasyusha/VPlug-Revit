@@ -79,6 +79,12 @@
     <Filter Include="Executable\UI\MyForms">
       <UniqueIdentifier>{aa229539-a950-4fb7-90e5-09579d7bba4d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Executable\Domain">
+      <UniqueIdentifier>{f17d2c3b-a91e-42a5-87f4-4443e69634c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Domain">
+      <UniqueIdentifier>{52b470fb-9102-4344-b724-325b7c25a7ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\app.ico">
@@ -124,6 +130,24 @@
     <ClInclude Include="Headers\UI\MyForms\FormAuditParameter.h">
       <Filter>Headers\UI\MyForms</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\UI\MyForms\FormAuditWallOpening.h">
+      <Filter>Headers\UI\MyForms</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Commands\AuditWallOpeningCommand.h">
+      <Filter>Headers\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Revit\Elements\WallElement.h">
+      <Filter>Headers\Revit\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Revit\Services\WallService.h">
+      <Filter>Headers\Revit\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Export\html\AuditWallOpeningExportHtml.h">
+      <Filter>Headers\Export\html</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Domain\WallOpeningDomain.h">
+      <Filter>Headers\Domain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Executable\AssemblyInfo.cpp">
@@ -158,6 +182,24 @@
     </ClCompile>
     <ClCompile Include="Executable\UI\MyForms\FormAuditParameter.cpp">
       <Filter>Executable\UI\MyForms</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\UI\MyForms\FormAuditWallOpening.cpp">
+      <Filter>Executable\UI\MyForms</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Commands\AuditWallOpeningCommand.cpp">
+      <Filter>Executable\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Elements\WallElement.cpp">
+      <Filter>Executable\Revit\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Revit\Services\WallService.cpp">
+      <Filter>Executable\Revit\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Export\html\AuditWallOpeningExportHtml.cpp">
+      <Filter>Executable\Export\html</Filter>
+    </ClCompile>
+    <ClCompile Include="Executable\Domain\WallOpeningDomain.cpp">
+      <Filter>Executable\Domain</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

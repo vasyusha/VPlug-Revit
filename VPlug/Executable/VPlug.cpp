@@ -33,6 +33,17 @@ Result VPlug::Main::OnStartup(UIControlledApplication^ app) {
 
 	pull_button_check_something->AddPushButton(push_button_data_check_filling_param);
 
+	PushButtonData^ pushButtonDataCheckWallOpening = gcnew PushButtonData (
+		"check_wall_opening",
+		"Данные проёмов в стенах",
+		path,
+		"Commands.AuditWallOpeningCommand"
+	);
+
+	pull_button_check_something->AddPushButton(pushButtonDataCheckWallOpening);
+
+
+
 	return Result::Succeeded;
 }
 
