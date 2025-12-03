@@ -19,6 +19,7 @@ namespace Commands {
 [Transaction(TransactionMode::Manual)]
 public ref class AuditWallOpeningCommand : public IExternalCommand {
 private:
+	/*
 	Document^ doc_;
 	MyForm::FormAuditWallOpening^ form_;
 
@@ -35,7 +36,7 @@ private:
 	void Export(String^ path);
 
 	MyDomain::WallOpening::WallOpeningReport^ report;
-
+	*/
 public:
 	virtual Result Execute(ExternalCommandData^ commandData,
 		String^% message, ElementSet^ elements);

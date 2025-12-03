@@ -4,7 +4,7 @@ namespace Commands {
 
 Result AuditWallOpeningCommand::Execute(ExternalCommandData^ commandData,
 	String^% message, ElementSet^ elements) {
-
+/*
 	UIDocument^ uiDoc = commandData->Application->ActiveUIDocument;
 	doc_ = uiDoc->Document;
 	
@@ -13,10 +13,10 @@ Result AuditWallOpeningCommand::Execute(ExternalCommandData^ commandData,
 	SubscriptionEvent();
 	
 	form_->ShowDialog();
-
+*/
 	return Result::Succeeded;
 }
-
+/*
 void AuditWallOpeningCommand::SubscriptionEvent() {
 	form_->RunRequest += gcnew MyForm::AuditWallOpeningRunningHandler(this, &AuditWallOpeningCommand::Audit);
 	form_->ExportRequest += gcnew MyForm::AuditWallOpeningExportHandler(this, &AuditWallOpeningCommand::Export);
@@ -152,5 +152,5 @@ void AuditWallOpeningCommand::Export(String^ path) {
 
 	form_->MarkAuditExportFinished(true);
 }
-
+*/
 }//namespace Commands
