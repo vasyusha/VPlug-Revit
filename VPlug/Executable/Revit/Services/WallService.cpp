@@ -20,7 +20,7 @@ bool BoxesIntersect(BoundingBoxXYZ^ a, BoundingBoxXYZ^ b) {
 	return overlapX && overlapY && overlapZ;
 }
 
-int WallService::CountRealOpeningsForWall(Document^ doc, Wall^ wall, Elements::WallElement^ wallElement) {
+int WallService::CountRealOpeningsForWall(Document^ doc, Wall^ wall, MyDomain::Elements::WallElement^ wallElement) {
 	/*Получили список проёмов*/
 	IList<ElementId^>^ inserts = wall->FindInserts(
 		true,
@@ -77,8 +77,8 @@ int WallService::CountRealOpeningsForWall(Document^ doc, Wall^ wall, Elements::W
 		if (hostWall->Id == wall->Id) {
 			if (BoxesIntersect(wallBox, boxIns)) {
 				/*Закидываем логические вставки*/
-				Elements::BaseElement^ baseElement = Services::BaseService::BuildBaseElement<Elements::BaseElement^>(doc, e);
-				wallElement->LogicChildren->Add(baseElement);
+				MyDomain::Elements::Element^ baseElement = Services::BaseService::BuildBaseElement<MyDomain::Elements::Element^>(doc, e);
+				wallElement->LogicChildrenOpenings->Add(baseElement);
 				count++;
 			}
 
@@ -114,25 +114,25 @@ int WallService::CountRealOpeningsForWall(Document^ doc, Wall^ wall, Elements::W
 			continue;
 		}
 			/*Закидываем логические вставки*/
-			Elements::BaseElement^ baseElement = Services::BaseService::BuildBaseElement<Elements::BaseElement^>(doc, e);
-			wallElement->LogicChildren->Add(baseElement);
+			MyDomain::Elements::Element^ baseElement = Services::BaseService::BuildBaseElement<MyDomain::Elements::Element^>(doc, e);
+			wallElement->LogicChildrenOpenings->Add(baseElement);
 
 		count++;
 	}
 	return count;
 }
 
-Elements::WallElement^ WallService::BuildWallElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
+MyDomain::Elements::WallElement^ WallService::BuildWallElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
 
-	Elements::WallElement^ wallElement = Services::BaseService::BuildBaseElement<Elements::WallElement^>(doc, e, requiredParams);
+	MyDomain::Elements::WallElement^ wallElement = Services::BaseService::BuildBaseElement<MyDomain::Elements::WallElement^>(doc, e, requiredParams);
 
-	wallElement->LogicChildren = gcnew List<Elements::BaseElement^>();
+	wallElement->LogicChildrenOpenings = gcnew List<MyDomain::Elements::Element^>();
 
 	Autodesk::Revit::DB::Wall^ wall = dynamic_cast<Autodesk::Revit::DB::Wall^>(e);
 
 	wallElement->HasOpening = wall->FindInserts(true, true, false, false)->Count > 0;
 
-	wallElement->CountOpening = CountRealOpeningsForWall(doc, wall, wallElement);
+	wallElement->CountOpenings = CountRealOpeningsForWall(doc, wall, wallElement);
 	ForgeTypeId^ areaId = ParameterUtils::GetParameterTypeId(BuiltInParameter::HOST_AREA_COMPUTED);
 	Parameter^ areaParam = wall->GetParameter(areaId);
 
@@ -144,12 +144,12 @@ Elements::WallElement^ WallService::BuildWallElement(Document^ doc, Element^ e, 
 	return wallElement;
 }
 
-List<Elements::WallElement^>^ WallService::CollectByCategory(
+List<MyDomain::Elements::WallElement^>^ WallService::CollectByCategory(
 	BuiltInCategory bic,
 	IDictionary<String^, IList<String^>^>^ controlFilters,
 	IEnumerable<String^>^ requiredParams) {
 
-	auto result = gcnew List<Elements::WallElement^>();
+	auto result = gcnew List<MyDomain::Elements::WallElement^>();
 
 	FilteredElementCollector^ col = gcnew FilteredElementCollector(doc_);
 	col->OfCategory(bic);

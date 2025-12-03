@@ -1,7 +1,8 @@
 ﻿#pragma once
 
 #include "BaseService.h"
-#include "../Elements/WallElement.h"
+#include "../../Domain/ElementDomain.h"
+
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -19,14 +20,14 @@ private:
 public:
 	WallService(Document^ doc);
 
-	Elements::WallElement^ BuildWallElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
+	MyDomain::Elements::WallElement^ BuildWallElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
 
-	List<Elements::WallElement^>^ CollectByCategory(
+	List<MyDomain::Elements::WallElement^>^ CollectByCategory(
 		BuiltInCategory bic,
 		IDictionary<String^, IList<String^>^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams);
 
-	int CountRealOpeningsForWall(Document^ doc, Wall^ wall, Elements::WallElement^ wallElement);
+	int CountRealOpeningsForWall(Document^ doc, Wall^ wall, MyDomain::Elements::WallElement^ wallElement);
 
 
 };
