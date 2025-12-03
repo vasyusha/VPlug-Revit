@@ -1,7 +1,6 @@
 ﻿#pragma once
-#include "..\Elements\BaseElement.h"
-#include "..\Filters\ElementCollectorFilter.h"
-#include "..\Filters\ParameterFilledFilter.h"
+
+#include "../../Domain/ElementDomain.h"
 
 using namespace Autodesk::Revit::UI;
 using namespace Autodesk::Revit::DB;
@@ -27,27 +26,27 @@ protected:
 	static bool MatchFilters(Document^ doc, Element^ e, IDictionary<String^, IList<String^>^>^ controlFilters);
 
 	generic <typename TElement>
-	where TElement : Elements::BaseElement, gcnew()
+	where TElement : MyDomain::Elements::Element, gcnew()
 	static TElement BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams);
 
 	generic <typename TElement>
-	where TElement : Elements::BaseElement, gcnew()
+	where TElement : MyDomain::Elements::Element, gcnew()
 	static TElement BuildBaseElement(Document^ doc, Element^ e);
 
 public:
 
 	BaseService(Document^ doc);
 
-	List<Elements::BaseElement^>^ CollectAll(
+	List<MyDomain::Elements::Element^>^ CollectAll(
 		IDictionary<String^, String^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams);
 
-	List<Elements::BaseElement^>^ CollectByCategory(
+	List<MyDomain::Elements::Element^>^ CollectByCategory(
 		BuiltInCategory bic,
 		//IDictionary<String^, String^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams);
 
-	Dictionary<String^, List<Elements::BaseElement^>^>^ CollectGroupedByCategory(
+	Dictionary<String^, List<MyDomain::Elements::Element^>^>^ CollectGroupedByCategory(
 		IDictionary<String^, String^>^ controlFilters,
 		IEnumerable<String^>^ requiredParams);
 
