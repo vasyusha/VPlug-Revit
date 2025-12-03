@@ -2,138 +2,6 @@
 
 namespace Commands {
 
-String^ AuditScopeSummary::Scope::get() {
-	return scope_;
-}
-
-void AuditScopeSummary::Scope::set(String^ value) {
-	scope_ = value;
-}
-
-bool AuditScopeSummary::Pass::get() {
-	return pass_;
-}
-
-void AuditScopeSummary::Pass::set(bool value) {
-	pass_ = value;
-}
-
-int AuditScopeSummary::TotalElement::get() {
-	return totalElement_;
-}
-
-void AuditScopeSummary::TotalElement::set(int value) {
-	totalElement_ = value;
-}
-
-int AuditScopeSummary::PassedElement::get() {
-	return passElement_;
-}
-
-void AuditScopeSummary::PassedElement::set(int value) {
-	passElement_ = value;
-}
-
-int AuditScopeSummary::FailedElement::get() {
-	return failedElement_;
-}
-
-void AuditScopeSummary::FailedElement::set(int value) {
-	failedElement_ = value;
-}
-
-int AuditScopeSummary::TotalParam::get() {
-	return totalParam_;
-}
-
-void AuditScopeSummary::TotalParam::set(int value) {
-	totalParam_ = value;
-}
-
-int AuditScopeSummary::PassedParam::get() {
-	return passedParam_;
-}
-
-void AuditScopeSummary::PassedParam::set(int value) {
-	passedParam_ = value;
-}
-
-int AuditScopeSummary::MissedValue::get() {
-	return missedValue_;
-}
-
-void AuditScopeSummary::MissedValue::set(int value) {
-	missedValue_ = value;
-}
-
-int AuditScopeSummary::NoParam::get() {
-	return noParam_;
-}
-
-void AuditScopeSummary::NoParam::set(int value) {
-	noParam_ = value;
-}
-
-AuditResults::AuditResults() {
-	auditScopeSummary = gcnew List<AuditScopeSummary^>();
-}
-
-bool AuditResults::Pass::get() {
-	return pass_;
-}
-
-void AuditResults::Pass::set(bool value) {
-	pass_ = value;
-}
-
-int AuditResults::SpecPass::get() {
-	return specPass_;
-}
-
-void AuditResults::SpecPass::set(int value) {
-	specPass_ = value;
-}
-
-int AuditResults::SpecTotal::get() {
-	return specTotal_;
-}
-
-void AuditResults::SpecTotal::set(int value) {
-	specTotal_ = value;
-}
-
-int AuditResults::ReqPass::get() {
-	return reqPass_;
-}
-
-void AuditResults::ReqPass::set(int value) {
-	reqPass_ = value;
-}
-
-int AuditResults::ReqTotal::get() {
-	return reqTotal_;
-}
-
-void AuditResults::ReqTotal::set(int value) {
-	reqTotal_ = value;
-}
-
-int AuditResults::CheckPass::get() {
-	return checkPass_;
-}
-
-void AuditResults::CheckPass::set(int value) {
-	checkPass_ = value;
-}
-
-int AuditResults::CheckTotal::get() {
-	return checkTotal_;
-}
-
-void AuditResults::CheckTotal::set(int value) {
-	checkTotal_ = value;
-}
-
 Result AuditParameterCommand::Execute(ExternalCommandData^ commandData,
 	String^% message, ElementSet^ elements) {
 
@@ -232,222 +100,211 @@ void AuditParameterCommand::Audit() {
 		form_->MarkAuditFinished(false);
 		return;
 	}
-
+	
+	scopCheckParameters_ = gcnew Dictionary<String^, List<String^>^>();
+	scopAuditElements_ = gcnew Dictionary<String^, List<MyDomain::Elements::AuditParameters::AuditElement^>^>();
+	scopAuditGroups_ = gcnew Dictionary<String^, MyDomain::Elements::AuditParameters::AuditGroup^>();
+	auditResult_ = gcnew MyDomain::Elements::AuditParameters::AuditResult();
+	
 	if (method_ == "Категория") {
-		AuditCategory();
+		AuditByCategory();
 	} else if (method_ == "Фильтр") {
-		AuditUserFilter();
+		AuditByUserFilter();
 	} else {
 		MessageBox::Show("Неизвестный метод проверки");
 		form_->MarkAuditFinished(false);
 		return;
 	}
+	CreateReport();
 	form_->MarkAuditFinished(true);
 }
 
-void AuditParameterCommand::AuditCategory() {
-	elements_ = gcnew Dictionary<String^, List<Elements::BaseElement^>^>();
+void AuditParameterCommand::AuditElements(
+	List<MyDomain::Elements::Element^>^ elements,
+		String^ scop) {
 
-	dataScopes_ = gcnew Dictionary<String^, AuditScopeSummary^>();
+	List<MyDomain::Elements::AuditParameters::AuditElement^>^ result = gcnew List<MyDomain::Elements::AuditParameters::AuditElement^>();
+
+	MyDomain::Elements::AuditParameters::AuditGroup^ auditGroup = gcnew MyDomain::Elements::AuditParameters::AuditGroup();
+
+	auditGroup->Pass = true;
+	auditGroup->Name = scop;
+	auditGroup->TotalElements = elements->Count;
+	auditGroup->CheckedParameters = scopCheckParameters_[scop];
+
+	for each (MyDomain::Elements::Element^ element in elements) {
+
+		MyDomain::Elements::AuditParameters::AuditElement^ auditElement = gcnew MyDomain::Elements::AuditParameters::AuditElement();
+
+		auditElement->Element = element;
+		auditElement->Pass = true;
+		auditElement->TotalParams = element->Parameters->Count;
+
+		for each (MyDomain::Parameters::Parameter^ parameter in element->Parameters) {
+			switch (parameter->Status) {
+				case MyDomain::Parameters::ParameterStatus::Filled : {
+					++auditElement->FilledParams;
+					++auditElement->PassParams;
+					break;
+				}
+				case MyDomain::Parameters::ParameterStatus::Empty : {
+					++auditElement->EmptyParams;
+					++auditElement->FailParams;
+					break;
+				}
+				case MyDomain::Parameters::ParameterStatus::Missing : {
+					++auditElement->MissingParams;
+					++auditElement->FailParams;
+					break;
+				}
+			}
+			if (parameter->Status != MyDomain::Parameters::ParameterStatus::Filled && auditElement->Pass == true) {
+				auditElement->Pass = false;
+			}
+		}
+
+		if (auditElement->PassParams > 0 && auditElement->TotalParams > 0) {
+			auditElement->Percent = System::Math::Floor((static_cast<double>(auditElement->PassParams) / auditElement->TotalParams) * 100);
+		} else {
+			auditElement->Percent = 0;
+		}
+		CollectAuditGroup(auditElement, auditGroup);
+	}
+	scopAuditElements_->Add(scop, result);
+
+	if (auditGroup->PassElements > 0 && auditGroup->TotalElements > 0) {
+		auditGroup->Percent = System::Math::Floor((static_cast<double>(auditGroup->PassElements) / auditGroup->TotalElements) * 100);
+	} else {
+		auditGroup->Percent = 0;
+	}
+
+	scopAuditGroups_->Add(scop, auditGroup);
+	CollectAuditResult(auditGroup);
+}
+
+void AuditParameterCommand::CollectAuditGroup(MyDomain::Elements::AuditParameters::AuditElement^ element,
+
+	MyDomain::Elements::AuditParameters::AuditGroup^ group) {
 	
-	Services::BaseService^ service = gcnew Services::BaseService(doc_);	
+	if (group->Pass && element->Pass == false) {
+		group->Pass = false;
+	}
 
-	groupCheckParameters_ = gcnew Dictionary<String^, List<String^>^>();
+	if (element->Pass) {
+		++group->PassElements;
+	} else {
+		++group->FailElements;
+	}
 
-	for each (String^ scope in checksSelected_) {
-		if (!categorySpecs_->ContainsKey(scope)) continue;
+	group->TotalParams += element->TotalParams;
+	group->PassParams += element->PassParams;
+	group->FailParams += element->FailParams;
+	group->EmptyParams += element->EmptyParams;
+	group->MissingParams += element->MissingParams;
+	group->Elements->Add(element);
+}
 
-			List<Elements::BaseElement^>^ es = service->CollectByCategory(
-			static_cast<BuiltInCategory>(categorySpecs_[scope]->Id),
-			categorySpecs_[scope]->Parameters
+void AuditParameterCommand::CollectAuditResult(MyDomain::Elements::AuditParameters::AuditGroup^ group) {
+
+	if (auditResult_->Pass && !group->Pass) {
+		auditResult_->Pass = false;
+	}
+
+	if (group->Pass) {
+		++auditResult_->PassGroups;
+	} else {
+		++auditResult_->FailGroup;
+	}
+
+	++auditResult_->TotalGroups;
+	auditResult_->ReqElementPass += group->PassElements;
+	auditResult_->ReqElementTotal += group->TotalElements;
+	auditResult_->ReqParamPass += group->PassParams;
+	auditResult_->ReqParamTotal += group->TotalParams;
+	auditResult_->Groups->Add(group);
+}
+
+
+void AuditParameterCommand::AuditByCategory() {
+
+	Services::BaseService^ baseService = gcnew Services::BaseService(doc_);
+
+	for each (String^ scop in checksSelected_) {
+		if (!categorySpecs_->ContainsKey(scop)) continue;
+
+		List<MyDomain::Elements::Element^>^ elements = baseService->CollectByCategory(
+			static_cast<BuiltInCategory>(categorySpecs_[scop]->Id),
+			categorySpecs_[scop]->Parameters
 		);
 
-		groupCheckParameters_->Add(scope, categorySpecs_[scope]->Parameters);	
-
-		elements_->Add(scope, es);
-
-		dataScopes_->Add(scope, CreateDataScope(scope, es));
-
-		CompileAuditResult(dataScopes_[scope]);
+		scopCheckParameters_->Add(scop, categorySpecs_[scop]->Parameters);
+		AuditElements(elements, scop);
+	}
+	
+	if (auditResult_->PassGroups > 0 && auditResult_->TotalGroups > 0) {
+		auditResult_->Percent = System::Math::Floor((static_cast<double>(auditResult_->PassGroups) / auditResult_->TotalGroups) * 100);
+	} else {
+		auditResult_->Percent = 0;
 	}
 	FillTable();
 }
 
-void AuditParameterCommand::AuditUserFilter() {
-	elements_ = gcnew Dictionary<String^, List<Elements::BaseElement^>^>();
-	
-	dataScopes_ = gcnew Dictionary<String^, AuditScopeSummary^>();
+void AuditParameterCommand::AuditByUserFilter() {
 
-	Services::BaseService^ service = gcnew Services::BaseService(doc_);	
+	Services::BaseService^ baseService = gcnew Services::BaseService(doc_);
 
-	groupCheckParameters_ = gcnew Dictionary<String^, List<String^>^>();
-
-	for each(String^ scope in checksSelected_) {
-		if (!userFilterSpecs_->ContainsKey(scope)) continue;
+	for each (String^ scop in checksSelected_) {
+		if (!userFilterSpecs_->ContainsKey(scop)) continue;
 
 		Dictionary<String^, String^>^ filter = gcnew Dictionary<String^, String^>();
-		for each (JsonReader::Filter^ f in userFilterSpecs_[scope]->Filters) {
-			filter->Add(f->Name, f->Value);
+
+		for each (JsonReader::Filter^ readerFilter in userFilterSpecs_[scop]->Filters) {
+			filter->Add(readerFilter->Name, readerFilter->Value);
 		}
 
-		List<Elements::BaseElement^>^ es = service->CollectAll(
+		List<MyDomain::Elements::Element^>^ elements = baseService->CollectAll(
 			filter,
-			userFilterSpecs_[scope]->Parameters
+			userFilterSpecs_[scop]->Parameters
 		);
 
-		groupCheckParameters_->Add(scope, categorySpecs_[scope]->Parameters);	
-
-		elements_->Add(scope, es);
-
-		dataScopes_->Add(scope, CreateDataScope(scope, es));
-
-		CompileAuditResult(dataScopes_[scope]);
+		scopCheckParameters_->Add(scop, categorySpecs_[scop]->Parameters);
+		AuditElements(elements, scop);
 	}
+	auditResult_->Percent = System::Math::Floor((static_cast<double>(auditResult_->PassGroups) / auditResult_->TotalGroups) * 100);
+
 	FillTable();
-}
-
-AuditScopeSummary^ AuditParameterCommand::CreateDataScope(String^ scope, IList<Elements::BaseElement^>^ elements) {
-	AuditScopeSummary^ dataScope = gcnew AuditScopeSummary();
-
-	dataScope->Scope = scope;
-	dataScope->TotalElement = elements->Count;
-	bool passScope = true;
-	for each (Elements::BaseElement^ e in elements) {
-		
-		bool elementPassed = true;
-
-		for each (Elements::ParamResult^ p in e->Parameters) {
-			++dataScope->TotalParam;
-			switch (p->Stage) {
-				case Elements::ParamState::MissingParam : ++dataScope->NoParam;
-					break;
-				case Elements::ParamState::EmptyValue : ++dataScope->MissedValue;
-					break;
-				case Elements::ParamState::Ok : ++dataScope->PassedParam;
-					break;
-			}
-
-			if (p->Stage != Elements::ParamState::Ok) elementPassed = false;
-		}
-
-		if (elementPassed) {
-			++dataScope->PassedElement;
-		} else {
-			++dataScope->FailedElement;
-			passScope = false;
-		}
-	}
-	dataScope->Pass = passScope;
-	return dataScope;
-}
-
-void AuditParameterCommand::CompileAuditResult(AuditScopeSummary^ scopeSummary) {
-	if (res_ == nullptr) {
-		res_ = gcnew AuditResults();
-	}
-
-	if (res_->Pass == true) {
-		res_->Pass = scopeSummary->Pass;
-	}
-
-	res_->SpecPass = scopeSummary->Pass == true ? ++res_->SpecPass : res_->SpecPass;
-	++res_->SpecTotal;
-	res_->ReqPass += scopeSummary->PassedElement;
-	res_->ReqTotal += scopeSummary->TotalElement;
-	res_->CheckPass += scopeSummary->PassedParam;
-	res_->CheckTotal += scopeSummary->TotalParam;
-
-	res_->auditScopeSummary->Add(scopeSummary);
-
 }
 
 void AuditParameterCommand::FillTable() {
 	form_->ClearTable();
-	for each (KeyValuePair<String^, AuditScopeSummary^> ds in dataScopes_) {
+	for each (KeyValuePair<String^, MyDomain::Elements::AuditParameters::AuditGroup^> scopGroup in scopAuditGroups_) {
 		MyForm::AuditSummaryRow^ row = gcnew MyForm::AuditSummaryRow();
 
-		row->Scope = ds.Value->Scope;
-		row->Total = ds.Value->TotalElement;
-		row->Passed = ds.Value->PassedElement;
-		row->Failed = ds.Value->FailedElement;
-		row->MissedValue = ds.Value->MissedValue;
-		row->NoParam = ds.Value->NoParam;
+		row->Scope = scopGroup.Value->Name;
+		row->Total = scopGroup.Value->TotalElements;
+		row->Passed = scopGroup.Value->PassElements;
+		row->Failed = scopGroup.Value->FailElements;
+		row->MissedValue = scopGroup.Value->EmptyParams;
+		row->NoParam = scopGroup.Value->MissingParams;
 
 		form_->AddRowTable(row);
 	}
 }
 
-void AuditParameterCommand::ExportPrepareCategory(ExportHtml::ReportModel^ repM) {
-
-	if (repM == nullptr) return;
-
-	for each (KeyValuePair<String^, AuditScopeSummary^> kvp in dataScopes_) {
-		if (!elements_->ContainsKey(kvp.Key)) continue;
-	
-		ExportHtml::CategoryReport^ cr = gcnew ExportHtml::CategoryReport();
-
-		cr->Name = kvp.Key;
-		cr->Slug = kvp.Value->Scope;
-		cr->Pass = kvp.Value->Pass;
-		cr->ChecksPass = kvp.Value->PassedParam;
-		cr->ChecksTotal = kvp.Value->TotalParam;
-		cr->ElementsPass = kvp.Value->PassedElement;
-		cr->ElementsTotal = kvp.Value->TotalElement;
-		cr->Percent = System::Math::Floor(((double)kvp.Value->PassedElement / kvp.Value->TotalElement) * 100);
-
-		if (groupCheckParameters_->ContainsKey(kvp.Key)) {
-			cr->CheckedParameters = groupCheckParameters_[kvp.Key];
-		}
-
-		for each (Elements::BaseElement^ e in elements_[kvp.Key]) {
-			ExportHtml::RequirementRow^ rr = gcnew ExportHtml::RequirementRow();
-
-			rr->Id = e->Id;
-			rr->Name = e->Name;
-
-			bool pass = true;
-
-			for each (Elements::ParamResult^ pr in e->Parameters) {
-				if (pr->Filled == false) pass = false;
-
-				ExportHtml::RequirementRow::Param^ rrP = gcnew ExportHtml::RequirementRow::Param();
-				rrP->Name = pr->Name;
-				rrP->Value = pr->Value;
-				rrP->Filled = pr->Filled;
-
-				rr->Params->Add(rrP);
-			}
-
-			rr->Pass = pass;
-			cr->Requirements->Add(rr);
-		}
-		if (cr != nullptr) repM->Categories->Add(cr);
-	}
+void AuditParameterCommand::CreateReport() {
+	resultReport_ = gcnew MyDomain::AuditParameterReport::ResultReport();
+	resultReport_->FilePath = doc_->PathName;
+	resultReport_->ProjectName = doc_->Title;
+	resultReport_->DateTimeStr = System::DateTime::Now.ToString("yyyy-MM-dd HH:mm:ss", System::Globalization::CultureInfo::InvariantCulture);
+	resultReport_->Result = auditResult_;
 }
 
 void AuditParameterCommand::Export(String^ path) {
-
-	ExportHtml::ReportModel^ repModel = gcnew ExportHtml::ReportModel();
-
-	repModel->FilePath = doc_->PathName;
-	repModel->ProjectName = doc_->Title;
-	repModel->DataTimeStr = System::DateTime::Now.ToString("yyyy-MM-dd HH:mm:ss", System::Globalization::CultureInfo::InvariantCulture);
-
-	repModel->SpecPass = res_->SpecPass;
-	repModel->SpecTotal = res_->SpecTotal;
-	repModel->ReqPass = res_->ReqPass;
-	repModel->ReqTotal = res_->ReqTotal;
-	repModel->CheckPass = res_->CheckPass;
-	repModel->CheckTotal = res_->CheckTotal;
-	repModel->Percent = (int)System::Math::Floor(((double)res_->SpecPass / res_->SpecTotal) * 100);
 	
-	ExportPrepareCategory(repModel);
-
 	ExportHtml::AuditParameterExportHtml^ exp = gcnew ExportHtml::AuditParameterExportHtml();
-	exp->SaveHtmlToFile(repModel, path);
+	exp->SaveHtmlToFile(resultReport_, path);
 	
 	form_->MarkAuditExportFinished(true);
 }
-
 }// namespace Commands
 
