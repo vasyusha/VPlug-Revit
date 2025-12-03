@@ -2,176 +2,25 @@
 
 namespace ExportHtml {
 
-RequirementRow::RequirementRow() {
-	Params = gcnew List<Param^>();
-}
-
-CategoryReport::CategoryReport() {
-	Requirements = gcnew List<RequirementRow^>();
-	CheckedParameters = gcnew List<String^>();
-}
-
-String^ CategoryReport::Name::get() {
-	return name_;
-}
-
-void CategoryReport::Name::set(String^ value) {
-	name_ = value;
-}
-
-String^ CategoryReport::Slug::get() {
-	return slug_;
-}
-
-void CategoryReport::Slug::set(String^ value) {
-	if (value != nullptr) {
-		slug_ = value->Replace(' ', '_');
-	} else {
-		slug_ = nullptr;
-	}
-}
-
-bool CategoryReport::Pass::get() {
-	return pass_;
-}
-
-void CategoryReport::Pass::set(bool value) {
-	pass_ = value;
-}
-
-int CategoryReport::ChecksPass::get() {
-	return checksPass_;
-}
-
-void CategoryReport::ChecksPass::set(int value) {
-	checksPass_ = value;
-}
-
-int CategoryReport::ChecksTotal::get() {
-	return checksTotal_;
-}
-
-void CategoryReport::ChecksTotal::set(int value) {
-	checksTotal_ = value;
-}
-
-int CategoryReport::ElementsPass::get() {
-	return elementsPass_;
-}
-
-void CategoryReport::ElementsPass::set(int value) {
-	elementsPass_ = value;
-}
-
-int CategoryReport::ElementsTotal::get() {
-	return elementsTotal_;
-}
-
-void CategoryReport::ElementsTotal::set(int value) {
-	elementsTotal_ = value;
-}
-
-int CategoryReport::Percent::get() {
-	return percent_;
-}
-
-void CategoryReport::Percent::set(int value) {
-	if (value < 0) value = 0;
-	if (value > 100) value = 100;
-	percent_ = value;
-}
-
-ReportModel::ReportModel() {
-	Categories = gcnew List<CategoryReport^>();
-}
-
-bool ReportModel::Pass::get() {
-	return pass_;
-}
-
-void ReportModel::Pass::set(bool value) {
-	pass_ = value;
-}
-
-int ReportModel::SpecPass::get() {
-	return specPass_;
-}
-
-void ReportModel::SpecPass::set(int value) {
-	specPass_ = value;
-}
-
-int ReportModel::SpecTotal::get() {
-	return specTotal_;
-}
-
-void ReportModel::SpecTotal::set(int value) {
-	specTotal_ = value;
-}
-
-
-
-int ReportModel::ReqPass::get() {
-	return reqPass_;
-}
-
-void ReportModel::ReqPass::set(int value) {
-	reqPass_ = value;
-}
-
-int ReportModel::ReqTotal::get() {
-	return reqTotal_;
-}
-
-void ReportModel::ReqTotal::set(int value) {
-	reqTotal_ = value;
-}
-
-int ReportModel::CheckPass::get() {
-	return checkPass_;
-}
-
-void ReportModel::CheckPass::set(int value) {
-	checkPass_ = value;
-}
-
-int ReportModel::CheckTotal::get() {
-	return checkTotal_;
-}
-
-void ReportModel::CheckTotal::set(int value) {
-	checkTotal_ = value;
-}
-
-int ReportModel::Percent::get() {
-	return percent_;
-}
-
-void ReportModel::Percent::set(int value) {
-	if (value < 0) value = 0;
-	if (value > 100) value = 100;
-	percent_ = value;
-}
-
-String^ AuditParameterExportHtml::BuildHtml(ReportModel^ model) {
-	if (model == nullptr)
-		throw gcnew ArgumentNullException("model");
+String^ AuditParameterExportHtml::BuildHtml(MyDomain::AuditParameterReport::ResultReport^ reportResult) {
+	if (reportResult == nullptr)
+		throw gcnew ArgumentNullException("resultReport == nullprt");
 
 	StringBuilder^ sb = gcnew StringBuilder();
 
-	AppendHeader(sb, model);
+	AppendHeader(sb, reportResult);
 
 	return sb->ToString();
 }
 
-void AuditParameterExportHtml::SaveHtmlToFile(ReportModel^ model, String^ path) {
-	String^ html = BuildHtml(model);
+void AuditParameterExportHtml::SaveHtmlToFile(MyDomain::AuditParameterReport::ResultReport^ reportResult, String^ path) {
+	String^ html = BuildHtml(reportResult);
 	StreamWriter^ w = gcnew StreamWriter(path, false, System::Text::Encoding::UTF8);
 	w->Write(html);
 	w->Close();
 }
 
-void AuditParameterExportHtml::AppendHeader(StringBuilder^ sb, ReportModel^ model) {
+void AuditParameterExportHtml::AppendHeader(StringBuilder^ sb, MyDomain::AuditParameterReport::ResultReport^ reportResult) {
 	sb->AppendLine("<!doctype html>");
 	sb->AppendLine("<html lang=\"ru\">");
 	sb->AppendLine("<head>");
@@ -280,86 +129,85 @@ void AuditParameterExportHtml::AppendHeader(StringBuilder^ sb, ReportModel^ mode
 	sb->AppendLine("	</style>");
 	sb->AppendLine("</head>");
 	
-	AppendBody(sb, model);
+	AppendBody(sb, reportResult);
 }
 
-void AuditParameterExportHtml::AppendBody(StringBuilder^ sb, ReportModel^ model) { 
+void AuditParameterExportHtml::AppendBody(StringBuilder^ sb, MyDomain::AuditParameterReport::ResultReport^ resultReport) { 
 	sb->AppendLine("<body>");
 	sb->AppendLine("	<header>");
 	sb->AppendLine("		<h1>VPlug - отчет по параметрам</h1>");
 	sb->AppendLine("		<div>");
-	sb->AppendLine("			<p>Файл:<span>" + model->ProjectName + "</span></p>");
-	sb->AppendLine("			<p>Дата:<span>" + model->DataTimeStr + "</span></p>");
+	sb->AppendLine("			<p>Файл:<span>" + resultReport->ProjectName + "</span></p>");
+	sb->AppendLine("			<p>Дата:<span>" + resultReport->DateTimeStr+ "</span></p>");
 	sb->AppendLine("		</div>");
 	sb->AppendLine("	</header>");
 	sb->AppendLine("	<hr>");
 	sb->AppendLine("	<h2>Краткое содержание</h2>");
 	sb->AppendLine("	<div class=\"container\">");
 
-	String^ passOrFailed = model->Pass == true ? "pass" : "fail";
+	String^ passOrFailed = resultReport->Result->Pass == true ? "pass" : "fail";
 
-	sb->AppendLine("		<div class=\"percent " + passOrFailed + "\" style=\"width: " + model->Percent + "%;\">" + model->Percent +"%</div>");
+	sb->AppendLine("		<div class=\"percent " + passOrFailed + "\" style=\"width: " + resultReport->Result->Percent + "%;\">" + resultReport->Result->Percent + "%</div>");
 	sb->AppendLine("	</div>");
 	sb->AppendLine("	<p>");
 
-	String^ RuPassOrFailed = model->Pass == true ? "Успех" : "Ошибки";
+	String^ RuPassOrFailed = resultReport->Result->Pass == true ? "Успех" : "Ошибки";
 
 	sb->AppendLine("		<span class=\"item " + passOrFailed + "\">" + RuPassOrFailed + "</span>");
 	sb->AppendLine("		<span class=\"item\">");
-	sb->AppendLine("			Спецификации пройдены: <strong>" + model->SpecPass + "</strong>/<strong>" + model->SpecTotal + "</strong>");
+	sb->AppendLine("			Спецификации пройдены: <strong>" + resultReport->Result->PassGroups + "</strong>/<strong>" + resultReport->Result->TotalGroups + "</strong>");
 	sb->AppendLine("		</span>");
 	sb->AppendLine("		<span class=\"item\">");
-	sb->AppendLine("			Требования приняты: <strong>" + model->ReqPass + "</strong>/<strong>" + model->ReqTotal + "</strong>");
+	sb->AppendLine("			Требования приняты: <strong>" + resultReport->Result->ReqElementPass + "</strong>/<strong>" + resultReport->Result->ReqElementTotal + "</strong>");
 	sb->AppendLine("		</span>");
 	sb->AppendLine("		<span class=\"item\">");
-	sb->AppendLine("			Проверки пройдены: <strong>" + model->CheckPass + "</strong>/<strong>" + model->CheckTotal + "</strong>");
+	sb->AppendLine("			Проверки пройдены: <strong>" + resultReport->Result->ReqParamPass + "</strong>/<strong>" + resultReport->Result->ReqParamTotal + "</strong>");
 	sb->AppendLine("		</span>");
 	sb->AppendLine("	</p>");
 	sb->AppendLine("	<hr>");
 
-	AppendSection(sb, model);
+	AppendSection(sb, resultReport);
 
 	sb->AppendLine("</body>");
 	sb->AppendLine("</html>");
-
 }
 
-void AuditParameterExportHtml::AppendSection(StringBuilder^ sb, ReportModel^ model) {
+void AuditParameterExportHtml::AppendSection(StringBuilder^ sb, MyDomain::AuditParameterReport::ResultReport^ resultRepor) {
 	int numCategory = 1;
-	for each (CategoryReport^ cr in model->Categories) {
+	for each (MyDomain::Elements::AuditParameters::AuditGroup^ groupReport in resultRepor->Result->Groups) {
 		sb->AppendLine("	<section style=\"clear: both; overflow: hidden; \">");
 		sb->AppendLine("		<div class=\"info\">");
-		sb->AppendLine("			<h2>" + numCategory + ". " + cr->Name + "</h2>");	
+		sb->AppendLine("			<h2>" + numCategory + ". " + groupReport->Name + "</h2>");	
 		sb->AppendLine("			<div class=\"container\">");
 
-		String^ passOrFailed = cr->Pass == true ? "pass" : "fail";
-		if (cr->Requirements->Count == 0) {
+		String^ passOrFailed = groupReport->Pass == true ? "pass" : "fail";
+		if (groupReport->Elements->Count == 0) {
 			sb->AppendLine("				<div>Отсутствует</div>");
 			sb->AppendLine("			</div>");
 			sb->AppendLine("			<p><span class=\"item\">Отсутствует</span></p>");
 		} else {
 			//String^ passOrFailed = cr->Pass == true ? "pass" : "fail";
 
-			sb->AppendLine("				<div class=\"percent " + passOrFailed + "\" style=\"width: " + cr->Percent + "%;\">" + cr->Percent + "%</div>");
+			sb->AppendLine("				<div class=\"percent " + passOrFailed + "\" style=\"width: " + groupReport->Percent + "%;\">" + groupReport->Percent + "%</div>");
 			sb->AppendLine("			</div>");
 
-			String^ RuPassOrFailed = cr->Pass == true ? "Успех" : "Ошибки";
+			String^ RuPassOrFailed = groupReport->Pass == true ? "Успех" : "Ошибки";
 			sb->AppendLine("			<p><span class=\"item " + passOrFailed + "\">" + RuPassOrFailed + "</span></p>");
 		}
 
-		sb->AppendLine("			<p><span class=\"item\">Элементы прошли<strong>" + cr->ElementsPass + "</strong>/<strong>" + cr->ElementsTotal + "</strong></span></p>");
-		sb->AppendLine("			<p><span class=\"item\">Проверки пройдены <strong>" + cr->ChecksPass + "</strong>/<strong>" + cr->ChecksTotal + "</strong></span></p>");
+		sb->AppendLine("			<p><span class=\"item\">Элементы прошли<strong>" + groupReport->PassElements + "</strong>/<strong>" + groupReport->TotalElements + "</strong></span></p>");
+		sb->AppendLine("			<p><span class=\"item\">Проверки пройдены <strong>" + groupReport->PassParams + "</strong>/<strong>" + groupReport->TotalParams + "</strong></span></p>");
 		sb->AppendLine("		</div>");	
 		sb->AppendLine("		<div class=\"results\">");
 		sb->AppendLine("			<p><strong>Применимо</strong></p>");
 		sb->AppendLine("			<ul>");
-		sb->AppendLine("				<li>" + cr->Name + "</li>");	
+		sb->AppendLine("				<li>" + groupReport->Name + "</li>");	
 		sb->AppendLine("			</ul>");
 		sb->AppendLine("			<p><strong>Требования</strong></p>");
 		sb->AppendLine("			<p><span>Заполнение параметров</span>");
 		sb->AppendLine("			<ul>");
 	
-		for each (String^ p in cr->CheckedParameters) {
+		for each (String^ p in groupReport->CheckedParameters) {
 			sb->AppendLine("				<li>" + p + "</li>");
 		}
 
@@ -378,18 +226,18 @@ void AuditParameterExportHtml::AppendSection(StringBuilder^ sb, ReportModel^ mod
 		sb->AppendLine("					</thead>");
 		sb->AppendLine("					<tbody>");
 
-		for each (RequirementRow^ r in cr->Requirements) {
-			String^ passOrFailedElement = r->Pass == true ? "ok" : "bad";
+		for each (MyDomain::Elements::AuditParameters::AuditElement^ auditElement in groupReport->Elements) {
+			String^ passOrFailedElement = auditElement->Pass == true ? "ok" : "bad";
 			//String^ passOrFailedElement = r->Pass == true ? "pass" : "fail";
 			//sb->AppendLine("						<tr class=\"" + passOrFailedElement + "\">");
 			sb->AppendLine("						<tr data-row=\"" + passOrFailedElement + "\">");
-			sb->AppendLine("							<td>" + r->Id + "</td>");
-			sb->AppendLine("							<td>" + r->Name+ "</td>");
+			sb->AppendLine("							<td>" + auditElement->Element->Id + "</td>");
+			sb->AppendLine("							<td>" + auditElement->Element->Name + "</td>");
 			sb->AppendLine("							<td>");
 
-			for each (RequirementRow::Param^ p in r->Params) {
-				String^ passOrFailedParam = p->Filled == true ? "pass" : "fail";
-				sb->AppendLine("								<span class=\"param " + passOrFailedParam + "\">" + p->Name + "</span>");
+			for each (MyDomain::Parameters::Parameter^ parameter in auditElement->Element->Parameters) {
+				String^ passOrFailedParam = parameter->Filled == true ? "pass" : "fail";
+				sb->AppendLine("								<span class=\"param " + passOrFailedParam + "\">" + parameter->Name + "</span>");
 			}
 
 			sb->AppendLine("							</td>");
@@ -400,16 +248,16 @@ void AuditParameterExportHtml::AppendSection(StringBuilder^ sb, ReportModel^ mod
 		sb->AppendLine("				</table>");
 		sb->AppendLine("				</details>");
 		sb->AppendLine("			<hr>");
-		/*
-		sb->AppendLine("			p><span>Данные по параметрам</span></p>");
-		sb->AppendLine("			<ol>");
-		sb->AppendLine("				<li>");
-		sb->AppendLine("					<details>");
+		
+		//sb->AppendLine("			p><span>Данные по параметрам</span></p>");
+		//sb->AppendLine("			<ol>");
+		//sb->AppendLine("				<li>");
+		//sb->AppendLine("					<details>");
 
-		sb->AppendLine("					</details>");
-		sb->AppendLine("				</li>");
-		sb->AppendLine("			</ol>");
-		*/
+		//sb->AppendLine("					</details>");
+		//sb->AppendLine("				</li>");
+		//sb->AppendLine("			</ol>");
+		
 		sb->AppendLine("	</section>");
 		++numCategory;	
 	}
