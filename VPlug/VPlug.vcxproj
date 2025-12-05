@@ -154,7 +154,6 @@
     <ClInclude Include="Headers\Domain\ElementDomain.h" />
     <ClInclude Include="Headers\Domain\ParameterDomain.h" />
     <ClInclude Include="Headers\Domain\ReportDomain.h" />
-    <ClInclude Include="Headers\Domain\WallOpeningDomain.h" />
     <ClInclude Include="Headers\Export\html\AuditParameterExportHtml.h" />
     <ClInclude Include="Headers\Export\html\AuditWallOpeningExportHtml.h" />
     <ClInclude Include="Headers\Revit\Elements\BaseElement.h" />
@@ -180,7 +179,6 @@
     <ClCompile Include="Executable\Domain\ElementDomain.cpp" />
     <ClCompile Include="Executable\Domain\ParameterDomain.cpp" />
     <ClCompile Include="Executable\Domain\ReportDomain.cpp" />
-    <ClCompile Include="Executable\Domain\WallOpeningDomain.cpp" />
     <ClCompile Include="Executable\Export\html\AuditParameterExportHtml.cpp" />
     <ClCompile Include="Executable\Export\html\AuditWallOpeningExportHtml.cpp" />
     <ClCompile Include="Executable\Revit\Elements\BaseElement.cpp" />

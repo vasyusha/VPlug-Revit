@@ -145,9 +145,6 @@
     <ClInclude Include="Headers\Export\html\AuditWallOpeningExportHtml.h">
       <Filter>Headers\Export\html</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Domain\WallOpeningDomain.h">
-      <Filter>Headers\Domain</Filter>
-    </ClInclude>
     <ClInclude Include="Headers\Domain\ParameterDomain.h">
       <Filter>Headers\Domain</Filter>
     </ClInclude>
@@ -206,9 +203,6 @@
     </ClCompile>
     <ClCompile Include="Executable\Export\html\AuditWallOpeningExportHtml.cpp">
       <Filter>Executable\Export\html</Filter>
-    </ClCompile>
-    <ClCompile Include="Executable\Domain\WallOpeningDomain.cpp">
-      <Filter>Executable\Domain</Filter>
     </ClCompile>
     <ClCompile Include="Executable\Domain\ParameterDomain.cpp">
       <Filter>Executable\Domain</Filter>
