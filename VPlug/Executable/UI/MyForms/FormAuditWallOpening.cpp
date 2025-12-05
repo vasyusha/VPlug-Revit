@@ -86,9 +86,11 @@ void FormAuditWallOpening::BuildUi() {
 	dgvTable_->ReadOnly = true;
 	dgvTable_->AllowUserToAddRows = false;
 	dgvTable_->RowHeadersVisible = false;
+	dgvTable_->DefaultCellStyle->WrapMode = DataGridViewTriState::True;
 	dgvTable_->AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode::Fill;
+	dgvTable_->AutoSizeRowsMode = DataGridViewAutoSizeRowsMode::AllCells;
 	//dgvTable_->Columns->Add("NumFilters", "Номер по фильтру");
-	dgvTable_->Columns->Add("NameType", "Имя типа");
+	dgvTable_->Columns->Add("NameType", "По фильтру");
 	dgvTable_->Columns->Add("CountExample", "Кол-во экземпляров(всего)");
 	dgvTable_->Columns->Add("TotalArea", "Сумма площадей(общая)");
 	dgvTable_->Columns->Add("TotalArea", "Сумма площадей(c проёмами)");
@@ -256,7 +258,7 @@ void FormAuditWallOpening::OnExport(Object^ sender, EventArgs^ e) {
 		return;
 	}
 
-	auditStage_ == AuditStageWallOpening::Export;
+	auditStage_ = AuditStageWallOpening::Export;
 	SetStatus("Экспорт запущен");
 	ExportRequest(exportPath_);
 }
