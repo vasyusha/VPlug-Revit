@@ -41,4 +41,40 @@ void ResultReport::Result::set(MyDomain::Elements::AuditParameters::AuditResult^
 
 }//namespace AuditParameterReport 
 
+namespace AuditWallOpeningsReport {
+
+String^ ResultReport::FilePath::get() {
+	return filePath_;
+}
+
+void ResultReport::FilePath::set(String^ value) {
+	filePath_ = value;
+}
+
+String^ ResultReport::ProjectName::get() {
+	return projectName_;
+}
+
+void ResultReport::ProjectName::set(String^ value) {
+	projectName_ = value;
+}
+
+String^ ResultReport::DateTimeStr::get() {
+	return dateTimeStr_;
+}
+
+void ResultReport::DateTimeStr::set(String^ value) {
+	dateTimeStr_ = value;
+}
+
+MyDomain::Elements::AuditWallOpenings::AuditResult^ ResultReport::AuditResult::get() {
+	return auditResult_;
+}
+
+void ResultReport::AuditResult::set(MyDomain::Elements::AuditWallOpenings::AuditResult^ value) {
+	auditResult_ = value;
+}
+
+}//namespace AuditWallOpeningsReport
+
 }//namespace MyDomai
