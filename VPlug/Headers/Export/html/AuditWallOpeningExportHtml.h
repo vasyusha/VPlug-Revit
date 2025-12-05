@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../../Domain/WallOpeningDomain.h"
+#include "../../Domain/ReportDomain.h"
 
 using namespace System;
 using namespace System::IO;
@@ -11,12 +11,12 @@ namespace ExportHtml {
 
 public ref class AuditWallOpeningExportHtml {
 private:
-	void AppendHeader(StringBuilder^ sb, MyDomain::WallOpening::WallOpeningReport^ report);
-	void AppendBody(StringBuilder^ sb, MyDomain::WallOpening::WallOpeningReport^ report);
+	void AppendHeader(StringBuilder^ sb, MyDomain::AuditWallOpeningsReport::ResultReport^ resultReport);
+	void AppendBody(StringBuilder^ sb, MyDomain::AuditWallOpeningsReport::ResultReport^ resultReport);
 
 public:
-	String^ BuildHtml(MyDomain::WallOpening::WallOpeningReport^ report);	
-	void SaveHtmlToFile(MyDomain::WallOpening::WallOpeningReport^ report, String^ path);
+	String^ BuildHtml(MyDomain::AuditWallOpeningsReport::ResultReport^ resultReport);	
+	void SaveHtmlToFile(MyDomain::AuditWallOpeningsReport::ResultReport^ resultReport, String^ path);
 
 };
 

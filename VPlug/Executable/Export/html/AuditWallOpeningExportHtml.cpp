@@ -2,25 +2,25 @@
 
 namespace ExportHtml {
 
-String^ AuditWallOpeningExportHtml::BuildHtml(MyDomain::WallOpening::WallOpeningReport^ report) {
-	if (report == nullptr)
+String^ AuditWallOpeningExportHtml::BuildHtml(MyDomain::AuditWallOpeningsReport::ResultReport^ resultReport) {
+	if (resultReport == nullptr)
 		throw gcnew ArgumentNullException("report");
 
 	StringBuilder^ sb = gcnew StringBuilder();
 
-	AppendHeader(sb, report);
+	AppendHeader(sb, resultReport);
 
 	return sb->ToString();
 }
 
-void AuditWallOpeningExportHtml::SaveHtmlToFile(MyDomain::WallOpening::WallOpeningReport^ report, String^ path) {
-	String^ html = BuildHtml(report);
+void AuditWallOpeningExportHtml::SaveHtmlToFile(MyDomain::AuditWallOpeningsReport::ResultReport^ resultReport, String^ path) {
+	String^ html = BuildHtml(resultReport);
 	StreamWriter^ w = gcnew StreamWriter(path, false, System::Text::Encoding::UTF8);
 	w->Write(html);
 	w->Close();
 }
 
-void AuditWallOpeningExportHtml::AppendHeader(StringBuilder^ sb, MyDomain::WallOpening::WallOpeningReport^ report) {
+void AuditWallOpeningExportHtml::AppendHeader(StringBuilder^ sb, MyDomain::AuditWallOpeningsReport::ResultReport^ resultReport) {
 	sb->AppendLine("<!doctype html>");
 	sb->AppendLine("<html lang=\"ru\">");
 	sb->AppendLine("<head>");
@@ -54,7 +54,7 @@ void AuditWallOpeningExportHtml::AppendHeader(StringBuilder^ sb, MyDomain::WallO
 	sb->AppendLine("			vertical-align: top;");
 	sb->AppendLine("			border: 1px solid #bfb6c9;");
 	sb->AppendLine("		}");
-	sb->AppendLine("		span.data-row {");
+	sb->AppendLine("		span.data-row, div.data-row {");
 	sb->AppendLine("			position: sticky;");
 	sb->AppendLine("			top: 20px;");
 	sb->AppendLine("			background: #fff;;");
@@ -84,29 +84,29 @@ void AuditWallOpeningExportHtml::AppendHeader(StringBuilder^ sb, MyDomain::WallO
 	sb->AppendLine("	</style>");
 	sb->AppendLine("</head>");
 
-	AppendBody(sb, report);
+	AppendBody(sb, resultReport);
 
 
 	sb->AppendLine("</html>");
 }
 
-void AuditWallOpeningExportHtml::AppendBody(StringBuilder^ sb, MyDomain::WallOpening::WallOpeningReport^ report) {
+void AuditWallOpeningExportHtml::AppendBody(StringBuilder^ sb, MyDomain::AuditWallOpeningsReport::ResultReport^ resultReport) {
 	sb->AppendLine("<body>");
 	sb->AppendLine("	<header>");
 	sb->AppendLine("		<h1>VPlug - отчет кол-во проёмов в стенах</h1>");
 	sb->AppendLine("		<div>");
-	sb->AppendLine("			<p>Файл: <span>" + report->ProjectName + "</span></p>");
-	sb->AppendLine("			<p>Дата: <span>" + report->DateTimeStr + "</span></p>");
+	sb->AppendLine("			<p>Файл: <span>" + resultReport->ProjectName + "</span></p>");
+	sb->AppendLine("			<p>Дата: <span>" + resultReport->DateTimeStr + "</span></p>");
 	sb->AppendLine("		</div>");
 	sb->AppendLine("	</header>");
 	sb->AppendLine("	<hr>");
 	sb->AppendLine("	<section>");
 	sb->AppendLine("		<details>");
-	sb->AppendLine("		<summary><strong>Отчет по типу</strong></summary>");
+	sb->AppendLine("		<summary><strong>Отчет по группе</strong></summary>");
 	sb->AppendLine("			<table>");
 	sb->AppendLine("				<thead>");
 	sb->AppendLine("					<tr>");
-	sb->AppendLine("						<th>Имя типа</th>");
+	sb->AppendLine("						<th>По фильтру</th>");
 	sb->AppendLine("						<th>Кол-во элементов</th>");
 	sb->AppendLine("						<th>Сумма площадей</th>");
 	sb->AppendLine("						<th>Сумма площадей с проёмами</th>");
@@ -117,6 +117,43 @@ void AuditWallOpeningExportHtml::AppendBody(StringBuilder^ sb, MyDomain::WallOpe
 	sb->AppendLine("				</thead>");
 	sb->AppendLine("				<tbody>");
 
+	for each (MyDomain::Elements::AuditWallOpenings::AuditWallGroup^ auditWallGroup in resultReport->AuditResult->AuditWallGroups) {
+		sb->AppendLine("					<tr>");
+		sb->AppendLine("						<td>");
+		sb->AppendLine("							<div class=\"data-row\">");
+				
+
+		for each (MyDomain::Elements::AuditWallOpenings::Scop^ scop in auditWallGroup->Scops) {
+			sb->AppendLine("								<p>" + scop->name + " - " + scop->value + "</p>");
+		}
+
+		sb->AppendLine("							</div>");
+		sb->AppendLine("						</td>");
+		//sb->AppendLine("						<td><span class=\"data-row\">" + auditWallGroup->Name + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + auditWallGroup->TotalWalls + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + auditWallGroup->TotalArea.ToString("F3") + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + auditWallGroup->TotalAreaWallsWithOpenings.ToString("F3") + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + auditWallGroup->TotalAreaWallsWithoutOpenings.ToString("F3") + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + auditWallGroup->TotalOpenings + "</span></td>");
+		sb->AppendLine("						<td class=\"opening-col\">");
+		sb->AppendLine("						<details>");
+		sb->AppendLine("						<summary class=\"opening-sum\">Проёмы</summary>");
+
+		for each (MyDomain::Elements::AuditWallOpenings::AuditOpening^ opening in auditWallGroup->AuditOpenings) {
+			sb->AppendLine("							<div class=\"opening\">");
+			sb->AppendLine("								<p>Id: " + opening->Element->Id + "</p>");
+			sb->AppendLine("								<p>Имя: " + opening->Element->Name + "</p>");
+			sb->AppendLine("								<p>Категория: " + opening->Element->CategoryName + "</p>");
+			sb->AppendLine("							</div>");
+
+		}
+
+		sb->AppendLine("						</details>");
+		sb->AppendLine("						</td>");
+		sb->AppendLine("					</tr>");
+
+	}
+	/*
 	for each (KeyValuePair<String^, MyDomain::WallOpening::WallTypeInfo^> kvp in report->WallTypes) {
 		sb->AppendLine("					<tr>");
 		sb->AppendLine("						<td><span class=\"data-row\">" + kvp.Value->Name + "</span></td>");
@@ -141,7 +178,7 @@ void AuditWallOpeningExportHtml::AppendBody(StringBuilder^ sb, MyDomain::WallOpe
 		sb->AppendLine("						</td>");
 		sb->AppendLine("					</tr>");
 	}
-
+	*/
 	sb->AppendLine("				</tbody>");
 	sb->AppendLine("			</table>");
 	sb->AppendLine("		</details>");
@@ -161,6 +198,28 @@ void AuditWallOpeningExportHtml::AppendBody(StringBuilder^ sb, MyDomain::WallOpe
 	sb->AppendLine("				</thead>");
 	sb->AppendLine("				<tbody>");
 
+	for each (MyDomain::Elements::AuditWallOpenings::AuditWallElement^ wallElement in resultReport->AuditResult->AuditWallElements) {
+		sb->AppendLine("					<tr>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + wallElement->WallElement->Id + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + wallElement->WallElement->Name + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + wallElement->WallElement->Area.ToString("F3") + "</span></td>");
+		sb->AppendLine("						<td><span class=\"data-row\">" + wallElement->WallElement->CountOpenings + "</span></td>");
+		sb->AppendLine("						<td class=\"opening-col\">");
+
+		for each (MyDomain::Elements::AuditWallOpenings::AuditOpening^ opening in wallElement->AuditOpenings) {
+			sb->AppendLine("							<div class=\"opening\">");
+			sb->AppendLine("								<p>Id: " + opening->Element->Id + "</p>");
+			sb->AppendLine("								<p>Имя: " + opening->Element->Name + "</p>");
+			sb->AppendLine("								<p>Категория: " + opening->Element->CategoryName + "</p>");
+			sb->AppendLine("							</div>");
+		
+		}
+
+		sb->AppendLine("						</td>");
+		sb->AppendLine("					</tr>");
+
+	}
+	/*
 	for each (MyDomain::WallOpening::WallElementInfo^ wallElement in report->WallElemnts) {
 		sb->AppendLine("					<tr>");
 		sb->AppendLine("						<td><span class=\"data-row\">" + wallElement->Id + "</span></td>");
@@ -180,6 +239,7 @@ void AuditWallOpeningExportHtml::AppendBody(StringBuilder^ sb, MyDomain::WallOpe
 		sb->AppendLine("						</td>");
 		sb->AppendLine("					</tr>");
 	}
+	*/
 	sb->AppendLine("				</tbody>");
 	sb->AppendLine("			</table>");
 	sb->AppendLine("		</details>");
