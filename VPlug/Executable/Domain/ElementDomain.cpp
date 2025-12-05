@@ -371,6 +371,140 @@ void AuditResult::Groups::set(IList<AuditGroup^>^ value) {
 
 }//namespace AuditParameters
 
+namespace AuditWallOpenings {
+
+ MyDomain::Elements::Element^ AuditOpening::Element::get() {
+	return element_;
+}
+
+void AuditOpening::Element::set(MyDomain::Elements::Element^ value) {
+	element_ = value;
+}
+
+List<Scop^>^ AuditWallElement::Scops::get() {
+	return scops_;
+}
+
+void AuditWallElement::Scops::set(List<Scop^>^ value) {
+	scops_ = value;
+}
+
+MyDomain::Elements::WallElement^ AuditWallElement::WallElement::get() {
+	return wallElement_;
+}
+
+void AuditWallElement::WallElement::set(MyDomain::Elements::WallElement^ value) {
+	wallElement_ = value;
+}
+
+List<AuditOpening^>^ AuditWallElement::AuditOpenings::get() {
+	return auditOpenings_;
+}
+
+void AuditWallElement::AuditOpenings::set(List<AuditOpening^>^ value) {
+	auditOpenings_ = value;
+}
+
+AuditWallGroup::AuditWallGroup() {
+	this->Scops = gcnew List<Scop^>();
+	this->AuditWallElements = gcnew List<AuditWallElement^>();
+}
+
+String^ AuditWallGroup::Name::get() {
+	return name_;
+}
+
+void AuditWallGroup::Name::set(String^ value) {
+	name_ = value;
+}
+
+List<Scop^>^ AuditWallGroup::Scops::get() {
+	return scops_;
+}
+
+void AuditWallGroup::Scops::set(List<Scop^>^ value) {
+	scops_ = value;
+}
+
+int AuditWallGroup::TotalWalls::get() {
+	return totalWalls_;
+}
+
+void AuditWallGroup::TotalWalls::set(int value) {
+	totalWalls_ = value;
+}
+
+double AuditWallGroup::TotalArea::get() {
+	return totalArea_;
+}
+
+void AuditWallGroup::TotalArea::set(double value) {
+	totalArea_ = value;
+}
+
+int AuditWallGroup::TotalOpenings::get() {
+	return totalOpenings_;
+}
+
+void AuditWallGroup::TotalOpenings::set(int value) {
+	totalOpenings_ = value;
+}
+
+double AuditWallGroup::TotalAreaWallsWithOpenings::get() {
+	return totalAreaWallsWithOpenings_;
+}
+
+void AuditWallGroup::TotalAreaWallsWithOpenings::set(double value) {
+	totalAreaWallsWithOpenings_ = value;
+}
+
+double AuditWallGroup::TotalAreaWallsWithoutOpenings::get() {
+	return totalAreaWallsWithoutOpenings_;
+}
+
+void AuditWallGroup::TotalAreaWallsWithoutOpenings::set(double value) {
+	totalAreaWallsWithoutOpenings_ = value;
+}
+
+IList<AuditWallElement^>^ AuditWallGroup::AuditWallElements::get() {
+	return auditWallElements_;
+}
+
+void AuditWallGroup::AuditWallElements::set(IList<AuditWallElement^>^ value) {
+	auditWallElements_ = value;
+}
+
+List<AuditOpening^>^ AuditWallGroup::AuditOpenings::get() {
+	return auditOpenings_;
+}
+
+void AuditWallGroup::AuditOpenings::set(List<AuditOpening^>^ value) {
+	auditOpenings_ = value;
+}
+
+AuditResult::AuditResult() {
+	this->AuditWallElements = gcnew List<AuditWallElement^>();
+	this->AuditWallGroups = gcnew List<AuditWallGroup^>();
+}
+
+IList<AuditWallElement^>^ AuditResult::AuditWallElements::get() {
+	return auditWallElements_;
+}
+
+void AuditResult::AuditWallElements::set(IList<AuditWallElement^>^ value) {
+	auditWallElements_ = value;
+}
+
+IList<AuditWallGroup^>^ AuditResult::AuditWallGroups::get() {
+	return auditWallGroups_;
+}
+
+void AuditResult::AuditWallGroups::set(IList<AuditWallGroup^>^ value) {
+	auditWallGroups_ = value;
+}
+
+}//namespace AuditWallOpenings
+
 }//namespace Elements
 
 }//namespace MyDomain

@@ -266,6 +266,128 @@ public:
 
 }//namespace AuditParameters
 
+namespace AuditWallOpenings {
+
+public ref struct Scop {
+	String^ name;
+	String^ value;
+	
+	/*
+	bool operator==(Scop^ other) {
+		return name == other->name && value == other->value;
+	}
+	bool operator!=(Scop^ other) {
+		return !(this == other);
+	}
+	*/
+};
+public ref class AuditOpening {
+private:
+	Element^ element_;
+
+public:
+	property Element^ Element {
+		MyDomain::Elements::Element^ get();
+		void set(MyDomain::Elements::Element^ value);
+	};
+};
+
+public ref class AuditWallElement {
+private:
+	List<Scop^>^ scops_;
+	WallElement^ wallElement_;
+	List<AuditOpening^>^ auditOpenings_;
+
+public:
+	property List<Scop^>^ Scops {
+		List<Scop^>^ get();
+		void set(List<Scop^>^ value);
+	};
+	property WallElement^ WallElement {
+		MyDomain::Elements::WallElement^ get();
+		void set(MyDomain::Elements::WallElement^ value);
+	};
+	property List<AuditOpening^>^ AuditOpenings {
+		List<AuditOpening^>^ get();
+		void set(List<AuditOpening^>^ value);
+	};
+
+};
+
+public ref class AuditWallGroup {
+private:
+	//Имя фильтра-значения.
+	String^ name_;
+	List<Scop^>^ scops_;
+	int totalWalls_;
+	double totalArea_;
+	int totalOpenings_;
+	double totalAreaWallsWithOpenings_;
+	double totalAreaWallsWithoutOpenings_;
+	IList<AuditWallElement^>^ auditWallElements_;
+	List<AuditOpening^>^ auditOpenings_;
+
+public:
+	AuditWallGroup();
+
+	property String^ Name {
+		String^ get();
+		void set(String^ value);
+	};
+	property List<Scop^>^ Scops {
+		List<Scop^>^ get();
+		void set(List<Scop^>^ valud);
+	};
+	property int TotalWalls {
+		int get();
+		void set(int value);
+	};
+	property double TotalArea {
+		double get();
+		void set(double value);
+	};
+	property int TotalOpenings {
+		int get();
+		void set(int value);
+	};
+	property double TotalAreaWallsWithOpenings {
+		double get();
+		void set(double value);
+	};
+	property double TotalAreaWallsWithoutOpenings {
+		double get();
+		void set(double value);
+	};
+	property IList<AuditWallElement^>^ AuditWallElements {
+		IList<AuditWallElement^>^ get();
+		void set(IList<AuditWallElement^>^ value);
+	};
+	property List<AuditOpening^>^ AuditOpenings {
+		List<AuditOpening^>^ get();
+		void set(List<AuditOpening^>^ value);
+	};
+};
+
+public ref class AuditResult {
+private:
+	IList<AuditWallElement^>^ auditWallElements_;
+	IList<AuditWallGroup^>^ auditWallGroups_;
+
+public:
+	AuditResult();
+
+	property IList<AuditWallElement^>^ AuditWallElements {
+		IList<AuditWallElement^>^ get();
+		void set(IList<AuditWallElement^>^ value);
+	};
+	property IList<AuditWallGroup^>^ AuditWallGroups {
+		IList<AuditWallGroup^>^ get();
+		void set(IList<AuditWallGroup^>^ value);
+	};
+};
+
+}//namespace AuditWallOpenings
+
 }//namespace Elements
 
 }//namespace MyDomain
