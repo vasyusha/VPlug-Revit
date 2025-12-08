@@ -23,8 +23,6 @@ void AuditWallOpeningCommand::SubscriptionEvent() {
 
 void AuditWallOpeningCommand::Audit(IDictionary<String^, String^>^ filters) {
 	List<String^>^ findParam = gcnew List<String^>();
-	//в финд парам закинуть ключи из фильтров, тем самым мы получим значение фильра у парам
-
 	filters_ = gcnew Dictionary<String^, IList<String^>^>();	
 
 	for each (KeyValuePair<String^, String^> kvp in filters) {
@@ -47,17 +45,30 @@ void AuditWallOpeningCommand::Audit(IDictionary<String^, String^>^ filters) {
 
 	FillTable();
 
+	for each (KeyValuePair<String^, MyDomain::Elements::AuditWallOpenings::AuditWallGroup^> kvp in scopAuditWallGroups_) {
+		auditResult_->AuditWallGroups->Add(kvp.Value);
+	}
 	form_->MarkAuditFinished(true);
 }
 
-void AuditWallOpeningCommand::AuditElement(List<MyDomain::Elements::WallElement^>^ wallElements) {
-	//scopAuditWallElements_ = gcnew Dictionary<String^, List<MyDomain::Elements::AuditWallOpenings::AuditWallElement^>^>();
-	
-	scopAuditWallElements_ = gcnew Dictionary<List<MyDomain::Elements::AuditWallOpenings::Scop^>^,
-		List<MyDomain::Elements::AuditWallOpenings::AuditWallElement^>^>();
+String^ AuditWallOpeningCommand::BuildScopKey(List<MyDomain::Elements::AuditWallOpenings::Scop^>^ scops) {
+	if (scops == nullptr && scops->Count == 0) {
+		return "<EMPTY>";
+	}
 
-	scopAuditWallGroups_ = gcnew Dictionary<List<MyDomain::Elements::AuditWallOpenings::Scop^>^,
-		MyDomain::Elements::AuditWallOpenings::AuditWallGroup^>();
+	List<String^>^ parts = gcnew List<String^>();
+	for each (MyDomain::Elements::AuditWallOpenings::Scop^ s in scops) {
+		parts->Add(s->name + "=" + s->value);
+	}
+
+	parts->Sort();
+
+	return String::Join("|", parts);
+}
+
+void AuditWallOpeningCommand::AuditElement(List<MyDomain::Elements::WallElement^>^ wallElements) {
+	scopAuditWallElements_ = gcnew Dictionary<String^, List<MyDomain::Elements::AuditWallOpenings::AuditWallElement^>^>();
+	scopAuditWallGroups_ = gcnew Dictionary<String^, MyDomain::Elements::AuditWallOpenings::AuditWallGroup^>();
 
 	auditResult_ = gcnew MyDomain::Elements::AuditWallOpenings::AuditResult();
 	reportResult_ = gcnew MyDomain::AuditWallOpeningsReport::ResultReport();
@@ -92,41 +103,40 @@ void AuditWallOpeningCommand::AuditElement(List<MyDomain::Elements::WallElement^
 		auditElement->Scops = scops;
 		auditElement->AuditOpenings = auditOpenings;		
 
-		if (scopAuditWallElements_->ContainsKey(scops)) {
-			scopAuditWallElements_[scops]->Add(auditElement);
-		} else {
+		String^ key = BuildScopKey(scops);
+
+		if (!scopAuditWallElements_->ContainsKey(key)) {
 			List<MyDomain::Elements::AuditWallOpenings::AuditWallElement^>^ auditWallElements = gcnew List<MyDomain::Elements::AuditWallOpenings::AuditWallElement^>();
 			auditWallElements->Add(auditElement);
-	
-			scopAuditWallElements_->Add(scops, auditWallElements);
+
+			scopAuditWallElements_->Add(key, auditWallElements);
+		} else {
+			scopAuditWallElements_[key]->Add(auditElement);
 		}
-		CollectAuditGroup(auditElement);
+
+		CollectAuditGroup(key, auditElement);
 		auditResult_->AuditWallElements->Add(auditElement);
 	}
 }
 
-void AuditWallOpeningCommand::CollectAuditGroup(MyDomain::Elements::AuditWallOpenings::AuditWallElement^ auditElement) {
-
-	if (!scopAuditWallGroups_->ContainsKey(auditElement->Scops)) {
-
+void AuditWallOpeningCommand::CollectAuditGroup(String^ key, MyDomain::Elements::AuditWallOpenings::AuditWallElement^ auditElement) {
+	if (!scopAuditWallGroups_->ContainsKey(key)) {
 		MyDomain::Elements::AuditWallOpenings::AuditWallGroup^ auditGroup = gcnew MyDomain::Elements::AuditWallOpenings::AuditWallGroup();
+		
 		auditGroup->AuditWallElements->Add(auditElement);
-				
-		scopAuditWallGroups_->Add(auditElement->Scops, auditGroup);
-
+		scopAuditWallGroups_->Add(key, auditGroup);	
 	} else {
-		scopAuditWallGroups_[auditElement->Scops]->AuditWallElements->Add(auditElement);
+		scopAuditWallGroups_[key]->AuditWallElements->Add(auditElement);
 	}
 
-	//scopAuditWallGroups_[auditElement->Scops]->Scops->AddRange(auditElement->Scops);
-	scopAuditWallGroups_[auditElement->Scops]->Scops = auditElement->Scops;
+	scopAuditWallGroups_[key]->Scops = auditElement->Scops;
 
-	if (scopAuditWallGroups_[auditElement->Scops]->AuditOpenings == nullptr) {
-		scopAuditWallGroups_[auditElement->Scops]->AuditOpenings = gcnew List<MyDomain::Elements::AuditWallOpenings::AuditOpening^>();
+	if (scopAuditWallGroups_[key]->AuditOpenings == nullptr) {
+		scopAuditWallGroups_[key]->AuditOpenings = gcnew List<MyDomain::Elements::AuditWallOpenings::AuditOpening^>();
 	} 
 
 	if (auditElement->AuditOpenings != nullptr) {
-		scopAuditWallGroups_[auditElement->Scops]->AuditOpenings->AddRange(auditElement->AuditOpenings);
+		scopAuditWallGroups_[key]->AuditOpenings->AddRange(auditElement->AuditOpenings);
 	}
 	
 	StringBuilder^ sb = gcnew StringBuilder();
@@ -134,18 +144,17 @@ void AuditWallOpeningCommand::CollectAuditGroup(MyDomain::Elements::AuditWallOpe
 		sb->AppendLine(scop->name + " - " + scop->value);
 	}
 
-	scopAuditWallGroups_[auditElement->Scops]->Name = sb->ToString();
+	scopAuditWallGroups_[key]->Name = sb->ToString();
 
-	++scopAuditWallGroups_[auditElement->Scops]->TotalWalls;
-	scopAuditWallGroups_[auditElement->Scops]->TotalArea += auditElement->WallElement->Area;
-	scopAuditWallGroups_[auditElement->Scops]->TotalOpenings += auditElement->WallElement->CountOpenings;
+	++scopAuditWallGroups_[key]->TotalWalls;
+	scopAuditWallGroups_[key]->TotalArea += auditElement->WallElement->Area;
+	scopAuditWallGroups_[key]->TotalOpenings += auditElement->WallElement->CountOpenings;
 	
 	if (auditElement->WallElement->HasOpening) {
-		scopAuditWallGroups_[auditElement->Scops]->TotalAreaWallsWithOpenings += auditElement->WallElement->Area;
+		scopAuditWallGroups_[key]->TotalAreaWallsWithOpenings += auditElement->WallElement->Area;
 	} else {
-		scopAuditWallGroups_[auditElement->Scops]->TotalAreaWallsWithoutOpenings += auditElement->WallElement->Area;
+		scopAuditWallGroups_[key]->TotalAreaWallsWithoutOpenings += auditElement->WallElement->Area;
 	}
-	auditResult_->AuditWallGroups->Add(scopAuditWallGroups_[auditElement->Scops]);
 }
 
 List<String^>^ AuditWallOpeningCommand::PrepareFilterValue(String^ value) {
@@ -181,8 +190,7 @@ List<String^>^ AuditWallOpeningCommand::PrepareFilterValue(String^ value) {
 }
 
 void AuditWallOpeningCommand::FillTable() {
-	for each (KeyValuePair<List<MyDomain::Elements::AuditWallOpenings::Scop^>^, MyDomain::Elements::AuditWallOpenings::AuditWallGroup^> kvp in scopAuditWallGroups_) {
-		TaskDialog::Show("Test", kvp.Key->Count.ToString() + " - ");
+	for each (KeyValuePair<String^, MyDomain::Elements::AuditWallOpenings::AuditWallGroup^> kvp in scopAuditWallGroups_) {
 		form_->AddRowTable(
 			kvp.Value->Name,
 			kvp.Value->TotalWalls.ToString(),
@@ -195,11 +203,10 @@ void AuditWallOpeningCommand::FillTable() {
 }
 
 void AuditWallOpeningCommand::Export(String^ path) {
-
-	
 	ExportHtml::AuditWallOpeningExportHtml^ exp = gcnew ExportHtml::AuditWallOpeningExportHtml();
 	exp->SaveHtmlToFile(reportResult_, path);
 
 	form_->MarkAuditExportFinished(true);
 }
+
 }//namespace Commands

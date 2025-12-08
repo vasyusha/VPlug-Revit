@@ -28,8 +28,10 @@ private:
 
 	List<String^>^ PrepareFilterValue(String^ value);
 
+	String^ BuildScopKey(List<MyDomain::Elements::AuditWallOpenings::Scop^>^ scops);
+
 	void AuditElement(List<MyDomain::Elements::WallElement^>^ wallElements);
-	void CollectAuditGroup(MyDomain::Elements::AuditWallOpenings::AuditWallElement^ auditElement);
+	void CollectAuditGroup(String^ key, MyDomain::Elements::AuditWallOpenings::AuditWallElement^ auditElement);
 	
 	void FillTable();
 
@@ -38,17 +40,12 @@ private:
 	//Парам - значения
 	Dictionary<String^, IList<String^>^>^ filters_;
 
-	IDictionary<List<MyDomain::Elements::AuditWallOpenings::Scop^>^
-		, List<MyDomain::Elements::AuditWallOpenings::AuditWallElement^>^>^ scopAuditWallElements_;
-
-
-	IDictionary<List<MyDomain::Elements::AuditWallOpenings::Scop^>^,
-		MyDomain::Elements::AuditWallOpenings::AuditWallGroup^>^ scopAuditWallGroups_;
+	Dictionary<String^, List<MyDomain::Elements::AuditWallOpenings::AuditWallElement^>^>^ scopAuditWallElements_;
+	Dictionary<String^, MyDomain::Elements::AuditWallOpenings::AuditWallGroup^>^ scopAuditWallGroups_;
 
 	MyDomain::Elements::AuditWallOpenings::AuditResult^ auditResult_;
 
 	MyDomain::AuditWallOpeningsReport::ResultReport^ reportResult_;
-
 
 public:
 	virtual Result Execute(ExternalCommandData^ commandData,
