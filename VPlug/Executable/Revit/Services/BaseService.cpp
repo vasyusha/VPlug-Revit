@@ -6,6 +6,7 @@ namespace Services {
 BaseService::BaseService(Document^ doc) : doc_(doc) {}
 
 Parameter^ BaseService::TryGetParam(Document^ doc, Element^ e, String^ name) {
+
 	if (e == nullptr || String::IsNullOrEmpty(name)) return nullptr;
 
 	Parameter^ p = e->LookupParameter(name);
@@ -20,6 +21,7 @@ Parameter^ BaseService::TryGetParam(Document^ doc, Element^ e, String^ name) {
 }
 
 String^ BaseService::ReadParamValue(Parameter^ param) {
+
 	if (param == nullptr) return nullptr;
 
 	switch (param->StorageType) {
@@ -32,6 +34,7 @@ String^ BaseService::ReadParamValue(Parameter^ param) {
 }
 
 bool BaseService::IsFilled(Parameter^ param) {
+
 	if (param == nullptr) return false;
 	if (!param->HasValue) return false;
 
@@ -73,119 +76,130 @@ bool BaseService::MatchFilters(Document^ doc, Element^ e, IDictionary<String^, I
 }
 
 generic <typename TElement>
- TElement BaseService::BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
-	auto be = gcnew TElement();
+TElement BaseService::BuildBaseElement(Document^ doc, Element^ e, IEnumerable<String^>^ requiredParams) {
 
-	be->Id = e->Id->IntegerValue;
-	be->UniqueId = e->UniqueId;
-	be->Name = e->Name;
+	auto tElement = gcnew TElement();
 
-	Category^ cat = e->Category;
-	if (cat != nullptr) {
-		be->CategoryName = cat->Name;
+	tElement->Id = e->Id->IntegerValue;
+	tElement->UniqueId = e->UniqueId;
+	tElement->Name = e->Name;
 
-		BuiltInCategory bic = static_cast<BuiltInCategory>(cat->Id->IntegerValue);
-		be->BuiltInCategory = (int)bic;
-		be->BuiltInCategoryName = bic.ToString();
+	Category^ category = e->Category;
+	if (category != nullptr) {
+		tElement->CategoryName = category->Name;	
+
+		BuiltInCategory bic = static_cast<BuiltInCategory>(category->Id->IntegerValue);
+		tElement->BuiltInCategory = static_cast<int>(bic);
+		tElement->BuiltInCategoryName = bic.ToString();
 	}
 
 	if (requiredParams != nullptr) {
-		for each (String^ pname in requiredParams) {
-			Parameter^ p = TryGetParam(doc, e, pname);
-			bool filled = IsFilled(p);
-			Elements::ParamState stage;
-			String^ val = nullptr;
+		for each (String^ parameterName in requiredParams) {
+			Parameter^ parameter = TryGetParam(doc, e, parameterName);
+			bool filled = IsFilled(parameter);
 
-			if (p == nullptr) {
-				stage = Elements::ParamState::MissingParam;
+			MyDomain::Parameters::ParameterStatus status;
+			String^ value = nullptr;
+
+			if (parameter == nullptr) {
+				status = MyDomain::Parameters::ParameterStatus::Missing;
 			} else if (!filled) {
-				stage = Elements::ParamState::EmptyValue;
+				status = MyDomain::Parameters::ParameterStatus::Empty;
 			} else {
-				stage = Elements::ParamState::Ok;
-				val = ReadParamValue(p);
-				if (String::IsNullOrEmpty(val)) stage = Elements::ParamState::EmptyValue;
+				status = MyDomain::Parameters::ParameterStatus::Filled;
+				value = ReadParamValue(parameter);
+
+				if (String::IsNullOrEmpty(value)) status = MyDomain::Parameters::ParameterStatus::Empty;
 			}
-			be->AddParameter(pname, val, filled, stage);
+			
+			MyDomain::Parameters::Parameter^ dParameter = gcnew MyDomain::Parameters::Parameter;
+			dParameter->Name = parameterName;
+			dParameter->Value = value;
+			dParameter->Filled = filled;
+			dParameter->Status = status;
+
+			tElement->Parameters->Add(dParameter);
 		}
 	}
-	return be;
+	return tElement;
 }
 
 generic <typename TElement>
- TElement BaseService::BuildBaseElement(Document^ doc, Element^ e) {
-	auto be = gcnew TElement();
+TElement BaseService::BuildBaseElement(Document^ doc, Element^ e) {
 
-	be->Id = e->Id->IntegerValue;
-	be->UniqueId = e->UniqueId;
-	be->Name = e->Name;
+	auto tElement = gcnew TElement();
 
-	Category^ cat = e->Category;
-	if (cat != nullptr) {
-		be->CategoryName = cat->Name;
+	tElement->Id = e->Id->IntegerValue;
+	tElement->UniqueId = e->UniqueId;
+	tElement->Name = e->Name;
 
-		BuiltInCategory bic = static_cast<BuiltInCategory>(cat->Id->IntegerValue);
-		be->BuiltInCategory = (int)bic;
-		be->BuiltInCategoryName = bic.ToString();
+	Category^ category = e->Category;
+	if (category != nullptr) {
+		tElement->CategoryName = category->Name;	
+
+		BuiltInCategory bic = static_cast<BuiltInCategory>(category->Id->IntegerValue);
+		tElement->BuiltInCategory = static_cast<int>(bic);
+		tElement->BuiltInCategoryName = bic.ToString();
 	}
-	return be;
+	return tElement;
 }
 
+List<MyDomain::Elements::Element^>^ BaseService::CollectAll(IDictionary<String^, String^>^ controlFilters,
+		IEnumerable<String^>^ requiredParams) {
 
-List<Elements::BaseElement^>^ BaseService::CollectAll(
+	auto result = gcnew List<MyDomain::Elements::Element^>();
+
+	FilteredElementCollector^ fec = gcnew FilteredElementCollector(doc_);
+	IList<Element^>^ elements = fec->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
+
+	for each (Element^ element in elements) {
+		if (!MatchFilters(doc_, element, controlFilters)) continue;
+		result->Add(BuildBaseElement<MyDomain::Elements::Element^>(doc_, element, requiredParams));
+	}
+	return result;
+}
+
+List<MyDomain::Elements::Element^>^ BaseService::CollectByCategory(BuiltInCategory bic,
+	//IDictionary<String^, String^>^ controlFilters,
+	IEnumerable<String^>^ requiredParams) {
+
+	auto result = gcnew List<MyDomain::Elements::Element^>();
+
+	FilteredElementCollector^ fec = gcnew FilteredElementCollector(doc_);
+	fec->OfCategory(bic);
+
+	IList<Element^>^ elements = fec->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
+
+	for each (Element^ element in elements) {
+		//if (!MatchFilters(doc_, element, controlFilters)) continue;
+		result->Add(BuildBaseElement<MyDomain::Elements::Element^>(doc_, element, requiredParams));
+	}
+	return result;
+}
+
+Dictionary<String^, List<MyDomain::Elements::Element^>^>^ BaseService::CollectGroupedByCategory (
 	IDictionary<String^, String^>^ controlFilters,
 	IEnumerable<String^>^ requiredParams) {
 
-	auto result = gcnew List<Elements::BaseElement^>();
+	auto result = gcnew Dictionary<String^, List<MyDomain::Elements::Element^>^>();
 
-	FilteredElementCollector^ col = gcnew FilteredElementCollector(doc_);
-	IList<Element^>^ elems = col->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
+	FilteredElementCollector^ fec = gcnew FilteredElementCollector(doc_);
+	IList<Element^>^ elements = fec->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
 
-	for each (Element^ e in elems) {
-		if (!MatchFilters(doc_, e, controlFilters)) continue;
-		result->Add(BuildBaseElement<Elements::BaseElement^>(doc_, e, requiredParams));
-	}
-	return result;
-}
-
-List<Elements::BaseElement^>^ BaseService::CollectByCategory(
-		BuiltInCategory bic,
-		//IDictionary<String^, String^>^ controlFilters,
-		IEnumerable<String^>^ requiredParams) {
+	for each (Element^ element in elements) {
+		if (!MatchFilters(doc_, element, controlFilters)) continue;
 	
-	auto result = gcnew List<Elements::BaseElement^>();
+		String^ categoryName = (element->Category != nullptr) ? element->Category->Name : "<Без категории>";
 
-	FilteredElementCollector^ col = gcnew FilteredElementCollector(doc_);
-	col->OfCategory(bic);
-	IList<Element^>^ elems = col->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
+		List<MyDomain::Elements::Element^>^ bucket;
 
-	for each (Element ^ e in elems) {
-		//if (!MatchFilters(doc_, e, controlFilters)) continue;
-		result->Add(BuildBaseElement<Elements::BaseElement^>(doc_, e, requiredParams));
-	}
-	return result;
-}
-
-Dictionary<String^, List<Elements::BaseElement^>^>^ BaseService::CollectGroupedByCategory(
-		IDictionary<String^, String^>^ controlFilters,
-		IEnumerable<String^>^ requiredParams) {
-
-	auto map = gcnew Dictionary<String^, List<Elements::BaseElement^>^>();
-
-	FilteredElementCollector^ col = gcnew FilteredElementCollector(doc_);
-	IList<Element^>^ elems = col->WhereElementIsNotElementType()->WhereElementIsViewIndependent()->ToElements();
-
-	for each (Element ^ e in elems) {
-		if (!MatchFilters(doc_, e, controlFilters)) continue;
-
-		String^ cname = (e->Category != nullptr) ? e->Category->Name : "<Без категории>";
-		List<Elements::BaseElement^>^ bucket;
-		if (!map->TryGetValue(cname, bucket)) {
-			bucket = gcnew List<Elements::BaseElement^>();
-			map[cname] = bucket;
+		if (!result->TryGetValue(categoryName, bucket)) {
+			bucket = gcnew List<MyDomain::Elements::Element^>();
+			result[categoryName] = bucket;
 		}
-		bucket->Add(BuildBaseElement<Elements::BaseElement^>(doc_, e, requiredParams));
+		bucket->Add(BuildBaseElement<MyDomain::Elements::Element^>(doc_, element, requiredParams));
 	}
-	return map;
+	return result;
 }
-	
+
 }// namespace Service

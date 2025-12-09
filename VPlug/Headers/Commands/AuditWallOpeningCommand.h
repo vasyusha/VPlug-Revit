@@ -2,7 +2,7 @@
 
 #include "../../Headers/UI/MyForms/FormAuditWallOpening.h"
 #include "../../Headers/Revit/Services/WallService.h"
-#include "../../Headers/Domain/WallOpeningDomain.h"
+#include "../../Headers/Domain/ReportDomain.h"
 #include "../../Headers/Export/html/AuditWallOpeningExportHtml.h"
 
 using namespace System;
@@ -27,14 +27,25 @@ private:
 	void Audit(IDictionary<String^, String^>^ filters);
 
 	List<String^>^ PrepareFilterValue(String^ value);
-	void PrepareElement(Elements::WallElement^ wallElement);
-	void PrepareType(Elements::WallElement^ wallElement);
 
+	String^ BuildScopKey(List<MyDomain::Elements::AuditWallOpenings::Scop^>^ scops);
+
+	void AuditElement(List<MyDomain::Elements::WallElement^>^ wallElements);
+	void CollectAuditGroup(String^ key, MyDomain::Elements::AuditWallOpenings::AuditWallElement^ auditElement);
+	
 	void FillTable();
 
 	void Export(String^ path);
 
-	MyDomain::WallOpening::WallOpeningReport^ report;
+	//Парам - значения
+	Dictionary<String^, IList<String^>^>^ filters_;
+
+	Dictionary<String^, List<MyDomain::Elements::AuditWallOpenings::AuditWallElement^>^>^ scopAuditWallElements_;
+	Dictionary<String^, MyDomain::Elements::AuditWallOpenings::AuditWallGroup^>^ scopAuditWallGroups_;
+
+	MyDomain::Elements::AuditWallOpenings::AuditResult^ auditResult_;
+
+	MyDomain::AuditWallOpeningsReport::ResultReport^ reportResult_;
 
 public:
 	virtual Result Execute(ExternalCommandData^ commandData,
